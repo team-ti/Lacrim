@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_inicio"
+        android:icon="@drawable/ic_inicio"
+        android:title="" />
+
+    <item
+        android:id="@+id/navigation_buscar"
+        android:icon="@drawable/ic_buscar"
+        android:title="" />
+
+    <item
+        android:id="@+id/navigation_perfil"
+        android:icon="@drawable/ic_perfil"
+        android:title="" />
+
+
+
+</menu>

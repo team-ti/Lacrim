@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".inicio">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1.0">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/R_lista"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/Fbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end|bottom"
+            android:clickable="true"
+            android:tint="#ffffff"
+            app:backgroundTint="?attr/actionModeSplitBackground"
+            app:srcCompat="@android:drawable/ic_input_add" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

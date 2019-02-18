@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="opciones_sexo">
+        <item>--Seleccionar sexo--</item>
+        <item>Macho</item>
+        <item>hembra</item>
+    </string-array>
+
+
+    <string-array name="opciones_tipo">
+        <item>--Seleccionar tipo--</item>
+        <item>Caballo</item>
+        <item>Mular</item>
+        <item>Asnal</item>
+    </string-array>
+
+
+    <string-array name="opciones_andar">
+        <item>--Seleccionar andar--</item>
+        <item>P1: Trote y galope</item>
+        <item>P2: Trocha y galope</item>
+        <item>P3: Trocha pura colombiana</item>
+        <item>P4: Paso fino colombiano</item>
+    </string-array>
+
+
+</resources>

@@ -1,12 +1,26 @@
 package com.example.mario.lacrim;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.Equinos;
+import com.example.mario.lacrim.Utilidades.Constantes;
+
+import java.util.ArrayList;
 
 
 /**
@@ -18,91 +32,124 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class buscar extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    EditText ed_buscar_equino;
+    View view;
+    ArrayList<Equinos> ListarEquinos = new ArrayList();
+    private RecyclerView.LayoutManager mLayoutManager;
+    ConexionSQLiteHelper conn;
+    RecyclerView R_lista_buscar;
+    String palabra_buscar;
 
     public buscar() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment buscar.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static buscar newInstance(String param1, String param2) {
-        buscar fragment = new buscar();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_buscar, container, false);
+
+        view =  inflater.inflate(R.layout.fragment_buscar, container, false);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+
+        ed_buscar_equino = view.findViewById(R.id.ed_buscar_equino);
+        R_lista_buscar =  view.findViewById(R.id.R_lista_buscar);
+        R_lista_buscar.setLayoutManager(this.mLayoutManager);
+
+
+        conn=new ConexionSQLiteHelper(getActivity(),"bd_equinos",null,1);
+
+
+        ed_buscar_equino.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+                palabra_buscar = String.valueOf(charSequence);
+
+                consultar_equinos(palabra_buscar);
+
+
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                startActivity(intent);
+                getActivity().finish();
+            }
+        }));
+
+
+
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+
+
+    private void consultar_equinos(String palabra_buscar) {
+
+
+        SQLiteDatabase db=conn.getReadableDatabase();
+
+        Equinos equino=null;
+
+        Cursor cursor;
+
+
+
+            String[] parametros={palabra_buscar+"%"};
+
+            cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_NOMBRE_EQUINO+"=?",parametros);
+
+
+
+        while (cursor.moveToNext()) {
+            equino = new Equinos();
+            equino.setNombre_equino(cursor.getString(1));
+            equino.setSexo_equino(cursor.getString(4));
+            equino.setAndar_equino(cursor.getString(9));
+            equino.setColor_equino(cursor.getString(5));
+
+            ListarEquinos.add(equino);
+
         }
+        cursor.close();
+
+
+
+
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }

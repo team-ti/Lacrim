@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_herradura2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+                  android:windowSoftInputMode="adjustPan">
 
         </activity>
         <activity android:name=".Crear_equino" android:label="Crear equino" />

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
@@ -35,7 +36,7 @@ public class buscar extends Fragment {
 
     EditText ed_buscar_equino;
     View view;
-    ArrayList<Equinos> ListarEquinos = new ArrayList();
+    ArrayList<Equinos> ListarEquinos;
     private RecyclerView.LayoutManager mLayoutManager;
     ConexionSQLiteHelper conn;
     RecyclerView R_lista_buscar;
@@ -83,8 +84,15 @@ public class buscar extends Fragment {
 
                 palabra_buscar = String.valueOf(charSequence);
 
-                consultar_equinos(palabra_buscar);
+                if (palabra_buscar.isEmpty()){
 
+                    vaciar_lista();
+
+                }else{
+
+                    consultar_equinos(palabra_buscar);
+
+                }
 
             }
 
@@ -94,19 +102,6 @@ public class buscar extends Fragment {
 
             }
         });
-
-
-        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-
-                Intent intent = new Intent(getActivity(), Detalle_equino.class);
-                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
-                startActivity(intent);
-                getActivity().finish();
-            }
-        }));
-
 
 
 
@@ -124,11 +119,14 @@ public class buscar extends Fragment {
 
         Cursor cursor;
 
+        ListarEquinos = new ArrayList<>();
 
 
             String[] parametros={palabra_buscar+"%"};
 
-            cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_NOMBRE_EQUINO+"=?",parametros);
+            cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_NOMBRE_EQUINO+" LIKE ?",parametros);
+
+
 
 
 
@@ -139,9 +137,21 @@ public class buscar extends Fragment {
             equino.setAndar_equino(cursor.getString(9));
             equino.setColor_equino(cursor.getString(5));
 
+
             ListarEquinos.add(equino);
 
         }
+
+        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                startActivity(intent);
+                getActivity().finish();
+            }
+        }));
         cursor.close();
 
 
@@ -150,6 +160,23 @@ public class buscar extends Fragment {
     }
 
 
+    public void vaciar_lista(){
+
+        ListarEquinos = new ArrayList<>();
+
+        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                startActivity(intent);
+                getActivity().finish();
+            }
+        }));
+
+
+    }
 
 
 }

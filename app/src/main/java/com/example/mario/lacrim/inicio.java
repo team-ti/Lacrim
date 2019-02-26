@@ -35,7 +35,7 @@ public class inicio extends Fragment {
 
     FloatingActionButton Fbutton;
     View view;
-    ArrayList<Equinos> ListarEquinos = new ArrayList();
+    ArrayList<Equinos> ListarEquinos;
     private RecyclerView.LayoutManager mLayoutManager;
     ConexionSQLiteHelper conn;
     RecyclerView R_lista;
@@ -77,16 +77,7 @@ public class inicio extends Fragment {
             }
         });
 
-        R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
-            @Override
-            public void onClick(View v, int position) {
 
-                Intent intent = new Intent(getActivity(), Detalle_equino.class);
-                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
-                startActivity(intent);
-                getActivity().finish();
-            }
-        }));
 
         return view;
     }
@@ -94,6 +85,8 @@ public class inicio extends Fragment {
 
     private void consultarLista() {
 
+
+        ListarEquinos = new ArrayList<>();
 
         SQLiteDatabase db=conn.getReadableDatabase();
 
@@ -110,15 +103,31 @@ public class inicio extends Fragment {
         while (cursor.moveToNext()) {
             equino = new Equinos();
 
+            equino.setId_equino(cursor.getString(0));
             equino.setNombre_equino(cursor.getString(1));
             equino.setSexo_equino(cursor.getString(4));
             equino.setAndar_equino(cursor.getString(9));
             equino.setColor_equino(cursor.getString(5));
 
+
             ListarEquinos.add(equino);
 
 
         }
+
+        R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                //int id = ListarEquinos.get(position).getId_equino();
+                //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
+                startActivity(intent);
+                getActivity().finish();
+            }
+        }));
+
         cursor.close();
 
 

@@ -37,4 +37,39 @@ public class Constantes {
             +CAMPO_NOMBRE_EQUINO+" TEXT, "+CAMPO_FECHA_EQUINO+" TEXT,"+CAMPO_LUGAR_EQUINO+" TEXT,"+CAMPO_SEXO_EQUINO+" TEXT,"+CAMPO_COLOR_EQUINO+" TEXT,"+CAMPO_MICROCHIP_EQUINO+" TEXT,"+CAMPO_CRIADOR_EQUINO+" TEXT,"+CAMPO_TIPO_EQUINO+" TEXT,"+CAMPO_ANDAR_EQUINO+" TEXT,"+CAMPO_PROPIETARIO_EQUINO+" TEXT)";
 
 
+
+    //Constantes campos tabla premios
+    public static final String TABLA_PREMIOS="premio";
+
+    public static final String CAMPO_ID_PREMIO="id_premio";
+    public static final String CAMPO_NOMBRE_PREMIO="nombre";
+    public static final String CAMPO_DESCRIPCION_PREMIO="descripcion";
+    public static final String CAMPO_FECHA_PREMIO="fecha_pre";
+    public static final String CAMPO_ID_EQUINO_PREMIO="id_equino";
+
+
+    public static final String CREAR_TABLA_PREMIO="CREATE TABLE " +
+            ""+TABLA_PREMIOS+" ("+CAMPO_ID_PREMIO+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+            +CAMPO_NOMBRE_PREMIO+" TEXT, "+CAMPO_DESCRIPCION_PREMIO+" TEXT,"+CAMPO_FECHA_PREMIO+" TEXT,"+CAMPO_ID_EQUINO_PREMIO+" INTEGER)";
+
+
+
+
+    //Constantes campos tabla alimentacion
+    public static final String TABLA_ALIMENTOS="alimento";
+
+    public static final String CAMPO_ID_ALIMENTO="id_alimento";
+    public static final String CAMPO_NOMBRE_ALIMENTO="nombre";
+    public static final String CAMPO_DESCRIPCION_ALIMENTO="descripcion";
+    public static final String CAMPO_FECHA_ALIMENTO="fecha_pre";
+    public static final String CAMPO_ID_EQUINO_ALIMENTO="id_equino";
+
+
+    public static final String CREAR_TABLA_ALIMENTO="CREATE TABLE " +
+            ""+TABLA_ALIMENTOS+" ("+CAMPO_ID_ALIMENTO+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+            +CAMPO_NOMBRE_ALIMENTO+" TEXT, "+CAMPO_DESCRIPCION_ALIMENTO+" TEXT,"+CAMPO_FECHA_ALIMENTO+" TEXT,"+CAMPO_ID_EQUINO_ALIMENTO+" INTEGER)";
+
+
+
+
 }

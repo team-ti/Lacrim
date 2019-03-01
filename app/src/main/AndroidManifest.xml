@@ -9,11 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_herradura2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-                  android:windowSoftInputMode="adjustPan">
-
-        </activity>
-        <activity android:name=".Crear_equino" android:label="Crear equino" />
+        <activity android:name=".Login"></activity>
+        <activity android:name=".Crear_usuario" />
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Crear_equino"
+            android:label="Crear equino" />
         <activity android:name=".Detalle_equino" />
         <activity android:name=".Splash">
             <intent-filter>

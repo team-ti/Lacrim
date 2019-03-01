@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
@@ -76,6 +77,8 @@ public class inicio extends Fragment {
                 getActivity().finish();
             }
         });
+
+
 
         R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
             @Override

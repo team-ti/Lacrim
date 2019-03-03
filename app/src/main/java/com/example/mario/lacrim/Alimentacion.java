@@ -1,0 +1,146 @@
+package com.example.mario.lacrim;
+
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.Alimentos;
+import com.example.mario.lacrim.Entidades.Equinos;
+import com.example.mario.lacrim.Utilidades.Constantes;
+
+import java.util.ArrayList;
+
+public class Alimentacion extends AppCompatActivity {
+
+    ArrayList<Alimentos> ListarAlimentos;
+    ConexionSQLiteHelper conn;
+    String id_equino;
+    RecyclerView R_lista_alimentacion;
+    TextView txt_detalle_equino_alimento;
+    FloatingActionButton Fbutton_alimentos;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_alimentacion);
+
+        id_equino = getIntent().getExtras().getString("id");
+        conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
+
+
+        R_lista_alimentacion = findViewById(R.id.R_lista_alimentacion);
+        txt_detalle_equino_alimento = findViewById(R.id.txt_detalle_equino_alimento);
+        Fbutton_alimentos = findViewById(R.id.Fbutton_alimentos);
+
+        R_lista_alimentacion.setAdapter(new Adaptador_lista_alimentacion(ListarAlimentos));
+
+        consultar_equino();
+        consultarListaAlimentacion();
+
+        Fbutton_alimentos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Crear_alimento_equino.class);
+                intent.putExtra("id",id_equino);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+    }
+
+    private void consultar_equino() {
+        SQLiteDatabase db=conn.getReadableDatabase();
+        String[] parametros={(getIntent().getExtras().getString("id"))};
+        String[] campos={Constantes.CAMPO_NOMBRE_EQUINO};
+        //Cursor cursor;
+
+        try {
+
+            Cursor cursor =db.query(Constantes.TABLA_EQUINO,campos,Constantes.CAMPO_ID_EQUINO+"=?",parametros,null,null,null);
+            //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_ID_EQUINO,parametros);
+
+            cursor.moveToFirst();
+
+            //txt_detalle_equino.setText(cursor.getString(1));
+            txt_detalle_equino_alimento.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_NOMBRE_EQUINO)));
+
+            cursor.close();
+
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(),"El equino no existe",Toast.LENGTH_LONG).show();
+
+        }
+
+
+    }
+
+    private void consultarListaAlimentacion() {
+
+
+        ListarAlimentos = new ArrayList<>();
+
+        SQLiteDatabase db=conn.getReadableDatabase();
+        String[] parametros={(getIntent().getExtras().getString("id"))};
+        Alimentos alimento=null;
+
+        Cursor cursor;
+
+
+        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ALIMENTOS + " WHERE " +Constantes.CAMPO_ID_EQUINO_ALIMENTO,parametros);
+
+
+        //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
+
+        while (cursor.moveToNext()) {
+            alimento = new Alimentos();
+
+            alimento.setId_alimento(cursor.getString(0));
+            alimento.setNombre(cursor.getString(1));
+            alimento.setDescripcion(cursor.getString(4));
+            alimento.setFecha_ali(cursor.getString(9));
+            alimento.setId_equino(cursor.getString(5));
+
+
+            ListarAlimentos.add(alimento);
+
+
+        }
+
+        R_lista_alimentacion.setAdapter(new Adaptador_lista_alimentacion(ListarAlimentos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                Intent intent = new Intent(getApplicationContext(), Detalle_alimentacion.class);
+                intent.putExtra("id",ListarAlimentos.get(position).getId_alimento());
+                startActivity(intent);
+                finish();
+            }
+        }));
+
+        cursor.close();
+
+
+    }
+
+
+
+    public void onBackPressed() {
+        Intent i = new Intent(this, Detalle_equino.class);
+        i.putExtra("id",id_equino);
+        startActivity(i);
+        finish();
+    }
+
+}

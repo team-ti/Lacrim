@@ -9,11 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_herradura2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-                  android:windowSoftInputMode="adjustPan">
-
-        </activity>
-        <activity android:name=".Crear_equino" android:label="Crear equino" />
+        <activity android:name=".Detalle_alimentacion"></activity>
+        <activity android:name=".Crear_alimento_equino" />
+        <activity android:name=".Alimentacion" />
+        <activity android:name=".Premios" />
+        <activity
+            android:name=".Datos_generales"
+            android:label="@string/title_activity_datos_generales"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Crear_equino"
+            android:label="Crear equino" />
         <activity android:name=".Detalle_equino" />
         <activity android:name=".Splash">
             <intent-filter>

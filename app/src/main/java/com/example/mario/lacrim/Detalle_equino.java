@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ public class Detalle_equino extends AppCompatActivity {
     TextView txt_detalle_equino;
     String id_equino;
     int interfaz;
+    LinearLayout ln_datos_generales, ln_premios, ln_alimentos;
 
     ConexionSQLiteHelper conn;
 
@@ -25,12 +28,51 @@ public class Detalle_equino extends AppCompatActivity {
         setContentView(R.layout.activity_detalle_equino);
 
         txt_detalle_equino = findViewById(R.id.txt_detalle_equino);
+        ln_datos_generales = findViewById(R.id.ln_datos_generales);
+        ln_premios = findViewById(R.id.ln_premios);
+        ln_alimentos = findViewById(R.id.ln_alimentos);
 
         conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
         id_equino = getIntent().getExtras().getString("id");
 
-        //Toast.makeText(getApplicationContext(),""+id_equino,Toast.LENGTH_LONG).show();
+
+
+        ln_datos_generales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Datos_generales.class);
+                intent.putExtra("id",id_equino);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+        ln_premios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Premios.class);
+                intent.putExtra("id",id_equino);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+        ln_alimentos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), Alimentacion.class);
+                intent.putExtra("id",id_equino);
+                startActivity(intent);
+                finish();
+
+            }
+        });
 
         consultar_equino();
 

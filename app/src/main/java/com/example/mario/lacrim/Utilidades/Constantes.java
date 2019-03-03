@@ -61,7 +61,7 @@ public class Constantes {
     public static final String CAMPO_ID_ALIMENTO="id_alimento";
     public static final String CAMPO_NOMBRE_ALIMENTO="nombre";
     public static final String CAMPO_DESCRIPCION_ALIMENTO="descripcion";
-    public static final String CAMPO_FECHA_ALIMENTO="fecha_pre";
+    public static final String CAMPO_FECHA_ALIMENTO="fecha_ali";
     public static final String CAMPO_ID_EQUINO_ALIMENTO="id_equino";
 
 

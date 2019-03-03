@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="match_parent"
+    tools:context=".Detalle_alimentacion">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/txt_nombreformulario"
+                    android:layout_width="match_parent"
+                    android:textSize="20sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:textStyle="bold"
+                    android:text="Detalle de alimentacion y entrenamiento"/>
+
+
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="Nombre" />
+
+                <EditText
+                    android:id="@+id/ed_nombre_detalle_alimentacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:ems="10"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:background="@null"
+                    android:inputType="none" />
+
+
+
+                <TextView
+                    android:id="@+id/textViewsdff7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="Fecha" />
+
+                <EditText
+                    android:id="@+id/ed_fecha_detalle_alimentacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:ems="10"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:background="@null"
+                    android:inputType="textPersonName" />
+
+
+
+                <TextView
+                    android:id="@+id/texss"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="Descripcion" />
+
+
+
+                <EditText
+                    android:id="@+id/ed_descripcion_detalle_alimentacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:ems="10"
+                    android:inputType="textMultiLine"
+                    android:lines="8"
+                    android:maxLines="10"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:background="@null"
+                    android:scrollbars="vertical" />
+
+
+
+
+
+
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

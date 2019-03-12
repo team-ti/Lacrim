@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_photo_camera_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_info_outline_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -44,7 +44,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_foto_default" />
+                                      <entry key="outputName" value="ic_info" />
                                       <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>

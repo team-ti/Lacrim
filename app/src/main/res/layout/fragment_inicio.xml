@@ -33,7 +33,6 @@
             app:backgroundTint="?attr/actionModeSplitBackground"
             app:srcCompat="@android:drawable/ic_input_add" />
 
-
     </RelativeLayout>
 
 </LinearLayout>

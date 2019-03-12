@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ public class Alimentacion extends AppCompatActivity {
     RecyclerView R_lista_alimentacion;
     TextView txt_detalle_equino_alimento;
     FloatingActionButton Fbutton_alimentos;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 
 
     @Override
@@ -38,8 +41,11 @@ public class Alimentacion extends AppCompatActivity {
 
 
         R_lista_alimentacion = findViewById(R.id.R_lista_alimentacion);
+        mLayoutManager = new LinearLayoutManager(this);
         txt_detalle_equino_alimento = findViewById(R.id.txt_detalle_equino_alimento);
         Fbutton_alimentos = findViewById(R.id.Fbutton_alimentos);
+        R_lista_alimentacion.setLayoutManager(this.mLayoutManager);
+
 
         R_lista_alimentacion.setAdapter(new Adaptador_lista_alimentacion(ListarAlimentos));
 
@@ -74,6 +80,7 @@ public class Alimentacion extends AppCompatActivity {
             cursor.moveToFirst();
 
             //txt_detalle_equino.setText(cursor.getString(1));
+
             txt_detalle_equino_alimento.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_NOMBRE_EQUINO)));
 
             cursor.close();
@@ -98,7 +105,7 @@ public class Alimentacion extends AppCompatActivity {
         Cursor cursor;
 
 
-        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ALIMENTOS + " WHERE " +Constantes.CAMPO_ID_EQUINO_ALIMENTO,parametros);
+        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ALIMENTOS + " WHERE " +Constantes.CAMPO_ID_EQUINO_ALIMENTO+"=?",parametros);
 
 
         //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
@@ -108,9 +115,9 @@ public class Alimentacion extends AppCompatActivity {
 
             alimento.setId_alimento(cursor.getString(0));
             alimento.setNombre(cursor.getString(1));
-            alimento.setDescripcion(cursor.getString(4));
-            alimento.setFecha_ali(cursor.getString(9));
-            alimento.setId_equino(cursor.getString(5));
+            alimento.setDescripcion(cursor.getString(2));
+            alimento.setFecha_ali(cursor.getString(3));
+            alimento.setId_equino(cursor.getString(4));
 
 
             ListarAlimentos.add(alimento);

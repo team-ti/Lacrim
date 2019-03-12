@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
@@ -37,8 +38,11 @@ public class inicio extends Fragment {
     View view;
     ArrayList<Equinos> ListarEquinos;
     private RecyclerView.LayoutManager mLayoutManager;
+    public static final String dataUserCache = "dataUser";
+    private static final int modo_private = Context.MODE_PRIVATE;
     ConexionSQLiteHelper conn;
     RecyclerView R_lista;
+    String token;
 
     public inicio() {
         // Required empty public constructor
@@ -64,6 +68,8 @@ public class inicio extends Fragment {
         R_lista =  view.findViewById(R.id.R_lista);
         R_lista.setLayoutManager(this.mLayoutManager);
 
+        cargarDatosToken();
+
         conn=new ConexionSQLiteHelper(getActivity(),"bd_equinos",null,1);
         consultarLista();
 
@@ -83,19 +89,24 @@ public class inicio extends Fragment {
     }
 
 
+    public void cargarDatosToken() {
+        token = getActivity().getSharedPreferences(dataUserCache,modo_private).getString("access_token", "no hay info");
+    }
+
+
     private void consultarLista() {
 
 
         ListarEquinos = new ArrayList<>();
 
         SQLiteDatabase db=conn.getReadableDatabase();
-
+        String[] parametros={token};
         Equinos equino=null;
 
         Cursor cursor;
 
 
-            cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO,null);
+            cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+ " WHERE " +Constantes.CAMPO_ID_USUARIO_EQUINO+"=?",parametros);
 
 
         //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
@@ -135,3 +146,4 @@ public class inicio extends Fragment {
 
 
 }
+

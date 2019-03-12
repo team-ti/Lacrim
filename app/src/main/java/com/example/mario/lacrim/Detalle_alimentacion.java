@@ -44,8 +44,8 @@ public class Detalle_alimentacion extends AppCompatActivity {
             cursor.moveToFirst();
 
             ed_nombre_detalle_alimentacion.setText(cursor.getString(0));
-            ed_fecha_detalle_alimentacion.setText(cursor.getString(2));
-            ed_descripcion_detalle_alimentacion.setText(cursor.getString(1));
+            ed_fecha_detalle_alimentacion.setText(cursor.getString(1));
+            ed_descripcion_detalle_alimentacion.setText(cursor.getString(2));
 
 
             cursor.close();
@@ -56,7 +56,7 @@ public class Detalle_alimentacion extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        Intent i = new Intent(this, Detalle_equino.class);
+        Intent i = new Intent(this, Alimentacion.class);
         i.putExtra("id",id_equino);
         startActivity(i);
         finish();

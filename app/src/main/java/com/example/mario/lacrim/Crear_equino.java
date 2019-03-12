@@ -2,6 +2,7 @@ package com.example.mario.lacrim;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,10 @@ public class Crear_equino extends AppCompatActivity {
     Button bt_registrar;
     Calendar calendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date;
+    public static final String dataUserCache = "dataUser";
+    private static final int modo_private = Context.MODE_PRIVATE;
+    String token;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class Crear_equino extends AppCompatActivity {
         sp_andar = findViewById(R.id.sp_andar);
         bt_registrar = findViewById(R.id.bt_registrar);
 
+        cargarDatosToken();
 
         date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -79,6 +85,10 @@ public class Crear_equino extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void cargarDatosToken() {
+        token = getSharedPreferences(dataUserCache,modo_private).getString("access_token", "no hay info");
     }
 
     private void updateEdit() {
@@ -154,6 +164,8 @@ public class Crear_equino extends AppCompatActivity {
         values.put(Constantes.CAMPO_SEXO_EQUINO,sp_sexo.getSelectedItem().toString());
         values.put(Constantes.CAMPO_TIPO_EQUINO,sp_tipo.getSelectedItem().toString());
         values.put(Constantes.CAMPO_ANDAR_EQUINO,sp_andar.getSelectedItem().toString());
+        values.put(Constantes.CAMPO_ID_USUARIO_EQUINO,token);
+
 
 
         db.insert(Constantes.TABLA_EQUINO,Constantes.CAMPO_ID_EQUINO,values);

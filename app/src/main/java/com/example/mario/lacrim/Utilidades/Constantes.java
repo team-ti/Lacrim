@@ -6,13 +6,15 @@ public class Constantes {
 
     public static final String CAMPO_ID="id";
     public static final String CAMPO_NOMBRE="nombre";
+    public static final String CAMPO_APELLIDO="apellido";
+    public static final String CAMPO_CIUDAD="ciudad";
     public static final String CAMPO_USER="usuario";
     public static final String CAMPO_CORREO="correo";
     public static final String CAMPO_CONTRASENA="contrasena";
 
     public static final String CREAR_TABLA_USUARIO="CREATE TABLE " +
             ""+TABLA_USUARIO+" ("+CAMPO_ID+" " +
-            "INTEGER PRIMARY KEY AUTOINCREMENT, "+CAMPO_NOMBRE+" TEXT,"+CAMPO_USER+" TEXT,"+CAMPO_CORREO+" TEXT,"+CAMPO_CONTRASENA+" TEXT)";
+            "INTEGER PRIMARY KEY AUTOINCREMENT, "+CAMPO_NOMBRE+" TEXT," +CAMPO_APELLIDO+" TEXT," +CAMPO_CIUDAD+" TEXT," +CAMPO_USER+" TEXT,"+CAMPO_CORREO+" TEXT,"+CAMPO_CONTRASENA+" TEXT)";
 
 
 
@@ -30,11 +32,13 @@ public class Constantes {
     public static final String CAMPO_TIPO_EQUINO="tipo";
     public static final String CAMPO_ANDAR_EQUINO="andar";
     public static final String CAMPO_PROPIETARIO_EQUINO="propietario";
+    public static final String CAMPO_ID_USUARIO_EQUINO="id_user";
+
 
 
     public static final String CREAR_TABLA_EQUINO="CREATE TABLE " +
             ""+TABLA_EQUINO+" ("+CAMPO_ID_EQUINO+" INTEGER PRIMARY KEY AUTOINCREMENT, "
-            +CAMPO_NOMBRE_EQUINO+" TEXT, "+CAMPO_FECHA_EQUINO+" TEXT,"+CAMPO_LUGAR_EQUINO+" TEXT,"+CAMPO_SEXO_EQUINO+" TEXT,"+CAMPO_COLOR_EQUINO+" TEXT,"+CAMPO_MICROCHIP_EQUINO+" TEXT,"+CAMPO_CRIADOR_EQUINO+" TEXT,"+CAMPO_TIPO_EQUINO+" TEXT,"+CAMPO_ANDAR_EQUINO+" TEXT,"+CAMPO_PROPIETARIO_EQUINO+" TEXT)";
+            +CAMPO_NOMBRE_EQUINO+" TEXT, "+CAMPO_FECHA_EQUINO+" TEXT,"+CAMPO_LUGAR_EQUINO+" TEXT,"+CAMPO_SEXO_EQUINO+" TEXT,"+CAMPO_COLOR_EQUINO+" TEXT,"+CAMPO_MICROCHIP_EQUINO+" TEXT,"+CAMPO_CRIADOR_EQUINO+" TEXT,"+CAMPO_TIPO_EQUINO+" TEXT,"+CAMPO_ANDAR_EQUINO+" TEXT,"+CAMPO_PROPIETARIO_EQUINO+" TEXT,"+CAMPO_ID_USUARIO_EQUINO+" INTEGER)";
 
 
 

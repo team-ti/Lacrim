@@ -124,7 +124,9 @@ public class Crear_alimento_equino extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"Alimentacion resgistrada",Toast.LENGTH_SHORT).show();
         db.close();
 
-        startActivity(new Intent(Crear_alimento_equino.this, Alimentacion.class));
+        Intent i = new Intent(this, Alimentacion.class);
+        i.putExtra("id",id_equino);
+        startActivity(i);
         finish();
 
     }

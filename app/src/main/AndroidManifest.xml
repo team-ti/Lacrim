@@ -9,7 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_herradura2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Informacion"></activity>
+        <activity android:name=".Detalle_alimentacion" />
+        <activity android:name=".Crear_alimento_equino" />
+        <activity android:name=".Alimentacion" />
+        <activity android:name=".Premios" />
+        <activity
+            android:name=".Datos_generales"
+            android:label="@string/title_activity_datos_generales"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Login" />
         <activity android:name=".Crear_usuario" />
         <activity
             android:name=".MainActivity"

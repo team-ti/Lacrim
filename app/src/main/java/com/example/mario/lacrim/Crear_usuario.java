@@ -118,8 +118,8 @@ public class Crear_usuario extends AppCompatActivity {
         values.put(Constantes.CAMPO_APELLIDO,us_apellidos.getText().toString());
         values.put(Constantes.CAMPO_CORREO,us_correo.getText().toString());
         values.put(Constantes.CAMPO_CIUDAD, us_ciudad.getText().toString());
-        values.put(Constantes.CAMPO_USER,us_usuario.getText().toString());
-        values.put(Constantes.CAMPO_CONTRASENA,us_contrasena.getText().toString());
+        values.put(Constantes.CAMPO_USER,us_usuario.getText().toString().trim());
+        values.put(Constantes.CAMPO_CONTRASENA,us_contrasena.getText().toString().trim());
 
         db.insert(Constantes.TABLA_USUARIO,Constantes.CAMPO_ID,values);
 
@@ -130,6 +130,13 @@ public class Crear_usuario extends AppCompatActivity {
         finish();
 
     }
+
+    public void onBackPressed() {
+        Intent i = new Intent(this, Login.class);
+        startActivity(i);
+        finish();
+    }
+
 }
 
 

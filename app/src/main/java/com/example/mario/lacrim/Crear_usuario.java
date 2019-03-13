@@ -81,7 +81,7 @@ public class Crear_usuario extends AppCompatActivity {
         } else  if (!match){
             us_correo.requestFocus();
             Toast.makeText(getApplicationContext(), "Formato de correo incorreto", Toast.LENGTH_SHORT).show();
-            
+
         } else if (us_ciudad == null || us_ciudad.getText().toString().equals("")) {
             us_ciudad.requestFocus();
             Toast.makeText(getApplicationContext(), "Ciudad no puede estar vacio", Toast.LENGTH_SHORT).show();

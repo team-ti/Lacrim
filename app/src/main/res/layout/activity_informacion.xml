@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/textura"
-    tools:context="app.afiliados.rubencortes.droomtech.Informacion">
+    tools:context=".Informacion">
 
     <ImageView
         android:id="@+id/imageView4"

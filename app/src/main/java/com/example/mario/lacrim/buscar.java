@@ -145,7 +145,6 @@ public class buscar extends Fragment {
         R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
             @Override
             public void onClick(View v, int position) {
-
                 Intent intent = new Intent(getActivity(), Detalle_equino.class);
                 intent.putExtra("id",ListarEquinos.get(position).getId_equino());
                 startActivity(intent);

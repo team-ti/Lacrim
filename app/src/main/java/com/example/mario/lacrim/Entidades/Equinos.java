@@ -2,7 +2,7 @@ package com.example.mario.lacrim.Entidades;
 
 public class Equinos {
 
-    private Integer id_equino;
+    private String id_equino;
     private String nombre_equino;
     private String fecha_equino;
     private String lugar_equino;
@@ -28,11 +28,11 @@ public class Equinos {
         this.andar_equino = andar_equino;
     }
 
-    public Integer getId_equino() {
+    public String getId_equino() {
         return id_equino;
     }
 
-    public void setId_equino(Integer id_equino) {
+    public void setId_equino(String id_equino) {
         this.id_equino = id_equino;
     }
 

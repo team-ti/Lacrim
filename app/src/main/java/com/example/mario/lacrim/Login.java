@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //cargarDatos();
+        cargarDatos();
 
         lo_usuario = findViewById(R.id.lo_usuario);
         lo_contrasena = findViewById(R.id.lo_contrasena);
@@ -47,6 +47,7 @@ public class Login extends AppCompatActivity {
         btnRegistrar_lo.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 startActivity(new Intent(Login.this, Crear_usuario.class));
+                finish();
             }
         });
 
@@ -98,11 +99,12 @@ public class Login extends AppCompatActivity {
             String usua=cursor.getString(1);
             String contra=cursor.getString(2);
             Log.d("id:", id);
-            if (usua.equals(lo_usuario.getText().toString()) && contra.equals(lo_contrasena.getText().toString())){
+            if (usua.equals(lo_usuario.getText().toString().trim()) && contra.equals(lo_contrasena.getText().toString().trim())){
                 editor.putString("access_token", id);
                 editor.commit();
                 Intent principal=new Intent(this,MainActivity.class);
                 startActivity(principal);
+                finish();
             }
         }else{
             Toast.makeText(getApplicationContext(), "Usuario y/o contraseña incorrecta", Toast.LENGTH_SHORT).show();

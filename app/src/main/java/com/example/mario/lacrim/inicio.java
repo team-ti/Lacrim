@@ -135,7 +135,7 @@ public class inicio extends Fragment {
                 //int id = ListarEquinos.get(position).getId_equino();
                 //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
                 startActivity(intent);
-                getActivity().finish();
+            //    getActivity().finish();
             }
         }));
 

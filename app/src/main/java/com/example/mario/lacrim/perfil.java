@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.Equinos;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import java.util.ArrayList;
 
 
 /**
@@ -32,14 +38,17 @@ import com.example.mario.lacrim.Utilidades.Constantes;
 public class perfil extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    ConexionSQLiteHelper conn;
-    EditText ed_nombres, ed_apellidos, ed_correo, ed_ciudad, ed_usuario, ed_password;
-    Button btn_actualizarus;
     View view;
-    String token;
+    FloatingActionButton Fbutton;
+    ArrayList<Equinos> ListarEquinos;
+    TextView txt_us;
+    private RecyclerView.LayoutManager mLayoutManager;
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
-    private RecyclerView.LayoutManager mLayoutManager;
+    ConexionSQLiteHelper conn;
+    RecyclerView R_lista;
+    String token;
+    ImageButton perfil_usuario;
 
 
 
@@ -60,28 +69,36 @@ public class perfil extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_perfil, container, false);
-        ed_nombres = view.findViewById(R.id.ed_us_nombres);
-        ed_apellidos = view.findViewById(R.id.ed_us_apellidos);
-        ed_correo = view.findViewById(R.id.ed_us_correo);
-        ed_ciudad = view.findViewById(R.id.ed_us_ciudad);
-        ed_usuario = view.findViewById(R.id.ed_us_usuario);
-        ed_password = view.findViewById(R.id.ed_us_contrasena);
-        btn_actualizarus = view.findViewById(R.id.btn_actualizarus);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        Fbutton =  view.findViewById(R.id.Fbutton_perfil);
+        txt_us = view.findViewById(R.id.txt_usu);
+        perfil_usuario = view.findViewById(R.id.perfil_usuario);
+        R_lista =  view.findViewById(R.id.R_lista_perfil);
+        R_lista.setLayoutManager(this.mLayoutManager);
 
         cargarDatosToken();
 
         conn=new ConexionSQLiteHelper(getActivity(),"bd_equinos",null,1);
+        consultarLista();
 
-        consultar();
 
-        btn_actualizarus.setOnClickListener(new View.OnClickListener() {
-            @Override
+        R_lista.setAdapter(new Adaptador_lista(ListarEquinos));
+
+        Fbutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-               actualizarUsuario();
-
+                startActivity(new Intent(getActivity(), Crear_equino.class));
+                getActivity().finish();
             }
         });
+
+        perfil_usuario.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), PerfilUsuario.class));
+            }
+        });
+
+
+        consultar_usuario();
         return view;
     }
 
@@ -90,49 +107,77 @@ public class perfil extends Fragment {
         token = getActivity().getSharedPreferences(dataUserCache,modo_private).getString("access_token", "no hay info");
     }
 
-    private void consultar() {
+    private void consultarLista() {
+
+
+        ListarEquinos = new ArrayList<>();
+
+        SQLiteDatabase db = conn.getReadableDatabase();
+        String[] parametros = {token};
+        Equinos equino = null;
+
+        Cursor cursor;
+
+
+        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO + " WHERE " + Constantes.CAMPO_ID_USUARIO_EQUINO + "=?", parametros);
+
+
+        //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
+
+        while (cursor.moveToNext()) {
+            equino = new Equinos();
+
+            equino.setId_equino(cursor.getString(0));
+            equino.setNombre_equino(cursor.getString(1));
+            equino.setSexo_equino(cursor.getString(4));
+            equino.setAndar_equino(cursor.getString(9));
+            equino.setColor_equino(cursor.getString(5));
+
+
+            ListarEquinos.add(equino);
+
+
+        }
+        R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                //int id = ListarEquinos.get(position).getId_equino();
+                //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
+                startActivity(intent);
+
+            }
+        }));
+
+        cursor.close();
+    }
+
+    private void consultar_usuario() {
         SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros= {token};
-        String[] campos={Constantes.CAMPO_NOMBRE,Constantes.CAMPO_APELLIDO,Constantes.CAMPO_CORREO,Constantes.CAMPO_CIUDAD,
-                Constantes.CAMPO_USER,Constantes.CAMPO_CONTRASENA};
+        String[] parametros={token};
+        String[] campos={Constantes.CAMPO_USER};
+        //Cursor cursor;
 
         try {
+
             Cursor cursor =db.query(Constantes.TABLA_USUARIO,campos,Constantes.CAMPO_ID+"=?",parametros,null,null,null);
+
             cursor.moveToFirst();
 
-            ed_nombres.setText(cursor.getString(0));
-            ed_apellidos.setText(cursor.getString(1));
-            ed_correo.setText(cursor.getString(2));
-            ed_ciudad.setText(cursor.getString(3));
-            ed_usuario.setText(cursor.getString(4));
-            ed_password.setText(cursor.getString(5));
+            //txt_detalle_equino.setText(cursor.getString(1));
+            txt_us.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_USER)));
 
             cursor.close();
+
         }catch (Exception e){
             Toast.makeText(getActivity(),"El usuario no existe",Toast.LENGTH_LONG).show();
+
         }
 
-    }
-
-    private void actualizarUsuario() {
-        SQLiteDatabase db=conn.getWritableDatabase();
-
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_NOMBRE,ed_nombres.getText().toString());
-        values.put(Constantes.CAMPO_APELLIDO,ed_apellidos.getText().toString());
-        values.put(Constantes.CAMPO_CORREO,ed_correo.getText().toString());
-        values.put(Constantes.CAMPO_CIUDAD, ed_ciudad.getText().toString());
-        values.put(Constantes.CAMPO_USER,ed_usuario.getText().toString().trim());
-        values.put(Constantes.CAMPO_CONTRASENA,ed_password.getText().toString().trim());
-        String[] parametros= {token};
-
-        db.update(Constantes.TABLA_USUARIO, values, Constantes.CAMPO_ID+"=?",parametros);
-
-        Toast.makeText(getActivity(),"Usuario actualizado",Toast.LENGTH_SHORT).show();
-        db.close();
-
-
 
     }
+
 
 }

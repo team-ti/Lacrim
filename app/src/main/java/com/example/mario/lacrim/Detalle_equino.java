@@ -106,11 +106,11 @@ public class Detalle_equino extends AppCompatActivity {
     }
 
 
-    public void onBackPressed() {
+  /*  public void onBackPressed() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
-    }
+    }*/
 
 
 }

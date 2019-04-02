@@ -17,8 +17,8 @@ public class Detalle_equino extends AppCompatActivity {
 
     TextView txt_detalle_equino;
     String id_equino;
-    int interfaz;
     LinearLayout ln_datos_generales, ln_premios, ln_alimentos;
+    String interfaz;
 
     ConexionSQLiteHelper conn;
 
@@ -35,6 +35,7 @@ public class Detalle_equino extends AppCompatActivity {
         conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
         id_equino = getIntent().getExtras().getString("id");
+        interfaz = getIntent().getExtras().getString("interfaz");
 
 
 
@@ -44,6 +45,7 @@ public class Detalle_equino extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Datos_generales.class);
                 intent.putExtra("id",id_equino);
+                intent.putExtra("interfaz",interfaz);
                 startActivity(intent);
                 finish();
 
@@ -56,6 +58,7 @@ public class Detalle_equino extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Premiacion.class);
                 intent.putExtra("id",id_equino);
+                intent.putExtra("interfaz",interfaz);
                 startActivity(intent);
                 finish();
 
@@ -68,6 +71,7 @@ public class Detalle_equino extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Alimentacion.class);
                 intent.putExtra("id",id_equino);
+                intent.putExtra("interfaz",interfaz);
                 startActivity(intent);
                 finish();
 

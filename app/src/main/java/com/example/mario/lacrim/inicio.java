@@ -132,6 +132,7 @@ public class inicio extends Fragment {
 
                 Intent intent = new Intent(getActivity(), Detalle_equino.class);
                 intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                intent.putExtra("interfaz","1");
                 //int id = ListarEquinos.get(position).getId_equino();
                 //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
                 startActivity(intent);

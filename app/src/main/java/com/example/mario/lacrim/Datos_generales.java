@@ -23,6 +23,8 @@ public class Datos_generales extends AppCompatActivity {
     EditText ed_nombre, ed_fecha_nacimiento, ed_lugar_nacimiento, ed_sexo, ed_color, ed_microship, ed_criador, ed_Tipo, ed_andar,ed_propietario;
     Button bt_actualizar;
     String id_equino;
+    String interfaz;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +45,27 @@ public class Datos_generales extends AppCompatActivity {
 
 
         id_equino = getIntent().getExtras().getString("id");
+        interfaz = getIntent().getExtras().getString("interfaz");
         conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
         consultar();
+
+        if (interfaz.equalsIgnoreCase("2")){
+
+            bt_actualizar.setVisibility(View.GONE);
+            ed_nombre.setEnabled(false);
+            ed_fecha_nacimiento.setEnabled(false);
+            ed_lugar_nacimiento.setEnabled(false);
+            ed_sexo.setEnabled(false);
+            ed_color.setEnabled(false);
+            ed_microship.setEnabled(false);
+            ed_criador.setEnabled(false);
+            ed_Tipo.setEnabled(false);
+            ed_andar.setEnabled(false);
+            ed_propietario.setEnabled(false);
+
+
+        }
 
         bt_actualizar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +134,7 @@ public class Datos_generales extends AppCompatActivity {
     public void onBackPressed() {
         Intent i = new Intent(this, Detalle_equino.class);
         i.putExtra("id",id_equino);
+        i.putExtra("interfaz",interfaz);
         startActivity(i);
         finish();
     }

@@ -54,7 +54,7 @@ public class Detalle_equino extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), Premios.class);
+                Intent intent = new Intent(getApplicationContext(), Premiacion.class);
                 intent.putExtra("id",id_equino);
                 startActivity(intent);
                 finish();

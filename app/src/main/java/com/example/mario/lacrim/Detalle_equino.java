@@ -43,7 +43,7 @@ public class Detalle_equino extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getApplicationContext(), Datos_generales.class);
-                intent.putExtra("id",id_equino);
+                intent.putExtra("id",id_equino );
                 startActivity(intent);
                 finish();
 

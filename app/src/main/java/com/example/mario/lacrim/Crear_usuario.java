@@ -64,6 +64,24 @@ public class Crear_usuario extends AppCompatActivity {
         }
     }
 
+    boolean consultarCorreo(String correo){
+        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this, "bd_equinos", null, 1);
+
+        SQLiteDatabase db = conn.getWritableDatabase();
+        Cursor cursor;
+        String txt_correo = us_correo.getText().toString().trim();
+        String[] columns = {Constantes.CAMPO_CORREO};
+        String selection = Constantes.CAMPO_CORREO + " = ?";
+        String[] selectionArgs = {txt_correo};
+        String tableName = Constantes.TABLA_USUARIO;
+        cursor = db.query(tableName, columns, selection, selectionArgs, null, null, null);
+        if (cursor.moveToFirst() == true) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     private void validarcampos() {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         boolean match = pattern.matcher(us_correo.getText().toString()).matches();
@@ -75,13 +93,17 @@ public class Crear_usuario extends AppCompatActivity {
             us_apellidos.requestFocus();
             Toast.makeText(getApplicationContext(), "Apellidos no puede estar vacio", Toast.LENGTH_SHORT).show();
 
+        } else if (consultarCorreo(us_correo.getText().toString())){
+            us_correo.requestFocus();
+            Toast.makeText(getApplicationContext(), "Correo ya existe", Toast.LENGTH_SHORT).show();
+
         } else if (us_correo == null || us_correo.getText().toString().equals("")) {
             us_correo.requestFocus();
             Toast.makeText(getApplicationContext(), "Correo no puede estar vacio", Toast.LENGTH_SHORT).show();
         } else  if (!match){
             us_correo.requestFocus();
             Toast.makeText(getApplicationContext(), "Formato de correo incorreto", Toast.LENGTH_SHORT).show();
-            
+
         } else if (us_ciudad == null || us_ciudad.getText().toString().equals("")) {
             us_ciudad.requestFocus();
             Toast.makeText(getApplicationContext(), "Ciudad no puede estar vacio", Toast.LENGTH_SHORT).show();

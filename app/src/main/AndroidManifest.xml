@@ -9,8 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_herradura2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".Detalle_premiacion"></activity>
         <activity android:name=".Crear_premio_equino" />
+
+        <activity android:name=".PerfilUsuario"></activity>
+
         <activity android:name=".Informacion" />
         <activity android:name=".Detalle_alimentacion" />
         <activity android:name=".Crear_alimento_equino" />

@@ -17,6 +17,8 @@
         android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="Buscar equino"
+        android:drawableLeft="@drawable/ic_buscar"
+        android:drawableStart="@drawable/ic_buscar"
         android:inputType="textPersonName" />
 
     <android.support.v7.widget.RecyclerView

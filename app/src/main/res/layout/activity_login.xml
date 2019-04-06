@@ -71,6 +71,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
+                android:drawableStart="@drawable/ic_perfil"
+                android:drawableLeft="@drawable/ic_perfil"
                 android:ems="10"
                 android:inputType="textPersonName" />
 
@@ -91,6 +93,8 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
                 android:ems="10"
+                android:drawableLeft="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_password"
                 android:inputType="textPassword" />
 
             <Button

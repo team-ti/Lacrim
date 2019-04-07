@@ -33,12 +33,14 @@ public class Constantes {
     public static final String CAMPO_ANDAR_EQUINO="andar";
     public static final String CAMPO_PROPIETARIO_EQUINO="propietario";
     public static final String CAMPO_ID_USUARIO_EQUINO="id_user";
+    public static final String CAMPO_ID_PESEBRERA_EQUINO="id_pesebrera";
+
 
 
 
     public static final String CREAR_TABLA_EQUINO="CREATE TABLE " +
             ""+TABLA_EQUINO+" ("+CAMPO_ID_EQUINO+" INTEGER PRIMARY KEY AUTOINCREMENT, "
-            +CAMPO_NOMBRE_EQUINO+" TEXT, "+CAMPO_FECHA_EQUINO+" TEXT,"+CAMPO_LUGAR_EQUINO+" TEXT,"+CAMPO_SEXO_EQUINO+" TEXT,"+CAMPO_COLOR_EQUINO+" TEXT,"+CAMPO_MICROCHIP_EQUINO+" TEXT,"+CAMPO_CRIADOR_EQUINO+" TEXT,"+CAMPO_TIPO_EQUINO+" TEXT,"+CAMPO_ANDAR_EQUINO+" TEXT,"+CAMPO_PROPIETARIO_EQUINO+" TEXT,"+CAMPO_ID_USUARIO_EQUINO+" INTEGER)";
+            +CAMPO_NOMBRE_EQUINO+" TEXT, "+CAMPO_FECHA_EQUINO+" TEXT,"+CAMPO_LUGAR_EQUINO+" TEXT,"+CAMPO_SEXO_EQUINO+" TEXT,"+CAMPO_COLOR_EQUINO+" TEXT,"+CAMPO_MICROCHIP_EQUINO+" TEXT,"+CAMPO_CRIADOR_EQUINO+" TEXT,"+CAMPO_TIPO_EQUINO+" TEXT,"+CAMPO_ANDAR_EQUINO+" TEXT,"+CAMPO_PROPIETARIO_EQUINO+" TEXT,"+CAMPO_ID_USUARIO_EQUINO+" INTEGER,"+CAMPO_ID_PESEBRERA_EQUINO+" INTEGER)";
 
 
 
@@ -73,6 +75,35 @@ public class Constantes {
             ""+TABLA_ALIMENTOS+" ("+CAMPO_ID_ALIMENTO+" INTEGER PRIMARY KEY AUTOINCREMENT, "
             +CAMPO_NOMBRE_ALIMENTO+" TEXT, "+CAMPO_DESCRIPCION_ALIMENTO+" TEXT,"+CAMPO_FECHA_ALIMENTO+" TEXT,"+CAMPO_ID_EQUINO_ALIMENTO+" INTEGER)";
 
+
+    //Constantes campos tabla pesebrera
+    public static final String TABLA_PESEBRERA="pesebrera";
+
+    public static final String CAMPO_ID_PESEBRERA="id_pesebrera";
+    public static final String CAMPO_NOMBRE_PESEBRERA="nombre";
+    public static final String CAMPO_ENCARGADO_PESEBRERA="encargado";
+    public static final String CAMPO_CIUDAD_PESEBRERA="ciudad";
+    public static final String CAMPO_TELEFONO_PESEBRERA="telefono";
+    public static final String CAMPO_ID_USUARIO_PESEBRERA="id_user";
+
+
+    public static final String CREAR_TABLA_PESEBRERA="CREATE TABLE " +
+            ""+TABLA_PESEBRERA+" ("+CAMPO_ID_PESEBRERA+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+            +CAMPO_NOMBRE_PESEBRERA+" TEXT, "+CAMPO_ENCARGADO_PESEBRERA+" TEXT,"+CAMPO_CIUDAD_PESEBRERA+" TEXT,"+CAMPO_TELEFONO_PESEBRERA+" TEXT,"+CAMPO_ID_USUARIO_PESEBRERA+" INTEGER)";
+
+
+
+    //Constantes campos tabla solicitud
+    public static final String TABLA_SOLICITUD="solicitud";
+
+    public static final String CAMPO_ID_SOLICITUD="id_solicitud";
+    public static final String CAMPO_ID_EQUINO_SOLICITUD="id_equino";
+    public static final String CAMPO_ID_PESEBRERA_SOLICITUD="id_pesebrera";
+
+
+    public static final String CREAR_TABLA_SOLICITUD="CREATE TABLE " +
+            ""+TABLA_SOLICITUD+" ("+CAMPO_ID_SOLICITUD+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+            +CAMPO_ID_EQUINO_SOLICITUD+" INTEGER, "+CAMPO_ID_PESEBRERA_SOLICITUD+" INTEGER)";
 
 
 

@@ -91,6 +91,8 @@ public class buscar extends Fragment {
                 }else{
 
                     consultar_equinos(palabra_buscar);
+                    R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos));
+
 
                 }
 
@@ -132,6 +134,7 @@ public class buscar extends Fragment {
 
         while (cursor.moveToNext()) {
             equino = new Equinos();
+            equino.setId_equino(cursor.getString(0));
             equino.setNombre_equino(cursor.getString(1));
             equino.setSexo_equino(cursor.getString(4));
             equino.setAndar_equino(cursor.getString(9));
@@ -147,6 +150,7 @@ public class buscar extends Fragment {
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getActivity(), Detalle_equino.class);
                 intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                intent.putExtra("interfaz","2");
                 startActivity(intent);
                 getActivity().finish();
             }

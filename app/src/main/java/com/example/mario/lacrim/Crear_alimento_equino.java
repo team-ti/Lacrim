@@ -27,6 +27,7 @@ public class Crear_alimento_equino extends AppCompatActivity {
     Calendar calendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date;
     String id_equino;
+    String interfaz;
 
 
     @Override
@@ -35,6 +36,7 @@ public class Crear_alimento_equino extends AppCompatActivity {
         setContentView(R.layout.activity_crear_alimento_equino);
 
         id_equino = getIntent().getExtras().getString("id");
+        interfaz = getIntent().getExtras().getString("interfaz");
 
         ed_nombre_alimento = findViewById(R.id.ed_nombre_alimentacion);
         ed_descripcion_alimento = findViewById(R.id.ed_descripcion_alimentacion);
@@ -126,6 +128,7 @@ public class Crear_alimento_equino extends AppCompatActivity {
 
         Intent i = new Intent(this, Alimentacion.class);
         i.putExtra("id",id_equino);
+        i.putExtra("interfaz",interfaz);
         startActivity(i);
         finish();
 
@@ -133,8 +136,9 @@ public class Crear_alimento_equino extends AppCompatActivity {
 
 
     public void onBackPressed() {
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, Alimentacion.class);
         i.putExtra("id",id_equino);
+        i.putExtra("interfaz",interfaz);
         startActivity(i);
         finish();
     }

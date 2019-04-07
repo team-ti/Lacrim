@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,15 +29,19 @@ public class Alimentacion extends AppCompatActivity {
     TextView txt_detalle_equino_alimento;
     FloatingActionButton Fbutton_alimentos;
     private RecyclerView.LayoutManager mLayoutManager;
+    String interfaz;
 
 
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alimentacion);
 
         id_equino = getIntent().getExtras().getString("id");
+        interfaz = getIntent().getExtras().getString("interfaz");
+
         conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
 
@@ -45,6 +50,12 @@ public class Alimentacion extends AppCompatActivity {
         txt_detalle_equino_alimento = findViewById(R.id.txt_detalle_equino_alimento);
         Fbutton_alimentos = findViewById(R.id.Fbutton_alimentos);
         R_lista_alimentacion.setLayoutManager(this.mLayoutManager);
+
+        if (interfaz.equalsIgnoreCase("2")){
+
+            Fbutton_alimentos.setVisibility(View.GONE);
+
+        }
 
 
         R_lista_alimentacion.setAdapter(new Adaptador_lista_alimentacion(ListarAlimentos));
@@ -58,6 +69,7 @@ public class Alimentacion extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Crear_alimento_equino.class);
                 intent.putExtra("id",id_equino);
+                intent.putExtra("interfaz",interfaz);
                 startActivity(intent);
                 finish();
 
@@ -131,6 +143,7 @@ public class Alimentacion extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Detalle_alimentacion.class);
                 intent.putExtra("id",ListarAlimentos.get(position).getId_alimento());
+                intent.putExtra("interfaz",interfaz);
                 startActivity(intent);
                 finish();
             }
@@ -146,6 +159,7 @@ public class Alimentacion extends AppCompatActivity {
     public void onBackPressed() {
         Intent i = new Intent(this, Detalle_equino.class);
         i.putExtra("id",id_equino);
+        i.putExtra("interfaz",interfaz);
         startActivity(i);
         finish();
     }

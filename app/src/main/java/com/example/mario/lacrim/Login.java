@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,10 @@ public class Login extends AppCompatActivity {
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
 
+    RadioButton rb_sesion;
+
+    private boolean isActivateRadioButton;
+    private static final String PREFERENCE_ESTADO_BUTTON_SESION = "estado";
 
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
@@ -35,14 +40,21 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        cargarDatos();
+        //cargarDatos();
 
         lo_usuario = findViewById(R.id.lo_usuario);
         lo_contrasena = findViewById(R.id.lo_contrasena);
+        rb_sesion = findViewById(R.id.rb_sesion);
         btnEntrar = findViewById(R.id.btn_entrar);
         btnRegistrar_lo = findViewById(R.id.btnRegistrar_lo);
         sharedpreferences = getSharedPreferences(dataUserCache, modo_private);
         editor = sharedpreferences.edit();
+
+        if (obtenerEstadoButton()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         btnRegistrar_lo.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -58,7 +70,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    public void cargarDatos() {
+    /*public void cargarDatos() {
 
         token = this.getSharedPreferences(dataUserCache,modo_private).getString("access_token", "0");
         Log.d("token", token);
@@ -67,8 +79,20 @@ public class Login extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
+    }*/
+
+
+    public static void changeEstadoButton(Context c, boolean b) {
+        c.getSharedPreferences(dataUserCache, 0).edit().putBoolean(PREFERENCE_ESTADO_BUTTON_SESION, b).apply();
     }
 
+    public void guardarEstadoButton() {
+        getSharedPreferences(dataUserCache, 0).edit().putBoolean(PREFERENCE_ESTADO_BUTTON_SESION, rb_sesion.isChecked()).apply();
+    }
+
+    public boolean obtenerEstadoButton() {
+        return getSharedPreferences(dataUserCache, 0).getBoolean(PREFERENCE_ESTADO_BUTTON_SESION, false);
+    }
 
 
     private void validarCampos(){
@@ -102,6 +126,7 @@ public class Login extends AppCompatActivity {
             if (usua.equals(lo_usuario.getText().toString().trim()) && contra.equals(lo_contrasena.getText().toString().trim())){
                 editor.putString("access_token", id);
                 editor.commit();
+                guardarEstadoButton();
                 Intent principal=new Intent(this,MainActivity.class);
                 startActivity(principal);
                 finish();

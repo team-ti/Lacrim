@@ -91,11 +91,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
                 android:ems="10"
                 android:drawableLeft="@drawable/ic_password"
                 android:drawableStart="@drawable/ic_password"
                 android:inputType="textPassword" />
+
+            <RadioButton
+                android:id="@+id/rb_sesion"
+                android:textColorHint="#ffffff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="No Cerrar Sesion"/>
+
 
             <Button
                 android:id="@+id/btn_entrar"

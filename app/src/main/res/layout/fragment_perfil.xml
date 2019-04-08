@@ -65,16 +65,42 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginTop="30px"
+                android:orientation="vertical"
                 >
-                <android.support.v7.widget.RecyclerView
+
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TabLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        app:tabIndicatorHeight="0dp"
+                        app:tabMode="fixed"
+                        app:tabGravity="fill"
+                        android:id="@+id/tablayout_id"
+                    />
+                </android.support.design.widget.AppBarLayout>
+
+                <android.support.v4.view.ViewPager
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/viewpager_id"
+                    app:layout_behavior = "@string/appbar_scrolling_view_behavior"
+                    />
+
+
+               <!-- <android.support.v7.widget.RecyclerView
                     android:id="@+id/R_lista_perfil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
+                    />-->
 
             </LinearLayout>
 
-            <android.support.design.widget.FloatingActionButton
+          <!--  <android.support.design.widget.FloatingActionButton
                 android:id="@+id/Fbutton_perfil"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,6 +112,7 @@
                 android:tint="#ffffff"
                 app:backgroundTint="?attr/actionModeSplitBackground"
                 app:srcCompat="@android:drawable/ic_input_add" />
+-->
 
         </LinearLayout>
 

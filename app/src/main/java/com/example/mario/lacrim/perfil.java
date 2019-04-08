@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,6 +48,8 @@ public class perfil extends Fragment {
     RecyclerView R_lista;
     String token;
     ImageButton perfil_usuario;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
 
 
@@ -64,28 +69,39 @@ public class perfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_perfil, container, false);
+        view = inflater.inflate(R.layout.fragment_perfil, container, false);
         mLayoutManager = new LinearLayoutManager(getActivity());
-        Fbutton =  view.findViewById(R.id.Fbutton_perfil);
+        // Fbutton =  view.findViewById(R.id.Fbutton_perfil);
         txt_us = view.findViewById(R.id.txt_usu);
         perfil_usuario = view.findViewById(R.id.perfil_usuario);
-        R_lista =  view.findViewById(R.id.R_lista_perfil);
-        R_lista.setLayoutManager(this.mLayoutManager);
+        //   R_lista =  view.findViewById(R.id.R_lista_perfil);
+//        R_lista.setLayoutManager(this.mLayoutManager);
+
+        tabLayout = view.findViewById(R.id.tablayout_id);
+        viewPager = view.findViewById(R.id.viewpager_id);
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
+        adapter.AddFragment(new FragmentEquinos(), "Equinos");
+        adapter.AddFragment(new FragmentPesebreras(), "Pesebreras");
+
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+
 
         cargarDatosToken();
 
-        conn=new ConexionSQLiteHelper(getActivity(),"bd_equinos",null,1);
-        consultarLista();
+        conn = new ConexionSQLiteHelper(getActivity(), "bd_equinos", null, 1);
+    //        consultarLista();
 
 
-        R_lista.setAdapter(new Adaptador_lista(ListarEquinos));
+       // R_lista.setAdapter(new Adaptador_lista(ListarEquinos));
 
-        Fbutton.setOnClickListener(new View.OnClickListener() {
+      /*  Fbutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), Crear_equino.class));
                 getActivity().finish();
             }
-        });
+        });*/
 
         perfil_usuario.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -134,18 +150,20 @@ public class perfil extends Fragment {
 
 
         }
-        R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+    /*    R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
             @Override
             public void onClick(View v, int position) {
 
                 Intent intent = new Intent(getActivity(), Detalle_equino.class);
                 intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                intent.putExtra("interfaz","1");
+
                 //int id = ListarEquinos.get(position).getId_equino();
                 //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
                 startActivity(intent);
 
             }
-        }));
+        }));*/
 
         cursor.close();
     }

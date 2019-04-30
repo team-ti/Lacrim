@@ -50,10 +50,11 @@ public class Adaptador_lista_pesebrera extends RecyclerView.Adapter<Adaptador_li
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_pesebrera, parent, false));
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         holder.tv_nombre_pes.setText(((Pesebrera) pes.get(position)).getNombre_pes());
         holder.tv_encargado_pes.setText(((Pesebrera) pes.get(position)).getEncargado_pes());
         holder.tv_ciudad_pes.setText(((Pesebrera) pes.get(position)).getCiudad_pes());

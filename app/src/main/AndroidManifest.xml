@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_herradura2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CrearPesebrera"></activity>
+        <activity android:name=".DatosPesebrera"></activity>
+        <activity android:name=".DetallePesebrera" />
+        <activity android:name=".CrearPesebrera" />
         <activity android:name=".Detalle_premiacion" />
         <activity android:name=".Crear_premio_equino" />
         <activity android:name=".PerfilUsuario" />

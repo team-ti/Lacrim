@@ -50,6 +50,7 @@ public class perfil extends Fragment {
     ImageButton perfil_usuario;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    ViewPagerAdapter adapter;
 
 
 
@@ -71,16 +72,15 @@ public class perfil extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_perfil, container, false);
         mLayoutManager = new LinearLayoutManager(getActivity());
-        // Fbutton =  view.findViewById(R.id.Fbutton_perfil);
+
         txt_us = view.findViewById(R.id.txt_usu);
         perfil_usuario = view.findViewById(R.id.perfil_usuario);
-        //   R_lista =  view.findViewById(R.id.R_lista_perfil);
-//        R_lista.setLayoutManager(this.mLayoutManager);
+
 
         tabLayout = view.findViewById(R.id.tablayout_id);
         viewPager = view.findViewById(R.id.viewpager_id);
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
+        adapter = new ViewPagerAdapter(getFragmentManager());
         adapter.AddFragment(new FragmentEquinos(), "Equinos");
         adapter.AddFragment(new FragmentPesebreras(), "Pesebreras");
 
@@ -91,17 +91,6 @@ public class perfil extends Fragment {
         cargarDatosToken();
 
         conn = new ConexionSQLiteHelper(getActivity(), "bd_equinos", null, 1);
-    //        consultarLista();
-
-
-       // R_lista.setAdapter(new Adaptador_lista(ListarEquinos));
-
-      /*  Fbutton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), Crear_equino.class));
-                getActivity().finish();
-            }
-        });*/
 
         perfil_usuario.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -119,54 +108,7 @@ public class perfil extends Fragment {
         token = getActivity().getSharedPreferences(dataUserCache,modo_private).getString("access_token", "no hay info");
     }
 
-    private void consultarLista() {
 
-
-        ListarEquinos = new ArrayList<>();
-
-        SQLiteDatabase db = conn.getReadableDatabase();
-        String[] parametros = {token};
-        Equinos equino = null;
-
-        Cursor cursor;
-
-
-        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO + " WHERE " + Constantes.CAMPO_ID_USUARIO_EQUINO + "=?", parametros);
-
-
-        //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
-
-        while (cursor.moveToNext()) {
-            equino = new Equinos();
-
-            equino.setId_equino(cursor.getString(0));
-            equino.setNombre_equino(cursor.getString(1));
-            equino.setSexo_equino(cursor.getString(4));
-            equino.setAndar_equino(cursor.getString(9));
-            equino.setColor_equino(cursor.getString(5));
-
-
-            ListarEquinos.add(equino);
-
-
-        }
-    /*    R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-
-                Intent intent = new Intent(getActivity(), Detalle_equino.class);
-                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
-                intent.putExtra("interfaz","1");
-
-                //int id = ListarEquinos.get(position).getId_equino();
-                //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
-                startActivity(intent);
-
-            }
-        }));*/
-
-        cursor.close();
-    }
 
     private void consultar_usuario() {
         SQLiteDatabase db=conn.getReadableDatabase();

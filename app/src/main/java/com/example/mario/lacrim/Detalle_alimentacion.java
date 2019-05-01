@@ -17,6 +17,7 @@ public class Detalle_alimentacion extends AppCompatActivity {
     ConexionSQLiteHelper conn;
     EditText ed_nombre_detalle_alimentacion, ed_fecha_detalle_alimentacion, ed_descripcion_detalle_alimentacion;
     String id_equino;
+    String interfaz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,8 @@ public class Detalle_alimentacion extends AppCompatActivity {
         ed_descripcion_detalle_alimentacion = findViewById(R.id.ed_descripcion_detalle_alimentacion);
 
         id_equino = getIntent().getExtras().getString("id");
+        interfaz = getIntent().getExtras().getString("interfaz");
+
         conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
         consultar_alimentacion();
@@ -58,6 +61,7 @@ public class Detalle_alimentacion extends AppCompatActivity {
     public void onBackPressed() {
         Intent i = new Intent(this, Alimentacion.class);
         i.putExtra("id",id_equino);
+        i.putExtra("interfaz",interfaz);
         startActivity(i);
         finish();
     }

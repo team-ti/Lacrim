@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,7 +29,10 @@ public class Premiacion extends AppCompatActivity {
     TextView txt_detalle_equino_premiacion;
     FloatingActionButton Fbutton_premiacion;
     private RecyclerView.LayoutManager mLayoutManager;
+    String interfaz;
 
+
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +40,7 @@ public class Premiacion extends AppCompatActivity {
 
 
         id_equino = getIntent().getExtras().getString("id");
+        interfaz = getIntent().getExtras().getString("interfaz");
         conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
 
@@ -44,6 +49,12 @@ public class Premiacion extends AppCompatActivity {
         txt_detalle_equino_premiacion = findViewById(R.id.txt_detalle_equino_premiacion);
         Fbutton_premiacion = findViewById(R.id.Fbutton_premiacion);
         R_lista_premiacion.setLayoutManager(this.mLayoutManager);
+
+        if (interfaz.equalsIgnoreCase("2")){
+
+            Fbutton_premiacion.setVisibility(View.GONE);
+
+        }
 
 
         R_lista_premiacion.setAdapter(new Adaptador_lista_premiacion(ListarPremios));
@@ -57,6 +68,7 @@ public class Premiacion extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Crear_premio_equino.class);
                 intent.putExtra("id",id_equino);
+                intent.putExtra("interfaz",interfaz);
                 startActivity(intent);
                 finish();
             }
@@ -129,6 +141,7 @@ public class Premiacion extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Detalle_premiacion.class);
                 intent.putExtra("id",ListarPremios.get(position).getId_premio());
+                intent.putExtra("interfaz",interfaz);
                 startActivity(intent);
                 finish();
             }
@@ -144,6 +157,7 @@ public class Premiacion extends AppCompatActivity {
     public void onBackPressed() {
         Intent i = new Intent(this, Detalle_equino.class);
         i.putExtra("id",id_equino);
+        i.putExtra("interfaz",interfaz);
         startActivity(i);
         finish();
     }

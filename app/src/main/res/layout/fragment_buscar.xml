@@ -7,19 +7,36 @@
     tools:context=".buscar">
 
 
-    <EditText
-        android:id="@+id/ed_buscar_equino"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-        android:hint="Buscar equino"
-        android:drawableLeft="@drawable/ic_buscar"
-        android:drawableStart="@drawable/ic_buscar"
-        android:inputType="textPersonName" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/ed_buscar_equino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:layout_weight="3"
+            android:hint="Buscar equino"
+            android:drawableLeft="@drawable/ic_buscar"
+            android:inputType="textPersonName" />
+
+        <Spinner
+            android:id="@+id/sp_tipo_buscar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:entries="@array/opciones_buscar">
+        </Spinner>
+
+    </LinearLayout>
+
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/R_lista_buscar"

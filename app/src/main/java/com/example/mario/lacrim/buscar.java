@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
@@ -41,6 +42,7 @@ public class buscar extends Fragment {
     ConexionSQLiteHelper conn;
     RecyclerView R_lista_buscar;
     String palabra_buscar;
+    Spinner sp_tipo_buscar;
 
     public buscar() {
         // Required empty public constructor
@@ -66,6 +68,7 @@ public class buscar extends Fragment {
 
         ed_buscar_equino = view.findViewById(R.id.ed_buscar_equino);
         R_lista_buscar =  view.findViewById(R.id.R_lista_buscar);
+        sp_tipo_buscar = view.findViewById(R.id.sp_tipo_buscar);
         R_lista_buscar.setLayoutManager(this.mLayoutManager);
 
 
@@ -90,8 +93,20 @@ public class buscar extends Fragment {
 
                 }else{
 
-                    consultar_equinos(palabra_buscar);
-                    R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos));
+
+                    if (sp_tipo_buscar.getSelectedItem().toString().equalsIgnoreCase("Equino")){
+
+                        consultar_equinos(palabra_buscar);
+                        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos));
+
+                    }else{
+
+                        consultar_pesebrera(palabra_buscar);
+                        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos));
+
+                    }
+
+
 
 
                 }
@@ -129,9 +144,6 @@ public class buscar extends Fragment {
             cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_NOMBRE_EQUINO+" LIKE ?",parametros);
 
 
-
-
-
         while (cursor.moveToNext()) {
             equino = new Equinos();
             equino.setId_equino(cursor.getString(0));
@@ -158,6 +170,50 @@ public class buscar extends Fragment {
         cursor.close();
 
 
+    }
+
+
+    private void consultar_pesebrera(String palabra_buscar) {
+
+
+        SQLiteDatabase db=conn.getReadableDatabase();
+
+        Equinos equino=null;
+
+        Cursor cursor;
+
+        ListarEquinos = new ArrayList<>();
+
+
+        String[] parametros={palabra_buscar+"%"};
+
+        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_NOMBRE_EQUINO+" LIKE ?",parametros);
+
+
+        while (cursor.moveToNext()) {
+            equino = new Equinos();
+            equino.setId_equino(cursor.getString(0));
+            equino.setNombre_equino(cursor.getString(1));
+            equino.setSexo_equino(cursor.getString(4));
+            equino.setAndar_equino(cursor.getString(9));
+            equino.setColor_equino(cursor.getString(5));
+
+
+            ListarEquinos.add(equino);
+
+        }
+
+        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                intent.putExtra("interfaz","2");
+                startActivity(intent);
+                getActivity().finish();
+            }
+        }));
+        cursor.close();
 
 
     }

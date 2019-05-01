@@ -5,6 +5,7 @@
       <map>
         <entry key="imageWizard">
           <value>
+<<<<<<< HEAD
             <PersistentState>
               <option name="children">
                 <map>
@@ -128,6 +129,9 @@
                 </map>
               </option>
             </PersistentState>
+=======
+            <PersistentState />
+>>>>>>> ff4a143ba9b07766c5bdf2474d15d16c5a7a4848
           </value>
         </entry>
         <entry key="vectorWizard">

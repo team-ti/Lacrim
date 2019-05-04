@@ -126,6 +126,7 @@ public class Datos_generales extends AppCompatActivity {
 
         Intent i = new Intent(this, Detalle_equino.class);
         i.putExtra("id",id_equino);
+        i.putExtra("interfaz",interfaz);
         startActivity(i);
         finish();
 

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.Pesebrera;
 import com.example.mario.lacrim.Utilidades.Constantes;
 
 public class CrearPesebrera extends AppCompatActivity {
@@ -85,20 +86,36 @@ public class CrearPesebrera extends AppCompatActivity {
 
 
 
-        db.insert(Constantes.TABLA_PESEBRERA,Constantes.CAMPO_ID_PESEBRERA,values);
+        long id = db.insert(Constantes.TABLA_PESEBRERA,Constantes.CAMPO_ID_PESEBRERA,values);
+
+
 
         Toast.makeText(getApplicationContext(),"Pesebrera resgistrada",Toast.LENGTH_SHORT).show();
         db.close();
 
-        startActivity(new Intent(CrearPesebrera.this, MainActivity.class));
+        //startActivity(new Intent(CrearPesebrera.this, MainActivity.class));
+
+        Pesebrera pese = null;
+
+        pese = new Pesebrera();
+
+        pese.setId_pes(String.valueOf(id));
+        pese.setNombre_pes(nombre.getText().toString());
+        pese.setEncargado_pes(encargado.getText().toString());
+        pese.setCiudad_pes(ciudad.getText().toString());
+        pese.setTelefono_pes(telefono.getText().toString());
+
+        FragmentPesebreras fragmentPesebreras = new FragmentPesebreras();
+        fragmentPesebreras.ChangeAdapterPesebrera(pese);
+
         finish();
 
     }
 
 
     public void onBackPressed() {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
+        //Intent i = new Intent(this, MainActivity.class);
+        //startActivity(i);
         finish();
     }
 }

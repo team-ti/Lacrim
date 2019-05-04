@@ -27,13 +27,14 @@ import java.util.ArrayList;
 public class FragmentPesebreras extends Fragment {
     View view;
     FloatingActionButton btn_crear;
-    ArrayList<Pesebrera> ListarPesebrera;
+    static ArrayList<Pesebrera> ListarPesebrera;
     private RecyclerView.LayoutManager mLayoutManager;
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
     ConexionSQLiteHelper conn;
     RecyclerView R_lista;
     String token;
+    static  Adaptador_lista_pesebrera adaptador_pese;
 
     public FragmentPesebreras() {
     }
@@ -62,12 +63,16 @@ public class FragmentPesebreras extends Fragment {
         consultarLista();
 
 
-        R_lista.setAdapter(new Adaptador_lista_pesebrera(ListarPesebrera));
+        //R_lista.setAdapter(new Adaptador_lista_pesebrera(ListarPesebrera));
+
+        adaptador_pese = new Adaptador_lista_pesebrera(ListarPesebrera);
+        R_lista.setAdapter(adaptador_pese);
+
 
         btn_crear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), CrearPesebrera.class));
-                getActivity().finish();
+                //getActivity().finish();
             }
         });
 
@@ -130,6 +135,23 @@ public class FragmentPesebreras extends Fragment {
             Toast.makeText(getActivity(),"Error",Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    public void ChangeAdapterPesebrera(Pesebrera pese) {
+        int position = 0;
+
+
+       // for (int i = 0; i < lstPost.size(); i++) {
+
+         //   if (lstPost.get(i).getId()==id){
+
+                ListarPesebrera.add(pese);
+                //adaptador_pese.notifyItemChanged(position, lstPost);
+                adaptador_pese.notifyItemInserted(position);
+                adaptador_pese.notifyDataSetChanged();
+
+           // }
+       // }
     }
 
 

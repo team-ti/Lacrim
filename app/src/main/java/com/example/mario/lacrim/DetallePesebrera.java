@@ -38,10 +38,38 @@ public class DetallePesebrera extends AppCompatActivity {
         id_pesebrera = getIntent().getExtras().getString("id");
         interfaz_pes = getIntent().getExtras().getString("interfaz");
 
-        if (interfaz_pes.equalsIgnoreCase("1")) {
 
-            ln_solicitud.setVisibility(View.GONE);
-        }
+        ln_solicitud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), SeleccionarEquino.class);
+
+                intent.putExtra("id",id_pesebrera);
+                Log.d("id_pes", ""+id_pesebrera);
+                intent.putExtra("interfaz",interfaz_pes);
+
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+        ln_datos_generales_pes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), DatosPesebrera.class);
+
+                intent.putExtra("id",id_pesebrera);
+                Log.d("id_pes", ""+id_pesebrera);
+                intent.putExtra("interfaz",interfaz_pes);
+
+                startActivity(intent);
+                finish();
+
+            }
+        });
 
         ln_datos_generales_pes.setOnClickListener(new View.OnClickListener() {
             @Override

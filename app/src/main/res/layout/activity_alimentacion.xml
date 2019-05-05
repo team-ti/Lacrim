@@ -14,11 +14,11 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_weight="3">
+        android:layout_weight="2">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@drawable/ic_foto_default"
             android:layout_marginTop="70dp"/>
 
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text=""
-            android:textSize="24dp"
+            android:textSize="21dp"
             android:textStyle="bold"/>
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:text="Listado de entramiento y alimentacion"
-            android:textSize="22dp"
+            android:textSize="19dp"
             android:textStyle="bold"/>
 
     </LinearLayout>

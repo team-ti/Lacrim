@@ -165,7 +165,7 @@ public class Crear_equino extends AppCompatActivity {
         values.put(Constantes.CAMPO_TIPO_EQUINO,sp_tipo.getSelectedItem().toString());
         values.put(Constantes.CAMPO_ANDAR_EQUINO,sp_andar.getSelectedItem().toString());
         values.put(Constantes.CAMPO_ID_USUARIO_EQUINO,token);
-
+        values.put(Constantes.CAMPO_ID_PESEBRERA_EQUINO, 0);
 
 
         db.insert(Constantes.TABLA_EQUINO,Constantes.CAMPO_ID_EQUINO,values);

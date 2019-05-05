@@ -41,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
                     fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
                     return true;
+                case R.id.navigation_solicitud:
+                    fragment= new solicitud();
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.content, fragment).commit();
+                    return true;
                 case R.id.navigation_perfil:
                     fragment= new perfil();
                     fragmentManager = getSupportFragmentManager();

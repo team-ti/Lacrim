@@ -98,12 +98,14 @@ public class Constantes {
 
     public static final String CAMPO_ID_SOLICITUD="id_solicitud";
     public static final String CAMPO_ID_EQUINO_SOLICITUD="id_equino";
+    public static final String CAMPO_ID_USER_SOLICITUD="id_user";
     public static final String CAMPO_ID_PESEBRERA_SOLICITUD="id_pesebrera";
+    public static final String CAMPO_NOMBRE_USER_SOLICITUD="nombre_pesebrera";
 
 
     public static final String CREAR_TABLA_SOLICITUD="CREATE TABLE " +
             ""+TABLA_SOLICITUD+" ("+CAMPO_ID_SOLICITUD+" INTEGER PRIMARY KEY AUTOINCREMENT, "
-            +CAMPO_ID_EQUINO_SOLICITUD+" INTEGER, "+CAMPO_ID_PESEBRERA_SOLICITUD+" INTEGER)";
+            +CAMPO_ID_EQUINO_SOLICITUD+" INTEGER, "+CAMPO_ID_USER_SOLICITUD+" INTEGER, "+CAMPO_ID_PESEBRERA_SOLICITUD+" INTEGER, "+CAMPO_NOMBRE_USER_SOLICITUD+" TEXT)";
 
 
 

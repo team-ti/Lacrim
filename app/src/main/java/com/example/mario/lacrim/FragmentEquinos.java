@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
+import com.example.mario.lacrim.Entidades.Pesebrera;
 import com.example.mario.lacrim.Utilidades.Constantes;
 
 import java.util.ArrayList;
@@ -26,13 +27,14 @@ import java.util.ArrayList;
 public class FragmentEquinos extends Fragment {
     View view;
     FloatingActionButton btn_crear;
-    ArrayList<Equinos> ListarEquinos;
+    static ArrayList<Equinos> ListarEquinos;
     private RecyclerView.LayoutManager mLayoutManager;
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
     ConexionSQLiteHelper conn;
     RecyclerView R_lista;
     String token;
+    static  Adaptador_lista adaptador_equi;
 
 
     public FragmentEquinos() {
@@ -62,7 +64,10 @@ public class FragmentEquinos extends Fragment {
         consultarLista();
 
 
-        R_lista.setAdapter(new Adaptador_lista(ListarEquinos));
+        //R_lista.setAdapter(new Adaptador_lista(ListarEquinos));
+
+        adaptador_equi = new Adaptador_lista(ListarEquinos);
+        R_lista.setAdapter(adaptador_equi);
 
         btn_crear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -131,5 +136,22 @@ public class FragmentEquinos extends Fragment {
             Toast.makeText(getActivity(),"Error",Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    public void ChangeAdapterEquino(Equinos equi) {
+        int position = 0;
+
+
+        // for (int i = 0; i < lstPost.size(); i++) {
+
+        //   if (lstPost.get(i).getId()==id){
+
+        ListarEquinos.add(equi);
+        //adaptador_pese.notifyItemChanged(position, lstPost);
+        adaptador_equi.notifyItemInserted(position);
+        adaptador_equi.notifyDataSetChanged();
+
+        // }
+        // }
     }
 }

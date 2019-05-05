@@ -102,7 +102,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="number" />
 
 
             <Button

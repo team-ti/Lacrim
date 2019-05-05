@@ -48,8 +48,8 @@ public class perfil extends Fragment {
     RecyclerView R_lista;
     String token;
     ImageButton perfil_usuario;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
+    TabLayout tabLayout;
+    ViewPager viewPager;
     ViewPagerAdapter adapter;
 
 

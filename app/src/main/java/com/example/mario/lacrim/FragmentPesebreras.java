@@ -99,31 +99,31 @@ public class FragmentPesebreras extends Fragment {
             while (cursor.moveToNext()) {
                 pese = new Pesebrera();
 
-                pese.setNombre_pes(cursor.getString(0));
-                pese.setEncargado_pes(cursor.getString(1));
-                pese.setCiudad_pes(cursor.getString(2));
-                pese.setTelefono_pes(cursor.getString(3));
-               // pes.setColor_equino(cursor.getString(5));
+                pese.setId_pes(cursor.getString(0));
+                pese.setNombre_pes(cursor.getString(1));
+                pese.setEncargado_pes(cursor.getString(2));
+                pese.setCiudad_pes(cursor.getString(3));
+                pese.setTelefono_pes(cursor.getString(4));
 
 
-               // ListarPesebrera.add(pese);
+                ListarPesebrera.add(pese);
 
 
             }
-           /* R_lista.setAdapter(new Adaptador_lista_pesebrera(ListarPesebrera, new RecyclerViewOnItemClickListener() {
+            R_lista.setAdapter(new Adaptador_lista_pesebrera(ListarPesebrera, new RecyclerViewOnItemClickListener() {
                 @Override
                 public void onClick(View v, int position) {
 
-                    Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                    Intent intent = new Intent(getActivity(), DetallePesebrera.class);
                     intent.putExtra("id", ListarPesebrera.get(position).getId_pes());
+                    //Log.d("id", ListarPesebrera.get(position).getId_pes()+"");
                     intent.putExtra("interfaz", "1");
-
-                    //int id = ListarPesebrera.get(position).getId_equino();
-                    //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
+                    String id = ListarPesebrera.get(position).getId_pes();
+                   // Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
                     startActivity(intent);
 
                 }
-            }));*/
+            }));
 
             cursor.close();
         }catch (Exception e){
@@ -131,4 +131,6 @@ public class FragmentPesebreras extends Fragment {
 
         }
     }
+
+
 }

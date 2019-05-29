@@ -17,6 +17,7 @@
         android:layout_weight="2">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_foto_perfil_equino_alimentacion"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_foto_default"

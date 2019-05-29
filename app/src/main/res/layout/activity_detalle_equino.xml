@@ -29,8 +29,10 @@
         android:layout_weight="3">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_foto_perfil_equino_detalle"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_gravity="center"
             android:src="@drawable/ic_foto_default"
             android:layout_marginTop="80dp"/>
 
@@ -190,6 +192,54 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Alimentacion - entrenamiento"
+                    android:layout_gravity="center_vertical"/>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/ln_videos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:elevation="3dp"
+            android:background="@drawable/ic_borde_linear"
+            android:layout_marginBottom="20dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="5">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:src="@drawable/video"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Video presentacion"
                     android:layout_gravity="center_vertical"/>
 
             </LinearLayout>

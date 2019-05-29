@@ -34,6 +34,7 @@
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_foto_perfil_frag"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:src="@drawable/ic_foto_default" />

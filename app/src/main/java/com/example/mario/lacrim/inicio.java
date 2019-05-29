@@ -113,7 +113,6 @@ public class inicio extends Fragment {
 
         while (cursor.moveToNext()) {
             equino = new Equinos();
-
             equino.setId_equino(cursor.getString(0));
             equino.setNombre_equino(cursor.getString(1));
             equino.setSexo_equino(cursor.getString(4));

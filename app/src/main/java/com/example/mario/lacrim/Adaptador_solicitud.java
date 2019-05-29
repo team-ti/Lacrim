@@ -140,12 +140,14 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
     public void EliminarSolicitud(){
 
+        SQLiteDatabase db=conn.getWritableDatabase();
+        String[] parametros={String.valueOf(id_equino)};
 
+        db.delete(Constantes.TABLA_EQUINO,Constantes.CAMPO_ID_EQUINO+"=?",parametros);
+        db.close();
 
 
     }
-
-
 
 
 }

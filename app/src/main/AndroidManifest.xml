@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Presentacion"></activity>
+
+        <activity android:name=".ListarEquinosPesebrera"></activity>
+        <activity
+            android:name=".SeleccionarEquino"
+            android:theme="@style/AppTheme.CustomTheme" />
+
         <activity android:name=".DatosPesebrera" />
         <activity android:name=".DetallePesebrera" />
         <activity android:name=".CrearPesebrera" />

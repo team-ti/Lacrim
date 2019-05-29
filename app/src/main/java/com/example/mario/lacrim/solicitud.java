@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
@@ -68,6 +70,7 @@ public class solicitud extends Fragment {
 
     private void consultarLista() {
 
+        Log.d("solicitud", "hola");
 
         Listarsolicitudes = new ArrayList<>();
 
@@ -77,13 +80,11 @@ public class solicitud extends Fragment {
 
         Cursor cursor;
 
-
-        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_SOLICITUD+ " WHERE " +Constantes.CAMPO_ID_USER_SOLICITUD+"=?",parametros);
+        try{
+        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_SOLICITUD+ " WHERE " +Constantes.CAMPO_ID_USER_RECEPTOR_SOLICITUD+"=?",parametros);
 
 
         //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
-
-        if(cursor.moveToNext()){
 
             while (cursor.moveToNext()) {
                 solicitud = new Solicitudes();
@@ -91,26 +92,19 @@ public class solicitud extends Fragment {
                 solicitud.setId_equino(cursor.getInt(1));
                 solicitud.setId_user(cursor.getInt(2));
                 solicitud.setId_pesebrera(cursor.getInt(3));
-                solicitud.setNombre_solicitud(cursor.getString(4));
+                solicitud.setNombre_solicitud(cursor.getString(5));
 
 
                 Listarsolicitudes.add(solicitud);
-
             }
-
-        }else{
-
-            R_lista_solicitud.setVisibility(View.GONE);
-            txt_sin_notificacion.setVisibility(View.VISIBLE);
-
-        }
-
-
 
 
 
         cursor.close();
+        }catch (Exception e){
+            Toast.makeText(getActivity(),"Error",Toast.LENGTH_LONG).show();
 
+        }
     }
 
 }

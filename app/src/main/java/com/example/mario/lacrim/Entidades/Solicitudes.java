@@ -6,12 +6,14 @@ public class Solicitudes {
     int id_pesebrera;
     int id_user;
     String nombre_solicitud;
+    int id_user_receptor;
 
     public Solicitudes() {
         this.id_equino = id_equino;
         this.id_pesebrera = id_pesebrera;
         this.id_user = id_user;
         this.nombre_solicitud = nombre_solicitud;
+        this.id_user_receptor = id_user_receptor;
     }
 
     public int getId_equino() {
@@ -44,5 +46,13 @@ public class Solicitudes {
 
     public void setNombre_solicitud(String nombre_solicitud) {
         this.nombre_solicitud = nombre_solicitud;
+    }
+
+    public int getId_user_receptor() {
+        return id_user_receptor;
+    }
+
+    public void setId_user_receptor(int id_user_receptor) {
+        this.id_user_receptor = id_user_receptor;
     }
 }

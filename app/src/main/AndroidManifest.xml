@@ -42,7 +42,8 @@
             android:name=".Crear_equino"
             android:label="Crear equino" />
         <activity android:name=".Detalle_equino" />
-        <activity android:name=".Splash">
+        <activity android:name=".Splash"
+                  android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

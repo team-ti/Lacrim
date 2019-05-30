@@ -4,8 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,74 +19,62 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
-import com.example.mario.lacrim.Entidades.Solicitudes;
 import com.example.mario.lacrim.Utilidades.Constantes;
+import com.example.mario.lacrim.Entidades.Solicitudes;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitud.ViewHolder> {
+
+
+/////////
+
+public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitud.MyViewHolder> implements View.OnClickListener{
+
     private ArrayList<Solicitudes> sl;
     ConexionSQLiteHelper conn;
     int id_equino;
     int id_pesebrera;
-    Context mContext;
-    private static RecyclerViewOnItemClickListener recyclerViewOnItemClickListener1;
+    private Context mContext;
+    private View.OnClickListener listener;
 
-    public Adaptador_solicitud(@NonNull ArrayList<Solicitudes> v, @NonNull RecyclerViewOnItemClickListener recyclerViewOnItemClickListener) {
-        this.sl = v;
-        recyclerViewOnItemClickListener1 = recyclerViewOnItemClickListener;
+
+
+
+    public Adaptador_solicitud(Context mContext, ArrayList<Solicitudes> sl) {
+        this.mContext = mContext;
+        this.sl = sl;
     }
 
-    public static class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tv_nombre_notificacion;
-        public TextView texto_aceptar_rechazar;
-        public Button bt_aceptar_solicitud;
-        public Button bt_rechazar_solicitud;
-
-        public ViewHolder(View v) {
-            super(v);
-            tv_nombre_notificacion = itemView.findViewById(R.id.txt_nombre_notificacion);
-            bt_aceptar_solicitud = itemView.findViewById(R.id.bt_aceptar_solicitud);
-            bt_rechazar_solicitud = itemView.findViewById(R.id.bt_rechazar_solicitud);
-            texto_aceptar_rechazar = itemView.findViewById(R.id.texto_aceptar_rechazar);
-            v.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            recyclerViewOnItemClickListener1.onClick(v, getAdapterPosition());
-        }
-
-
+    @NonNull
+    @Override
+    public Adaptador_solicitud.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view;
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
+        view = mInflater.inflate(R.layout.cardview_solicitud, viewGroup, false);
+        view.setOnClickListener(this);
+        return new Adaptador_solicitud.MyViewHolder(view);
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull final Adaptador_solicitud.MyViewHolder myViewHolder, final int i) {
 
-    public Adaptador_solicitud(ArrayList<Solicitudes> pan) {
-        sl = pan;
-    }
+        String nombre = sl.get(i).getNombre_solicitud() + " te ha enviado una solicitud";
 
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_solicitud, parent, false));
-    }
+        myViewHolder.tv_nombre_notificacion.setText(nombre);
 
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-
-        String nombre = sl.get(position).getNombre_solicitud() + " te ha enviado una solicitud";
-
-        holder.tv_nombre_notificacion.setText(nombre);
-
-        id_equino = sl.get(position).getId_equino();
-        id_pesebrera = sl.get(position).getId_pesebrera();
+        id_equino = sl.get(i).getId_equino();
+        id_pesebrera = sl.get(i).getId_pesebrera();
 
 
-        holder.bt_aceptar_solicitud.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.bt_aceptar_solicitud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                holder.bt_aceptar_solicitud.setVisibility(View.GONE);
-                holder.bt_rechazar_solicitud.setVisibility(View.GONE);
-                holder.texto_aceptar_rechazar.setVisibility(View.VISIBLE);
-                holder.texto_aceptar_rechazar.setText("Solicitud aceptada");
+                myViewHolder.bt_aceptar_solicitud.setVisibility(View.GONE);
+                myViewHolder.bt_rechazar_solicitud.setVisibility(View.GONE);
+                myViewHolder.texto_aceptar_rechazar.setVisibility(View.VISIBLE);
+                myViewHolder.texto_aceptar_rechazar.setText("Solicitud aceptada");
 
                 AceptarSolicitud();
 
@@ -89,29 +82,25 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
         });
 
 
-        holder.bt_rechazar_solicitud.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.bt_rechazar_solicitud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                holder.bt_aceptar_solicitud.setVisibility(View.GONE);
-                holder.bt_rechazar_solicitud.setVisibility(View.GONE);
-                holder.texto_aceptar_rechazar.setVisibility(View.VISIBLE);
-                holder.texto_aceptar_rechazar.setText("Solicitud rechazada");
+                myViewHolder.bt_aceptar_solicitud.setVisibility(View.GONE);
+                myViewHolder.bt_rechazar_solicitud.setVisibility(View.GONE);
+                myViewHolder.texto_aceptar_rechazar.setVisibility(View.VISIBLE);
+                myViewHolder.texto_aceptar_rechazar.setText("Solicitud rechazada");
 
                 RechazarSolicitud();
 
             }
         });
 
+
     }
-
-    public int getItemCount() {
-        return sl.size();
-    }
-
-
     public void AceptarSolicitud(){
 
+        conn=new ConexionSQLiteHelper(mContext,"bd_equinos",null,1);
 
         SQLiteDatabase db=conn.getWritableDatabase();
         String[] parametros={String.valueOf(id_equino)};
@@ -140,15 +129,54 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
     public void EliminarSolicitud(){
 
+        conn=new ConexionSQLiteHelper(mContext,"bd_equinos",null,1);
+
+
         SQLiteDatabase db=conn.getWritableDatabase();
         String[] parametros={String.valueOf(id_equino)};
 
-        db.delete(Constantes.TABLA_EQUINO,Constantes.CAMPO_ID_EQUINO+"=?",parametros);
+        db.delete(Constantes.TABLA_SOLICITUD,Constantes.CAMPO_ID_EQUINO+"=?",parametros);
         db.close();
 
 
     }
 
 
+    @Override
+    public int getItemCount() {
+        return sl.size();
+    }
+
+    public void setOnClickListener(View.OnClickListener listener){
+        this.listener = listener;
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        if (listener!=null){
+            listener.onClick(view);
+        }
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView tv_nombre_notificacion;
+        public TextView texto_aceptar_rechazar;
+        public Button bt_aceptar_solicitud;
+        public Button bt_rechazar_solicitud;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            tv_nombre_notificacion = itemView.findViewById(R.id.txt_nombre_notificacion);
+            bt_aceptar_solicitud = itemView.findViewById(R.id.bt_aceptar_solicitud);
+            bt_rechazar_solicitud = itemView.findViewById(R.id.bt_rechazar_solicitud);
+            texto_aceptar_rechazar = itemView.findViewById(R.id.texto_aceptar_rechazar);
+        }
+    }
 }
+
+
+
 

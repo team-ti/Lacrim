@@ -148,8 +148,9 @@ public class SeleccionarEquino extends AppCompatActivity {
             cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO + " WHERE " + Constantes.CAMPO_ID_USUARIO_EQUINO + "=?", parametros);
 
             //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
+        int c=0;
 
-            if (cursor.moveToNext()) {
+            if (cursor.getCount()>0) {
                 while (cursor.moveToNext()) {
 
                     if (!consultarEquinoSolicitud(cursor.getString(0))) {
@@ -160,10 +161,17 @@ public class SeleccionarEquino extends AppCompatActivity {
                         equino.setAndar_equino(cursor.getString(9));
                         ListarEquinos.add(equino);
 
+                        c=c+1;
+
                     }
 
                 }
 
+                if (c==0){
+
+                    R_lista.setVisibility(View.GONE);
+                    txt_sin_equinos.setVisibility(View.VISIBLE);
+                }
 
             }else{
 

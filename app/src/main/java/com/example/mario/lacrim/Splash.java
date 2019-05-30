@@ -22,11 +22,5 @@ public class Splash extends AppCompatActivity {
     }
 
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        View decorView = getWindow().getDecorView();
-        if (hasFocus) {
-            decorView.setSystemUiVisibility(5894);
-        }
-    }
+
 }

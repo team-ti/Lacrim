@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/navigation_solicitud"
-        android:icon="@drawable/ic_solicitud3"
+        android:icon="@drawable/ic_soli"
         android:title="" />
 
     <item

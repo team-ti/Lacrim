@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class solicitud extends Fragment {
     ConexionSQLiteHelper conn;
     RecyclerView R_lista_solicitud;
     String token;
+    Context mContext;
     TextView txt_sin_notificacion;
 
 
@@ -48,6 +50,9 @@ public class solicitud extends Fragment {
         R_lista_solicitud.setLayoutManager(this.mLayoutManager);
         txt_sin_notificacion = view.findViewById(R.id.txt_sin_notificacion);
 
+        mContext = this.getContext();
+
+
         cargarDatosToken();
 
 
@@ -55,7 +60,7 @@ public class solicitud extends Fragment {
         consultarLista();
 
 
-        R_lista_solicitud.setAdapter(new Adaptador_solicitud(Listarsolicitudes));
+        //R_lista_solicitud.setAdapter(new Adaptador_solicitud(Listarsolicitudes));
 
 
         return view;
@@ -86,19 +91,33 @@ public class solicitud extends Fragment {
 
         //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
 
-            while (cursor.moveToNext()) {
-                solicitud = new Solicitudes();
+         if (cursor.getCount()>0) {
 
-                solicitud.setId_equino(cursor.getInt(1));
-                solicitud.setId_user(cursor.getInt(2));
-                solicitud.setId_pesebrera(cursor.getInt(3));
-                solicitud.setNombre_solicitud(cursor.getString(5));
+             while (cursor.moveToNext()) {
+                 solicitud = new Solicitudes();
 
-
-                Listarsolicitudes.add(solicitud);
-            }
+                 solicitud.setId_equino(cursor.getInt(1));
+                 solicitud.setId_user(cursor.getInt(2));
+                 solicitud.setId_pesebrera(cursor.getInt(3));
+                 solicitud.setNombre_solicitud(cursor.getString(5));
 
 
+                 Listarsolicitudes.add(solicitud);
+             }
+
+
+             Adaptador_solicitud myAdapter = new Adaptador_solicitud(mContext, Listarsolicitudes);
+             R_lista_solicitud.setLayoutManager(new GridLayoutManager(getContext(), 1));
+             R_lista_solicitud.setHasFixedSize(true);
+             R_lista_solicitud.setAdapter(myAdapter);
+
+         }else{
+
+             txt_sin_notificacion.setVisibility(View.VISIBLE);
+             R_lista_solicitud.setVisibility(View.GONE);
+
+
+         }
 
         cursor.close();
         }catch (Exception e){

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -121,5 +122,13 @@ public class DatosPesebrera extends AppCompatActivity {
 
 
 
+    }
+
+    public void onBackPressed() {
+        Intent i = new Intent(this, DetallePesebrera.class);
+        i.putExtra("id",id_pes);
+        i.putExtra("interfaz",interfaz);
+        startActivity(i);
+        finish();
     }
 }

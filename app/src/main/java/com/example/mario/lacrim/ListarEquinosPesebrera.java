@@ -113,4 +113,14 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
 
 
     }
+
+    public void onBackPressed() {
+        Intent i = new Intent(this, DetallePesebrera.class);
+        i.putExtra("id",id_pes);
+        i.putExtra("interfaz",interfaz);
+        startActivity(i);
+        finish();
+    }
+
+
 }

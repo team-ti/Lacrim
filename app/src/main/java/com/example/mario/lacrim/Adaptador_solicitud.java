@@ -3,18 +3,18 @@ package com.example.mario.lacrim;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +23,6 @@ import com.example.mario.lacrim.Utilidades.Constantes;
 import com.example.mario.lacrim.Entidades.Solicitudes;
 
 import java.util.ArrayList;
-import java.util.List;
-
 
 
 /////////
@@ -63,8 +61,40 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
         myViewHolder.tv_nombre_notificacion.setText(nombre);
 
+
+
         id_equino = sl.get(i).getId_equino();
         id_pesebrera = sl.get(i).getId_pesebrera();
+
+        String avatar = cargaravatar();
+
+        if (!avatar.equalsIgnoreCase("")){
+
+            String codbase64 = avatar;
+
+            byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
+            Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+            myViewHolder.img_perfil_notificacion.setImageBitmap(img);
+
+        }
+
+
+        myViewHolder.img_perfil_notificacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(mContext, Detalle_equino.class);
+                String idString;
+                idString = String.valueOf(sl.get(i).getId_equino());
+                intent.putExtra("id", idString);
+                intent.putExtra("interfaz","2");
+                mContext.startActivity(intent);
+                //    getActivity().finish();
+
+            }
+        });
+
 
 
         myViewHolder.bt_aceptar_solicitud.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +171,42 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
     }
 
+    private String cargaravatar() {
+
+        conn=new ConexionSQLiteHelper(mContext,"bd_equinos",null,1);
+
+        SQLiteDatabase db=conn.getReadableDatabase();
+        String[] parametros={String.valueOf(id_equino)};
+        String[] campos={Constantes.CAMPO_AVATAR_EQUINO};
+        //Cursor cursor;
+
+        String ava = "";
+
+        try {
+
+            Cursor cursor =db.query(Constantes.TABLA_EQUINO,campos,Constantes.CAMPO_ID_EQUINO+"=?",parametros,null,null,null);
+            //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_ID_EQUINO,parametros);
+
+            cursor.moveToFirst();
+
+            if (!cursor.isNull(0)){
+
+                 ava= cursor.getString(0);
+                return ava;
+
+            }
+
+            cursor.close();
+
+        }catch (Exception e){
+            //Toast.makeText(mContext,"El equino no existe",Toast.LENGTH_LONG).show();
+
+        }
+
+
+        return ava;
+    }
+
 
     @Override
     public int getItemCount() {
@@ -166,6 +232,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
         public TextView texto_aceptar_rechazar;
         public Button bt_aceptar_solicitud;
         public Button bt_rechazar_solicitud;
+        public ImageView img_perfil_notificacion;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -173,6 +240,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
             bt_aceptar_solicitud = itemView.findViewById(R.id.bt_aceptar_solicitud);
             bt_rechazar_solicitud = itemView.findViewById(R.id.bt_rechazar_solicitud);
             texto_aceptar_rechazar = itemView.findViewById(R.id.texto_aceptar_rechazar);
+            img_perfil_notificacion = itemView.findViewById(R.id.img_perfil_notificacion);
         }
     }
 }

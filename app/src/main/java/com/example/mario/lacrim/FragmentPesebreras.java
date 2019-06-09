@@ -122,7 +122,7 @@ public class FragmentPesebreras extends Fragment {
                     Intent intent = new Intent(getActivity(), DetallePesebrera.class);
                     intent.putExtra("id", ListarPesebrera.get(position).getId_pes());
                     //Log.d("id", ListarPesebrera.get(position).getId_pes()+"");
-                    intent.putExtra("interfaz", "1");
+                    intent.putExtra("interfaz", "2");
                     String id = ListarPesebrera.get(position).getId_pes();
                    // Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
                     startActivity(intent);

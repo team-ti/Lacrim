@@ -5,7 +5,6 @@
       <map>
         <entry key="imageWizard">
           <value>
-<<<<<<< HEAD
             <PersistentState>
               <option name="children">
                 <map>
@@ -35,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_supervisor_account_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_people_outline_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,7 +44,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_solicitud3" />
+                                      <entry key="outputName" value="ic_soli2" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="858585" />
                                     </map>
@@ -84,12 +83,29 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="color" value="000000" />
+                                                <entry key="color" value="858585" />
                                               </map>
                                             </option>
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                      <entry key="clipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_people_outline_black_24dp.xml" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="iconShape" value="NONE" />
+                                      <entry key="outputName" value="ic_soli2" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -120,7 +136,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>
@@ -129,9 +145,6 @@
                 </map>
               </option>
             </PersistentState>
-=======
-            <PersistentState />
->>>>>>> ff4a143ba9b07766c5bdf2474d15d16c5a7a4848
           </value>
         </entry>
         <entry key="vectorWizard">

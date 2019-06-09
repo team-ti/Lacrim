@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
@@ -24,6 +25,7 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
     ConexionSQLiteHelper conn;
     RecyclerView R_lista;
     String token, id_pes, interfaz;
+    TextView txt_sin_equino;
 
 
     @Override
@@ -34,6 +36,7 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         R_lista =  findViewById(R.id.R_lista);
         R_lista.setLayoutManager(this.mLayoutManager);
+        txt_sin_equino = findViewById(R.id.txt_sin_equino);
 
         cargarDatosToken();
         id_pes = getIntent().getExtras().getString("id");
@@ -56,40 +59,42 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
 
         ListarEquinos = new ArrayList<>();
 
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={id_pes};
-        Equinos equino=null;
+        SQLiteDatabase db = conn.getReadableDatabase();
+        String[] parametros = {id_pes};
+        Equinos equino = null;
 
         Cursor cursor;
 
 
-        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+ " WHERE " +Constantes.CAMPO_ID_PESEBRERA_EQUINO+ "=?",parametros);
+        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO + " WHERE " + Constantes.CAMPO_ID_PESEBRERA_EQUINO + "=?", parametros);
 
 
         //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
 
-        while (cursor.moveToNext()) {
-            equino = new Equinos();
+        if (cursor.getCount() > 0){
 
-            equino.setId_equino(cursor.getString(0));
-            equino.setNombre_equino(cursor.getString(1));
-            equino.setSexo_equino(cursor.getString(4));
-            equino.setAndar_equino(cursor.getString(9));
-            equino.setColor_equino(cursor.getString(5));
+            while (cursor.moveToNext()) {
+                equino = new Equinos();
+
+                equino.setId_equino(cursor.getString(0));
+                equino.setNombre_equino(cursor.getString(1));
+                equino.setSexo_equino(cursor.getString(4));
+                equino.setAndar_equino(cursor.getString(9));
+                equino.setColor_equino(cursor.getString(5));
 
 
-            ListarEquinos.add(equino);
+                ListarEquinos.add(equino);
 
 
-        }
+            }
 
         R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
             @Override
             public void onClick(View v, int position) {
 
                 Intent intent = new Intent(getApplicationContext(), Detalle_equino.class);
-                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
-                intent.putExtra("interfaz","1");
+                intent.putExtra("id", ListarEquinos.get(position).getId_equino());
+                intent.putExtra("interfaz", interfaz);
                 //int id = ListarEquinos.get(position).getId_equino();
                 //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
                 startActivity(intent);
@@ -97,8 +102,25 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
             }
         }));
 
+    }else{
+
+            txt_sin_equino.setVisibility(View.VISIBLE);
+            R_lista.setVisibility(View.GONE);
+
+        }
+
         cursor.close();
 
 
     }
+
+    public void onBackPressed() {
+        Intent i = new Intent(this, DetallePesebrera.class);
+        i.putExtra("id",id_pes);
+        i.putExtra("interfaz",interfaz);
+        startActivity(i);
+        finish();
+    }
+
+
 }

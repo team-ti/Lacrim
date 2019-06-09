@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,8 @@ import com.example.mario.lacrim.Entidades.Equinos;
 import com.example.mario.lacrim.Utilidades.Constantes;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -41,6 +46,7 @@ public class perfil extends Fragment {
     FloatingActionButton Fbutton;
     ArrayList<Equinos> ListarEquinos;
     TextView txt_us;
+    CircleImageView img_foto_perfil_frag;
     private RecyclerView.LayoutManager mLayoutManager;
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
@@ -75,7 +81,7 @@ public class perfil extends Fragment {
 
         txt_us = view.findViewById(R.id.txt_usu);
         perfil_usuario = view.findViewById(R.id.perfil_usuario);
-
+        img_foto_perfil_frag = view.findViewById(R.id.img_foto_perfil_frag);
 
         tabLayout = view.findViewById(R.id.tablayout_id);
         viewPager = view.findViewById(R.id.viewpager_id);
@@ -113,7 +119,7 @@ public class perfil extends Fragment {
     private void consultar_usuario() {
         SQLiteDatabase db=conn.getReadableDatabase();
         String[] parametros={token};
-        String[] campos={Constantes.CAMPO_USER};
+        String[] campos={Constantes.CAMPO_USER,Constantes.CAMPO_AVATAR};
         //Cursor cursor;
 
         try {
@@ -124,6 +130,17 @@ public class perfil extends Fragment {
 
             //txt_detalle_equino.setText(cursor.getString(1));
             txt_us.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_USER)));
+
+            if (!cursor.isNull(1)){
+
+                String codbase64 = cursor.getString(1);
+
+                byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
+                Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                img_foto_perfil_frag.setImageBitmap(img);
+
+            }
 
             cursor.close();
 

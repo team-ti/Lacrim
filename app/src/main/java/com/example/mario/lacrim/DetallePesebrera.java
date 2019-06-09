@@ -61,7 +61,6 @@ public class DetallePesebrera extends AppCompatActivity {
                 intent.putExtra("interfaz",interfaz_pes);
 
                 startActivity(intent);
-                //lfinish();
 
             }
         });

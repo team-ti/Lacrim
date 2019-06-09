@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +23,12 @@ import com.example.mario.lacrim.Utilidades.Constantes;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Premiacion extends AppCompatActivity {
 
     ArrayList<Premios> ListarPremios;
+    CircleImageView img_foto_perfil_equino_premiacion;
     ConexionSQLiteHelper conn;
     String id_equino;
     RecyclerView R_lista_premiacion;
@@ -44,6 +50,7 @@ public class Premiacion extends AppCompatActivity {
         conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
 
+        img_foto_perfil_equino_premiacion = findViewById(R.id.img_foto_perfil_equino_premiacion);
         R_lista_premiacion = findViewById(R.id.R_lista_premiacion);
         mLayoutManager = new LinearLayoutManager(this);
         txt_detalle_equino_premiacion = findViewById(R.id.txt_detalle_equino_premiacion);
@@ -80,7 +87,7 @@ public class Premiacion extends AppCompatActivity {
     private void consultar_equino() {
         SQLiteDatabase db=conn.getReadableDatabase();
         String[] parametros={(getIntent().getExtras().getString("id"))};
-        String[] campos={Constantes.CAMPO_NOMBRE_EQUINO};
+        String[] campos={Constantes.CAMPO_NOMBRE_EQUINO,Constantes.CAMPO_AVATAR_EQUINO};
         //Cursor cursor;
 
         try {
@@ -93,6 +100,18 @@ public class Premiacion extends AppCompatActivity {
             //txt_detalle_equino.setText(cursor.getString(1));
 
             txt_detalle_equino_premiacion.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_NOMBRE_EQUINO)));
+
+            if (!cursor.isNull(1)){
+
+                String codbase64 = cursor.getString(1);
+
+                byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
+                Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                img_foto_perfil_equino_premiacion.setImageBitmap(img);
+
+            }
+
 
             cursor.close();
 

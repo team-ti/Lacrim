@@ -8,10 +8,22 @@
     android:layout_height="match_parent"
     tools:context=".ListarEquinosPesebrera">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal">
+
+
+        <TextView
+            android:id="@+id/txt_sin_equino"
+            android:text="No tienes equinos en tu pesebrera"
+            android:textSize="16dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:visibility="gone"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 
         <android.support.v7.widget.RecyclerView
@@ -21,6 +33,6 @@
 
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

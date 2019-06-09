@@ -19,44 +19,44 @@
             android:theme="@style/AppTheme.CustomTheme" />
 
         <activity android:name=".DatosPesebrera"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".DetallePesebrera"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".CrearPesebrera"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Detalle_premiacion"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Crear_premio_equino"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".PerfilUsuario"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Informacion" />
         <activity android:name=".Detalle_alimentacion"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Crear_alimento_equino"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Alimentacion"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Premiacion"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".Datos_generales"
             android:label="@string/title_activity_datos_generales"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Login"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Crear_usuario"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Crear_equino"
             android:label="Crear equino"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Detalle_equino"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Splash"
                   android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

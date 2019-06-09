@@ -1,0 +1,39 @@
+package com.example.mario.lacrim.Entidades;
+
+import android.content.Context;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
+public class VolleyRP {
+    private static VolleyRP mVolleyRP = null;
+    private RequestQueue mRequestQueue;
+
+    private VolleyRP(Context context) {
+        this.mRequestQueue = Volley.newRequestQueue(context);
+    }
+
+    public static VolleyRP getInstance(Context context) {
+        if (mVolleyRP == null) {
+            mVolleyRP = new VolleyRP(context);
+        }
+        return mVolleyRP;
+    }
+
+    public RequestQueue getRequestQueue() {
+        return this.mRequestQueue;
+    }
+
+    public static void addToQueue(Request request, RequestQueue fRequestQueue, Context context, VolleyRP volley) {
+        if (request != null) {
+            request.setTag(context);
+            if (fRequestQueue == null) {
+                fRequestQueue = volley.getRequestQueue();
+            }
+            request.setRetryPolicy(new DefaultRetryPolicy(60000, 3, 1.0f));
+            fRequestQueue.add(request);
+        }
+    }
+}

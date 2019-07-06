@@ -27,14 +27,7 @@ import com.example.mario.lacrim.Utilidades.Constantes;
 import java.util.ArrayList;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link buscar.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link buscar#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class buscar extends Fragment {
 
     EditText ed_buscar_equino;
@@ -108,10 +101,6 @@ public class buscar extends Fragment {
                         R_lista_buscar.setAdapter(new Adaptador_lista_pesebrera_buscar(ListarPesebrera));
 
                     }
-
-
-
-
                 }
 
             }

@@ -4,16 +4,31 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Pesebrera;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CrearPesebrera extends AppCompatActivity {
 
@@ -68,47 +83,94 @@ public class CrearPesebrera extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Teléfono no puede estar vacio", Toast.LENGTH_SHORT).show();
 
         } else {
-            registrarPesebrera();
+            insertar_pesebrera();
         }
     }
 
-    private void registrarPesebrera() {
-        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(this,"bd_equinos",null,1);
 
-        SQLiteDatabase db=conn.getWritableDatabase();
+    private void insertar_pesebrera() {
 
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_NOMBRE_PESEBRERA,nombre.getText().toString());
-        values.put(Constantes.CAMPO_ENCARGADO_PESEBRERA,encargado.getText().toString());
-        values.put(Constantes.CAMPO_CIUDAD_PESEBRERA,ciudad.getText().toString());
-        values.put(Constantes.CAMPO_TELEFONO_PESEBRERA,telefono.getText().toString());
-        values.put(Constantes.CAMPO_ID_USUARIO_PESEBRERA,token);
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
 
-
-
-        long id = db.insert(Constantes.TABLA_PESEBRERA,Constantes.CAMPO_ID_PESEBRERA,values);
+        map.put("nombre_pes", nombre.getText().toString());
+        map.put("encargado_pes", encargado.getText().toString());
+        map.put("ciudad_pes", ciudad.getText().toString());
+        map.put("telefono_pes", telefono.getText().toString());
+        map.put("id_user", token);
+        registrarPesebrera(map);
 
 
+    }
 
-        Toast.makeText(getApplicationContext(),"Pesebrera resgistrada",Toast.LENGTH_SHORT).show();
-        db.close();
 
-        //startActivity(new Intent(CrearPesebrera.this, MainActivity.class));
+    private void registrarPesebrera(HashMap<String, String> map) {
+        JSONObject miObjetoJSON = new JSONObject(map);
 
-        Pesebrera pese = null;
 
-        pese = new Pesebrera();
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
 
-        pese.setId_pes(String.valueOf(id));
-        pese.setNombre_pes(nombre.getText().toString());
-        pese.setEncargado_pes(encargado.getText().toString());
-        pese.setCiudad_pes(ciudad.getText().toString());
-        pese.setTelefono_pes(telefono.getText().toString());
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        getResources().getString(R.string.url_server)+"pesebreras/pesebrera_registrar",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_insert(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
 
-        FragmentPesebreras fragmentPesebreras = new FragmentPesebreras();
-        fragmentPesebreras.ChangeAdapterPesebrera(pese);
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
 
-        finish();
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_insert(JSONObject response) {
+
+        try {
+            String cod = response.getString("cod");
+
+            switch (cod) {
+                case "1":
+                    Toast.makeText(getApplicationContext(),"Pesebrera registrada",Toast.LENGTH_SHORT).show();
+                    //FragmentPesebreras fragmentPesebreras = new FragmentPesebreras();
+                   // fragmentPesebreras.ChangeAdapterPesebrera(pese);
+                    //finish
+                    break;
+
+
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+
+
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

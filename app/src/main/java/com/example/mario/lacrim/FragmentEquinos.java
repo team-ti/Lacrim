@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,10 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
 import com.example.mario.lacrim.Entidades.Pesebrera;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -56,7 +66,7 @@ public class FragmentEquinos extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         btn_crear =  view.findViewById(R.id.Fbutton_perfil);
         R_lista =  view.findViewById(R.id.R_lista_perfil);
-        R_lista.setLayoutManager(this.mLayoutManager);
+        //R_lista.setLayoutManager(this.mLayoutManager);
 
         cargarDatosToken();
 
@@ -66,8 +76,8 @@ public class FragmentEquinos extends Fragment {
 
         //R_lista.setAdapter(new Adaptador_lista(ListarEquinos));
 
-        adaptador_equi = new Adaptador_lista(ListarEquinos);
-        R_lista.setAdapter(adaptador_equi);
+       // adaptador_equi = new Adaptador_lista(ListarEquinos);
+       // R_lista.setAdapter(adaptador_equi);
 
         btn_crear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -90,50 +100,78 @@ public class FragmentEquinos extends Fragment {
 
         ListarEquinos = new ArrayList<>();
 
-        SQLiteDatabase db = conn.getReadableDatabase();
-        String[] parametros = {token};
-        Equinos equino = null;
-
-        Cursor cursor;
+        final String id_usuario = token;
 
         try {
-            cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO + " WHERE " + Constantes.CAMPO_ID_USUARIO_EQUINO + "=?", parametros);
+
+            RequestQueue queue = Volley.newRequestQueue(getActivity());
+            String url =getResources().getString(R.string.url_server)+"equino/obtener_equinos/"+id_usuario;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            try {
+                                String  id_equino="";
+                                String nombre = "";
+                                String sexo = "";
+                                String andar = "";
+                                String color = "";
 
 
-            //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
-
-            while (cursor.moveToNext()) {
-                equino = new Equinos();
-
-                equino.setId_equino(cursor.getString(0));
-                equino.setNombre_equino(cursor.getString(1));
-                equino.setSexo_equino(cursor.getString(4));
-                equino.setAndar_equino(cursor.getString(9));
-                equino.setColor_equino(cursor.getString(5));
+                                JSONArray data = new JSONArray(response);
 
 
-                ListarEquinos.add(equino);
+                                for (int i = 0; i < data.length(); i++) {
+                                    id_equino = data.getJSONObject(i).getString("id_equino");
+                                    nombre = data.getJSONObject(i).getString("nombre_equino");
+                                    sexo = data.getJSONObject(i).getString("sexo_equino");
+                                    andar = data.getJSONObject(i).getString("andar_equino");
+                                    color = data.getJSONObject(i).getString("color_equino");
 
+                                    Equinos equino = new Equinos();
 
-            }
-            R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+                                    equino.setId_equino(id_equino);
+                                    equino.setNombre_equino(nombre);
+                                    equino.setSexo_equino(sexo);
+                                    equino.setAndar_equino(andar);
+                                    equino.setColor_equino(color);
+
+                                    ListarEquinos.add(equino);
+                                }
+                                //procesarRespuesta(id, cod);
+
+                                Adaptador_lista myAdapter = new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+                                    @Override
+                                    public void onClick(View v, int position) {
+                                        Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                                        intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                                        intent.putExtra("interfaz","1");
+                                        //int id = ListarEquinos.get(position).getId_equino();
+                                        //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
+                                        startActivity(intent);
+                                    }
+                                });
+
+                                R_lista.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+                                R_lista.setHasFixedSize(true);
+                                R_lista.setAdapter(myAdapter);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
                 @Override
-                public void onClick(View v, int position) {
-
-                    Intent intent = new Intent(getActivity(), Detalle_equino.class);
-                    intent.putExtra("id", ListarEquinos.get(position).getId_equino());
-                    intent.putExtra("interfaz", "1");
-
-                    //int id = ListarEquinos.get(position).getId_equino();
-                    //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
-                    startActivity(intent);
-
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
                 }
-            }));
+            });
 
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(getActivity(),"Error",Toast.LENGTH_LONG).show();
+            queue.add(stringRequest);
+        } catch (Exception e) {
 
         }
     }

@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,9 +16,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class Crear_usuario extends AppCompatActivity {
@@ -125,31 +139,102 @@ public class Crear_usuario extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "La contraseña es muy corta", Toast.LENGTH_SHORT).show();
 
         } else {
-            registrarUsuario();
+            insertar_usuario();
         }
 
     }
 
-    private void registrarUsuario() {
-        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(this,"bd_equinos",null,1);
 
-        SQLiteDatabase db=conn.getWritableDatabase();
+        private void insertar_usuario() {
 
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_NOMBRE,us_nombres.getText().toString());
-        values.put(Constantes.CAMPO_APELLIDO,us_apellidos.getText().toString());
-        values.put(Constantes.CAMPO_CORREO,us_correo.getText().toString());
-        values.put(Constantes.CAMPO_CIUDAD, us_ciudad.getText().toString());
-        values.put(Constantes.CAMPO_USER,us_usuario.getText().toString().trim());
-        values.put(Constantes.CAMPO_CONTRASENA,us_contrasena.getText().toString().trim());
 
-        db.insert(Constantes.TABLA_USUARIO,Constantes.CAMPO_ID,values);
 
-        Toast.makeText(getApplicationContext(),"Usuario registrado",Toast.LENGTH_SHORT).show();
-        db.close();
+            HashMap<String, String> map = new HashMap<>();// Mapeo previo
 
-        startActivity(new Intent(Crear_usuario.this, Login.class));
-        finish();
+            map.put("nombre", us_nombres.getText().toString());
+            map.put("apellido", us_apellidos.getText().toString());
+            map.put("ciudad", us_ciudad.getText().toString());
+            map.put("correo", us_correo.getText().toString());
+            map.put("usuario", us_usuario.getText().toString());
+            map.put("contrasena", us_contrasena.getText().toString());
+            map.put("avatar", "");
+
+
+            registrarUsuario(map);
+
+
+        }
+
+
+
+
+    public void registrarUsuario(HashMap<String, String> map) {
+
+        JSONObject miObjetoJSON = new JSONObject(map);
+
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        getResources().getString(R.string.url_server)+"generic/usuario_registrar",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                               procesarRespuesta_insert(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_insert(JSONObject response) {
+
+        try {
+            String cod = response.getString("cod");
+
+            switch (cod) {
+                case "1":
+                    Toast.makeText(getApplicationContext(),"Usuario registrado",Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Crear_usuario.this, Login.class));
+                    finish();
+                    break;
+
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(),"El correo o usuario ya existe",Toast.LENGTH_SHORT).show();
+
+
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

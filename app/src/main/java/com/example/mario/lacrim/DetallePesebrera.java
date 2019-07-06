@@ -4,16 +4,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DetallePesebrera extends AppCompatActivity {
 
@@ -23,7 +36,8 @@ public class DetallePesebrera extends AppCompatActivity {
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
     String interfaz_pes;
-    String token;
+    String nombre_pes;
+    String token, cod;
 
     ConexionSQLiteHelper conn;
 
@@ -34,21 +48,20 @@ public class DetallePesebrera extends AppCompatActivity {
 
         txt_detalle_pes = findViewById(R.id.txt_detalle_pes);
         ln_datos_generales_pes = findViewById(R.id.ln_datos_generales_pes);
-        ln_lista_equinos = findViewById(R.id.ln_lista_equinos);
+        //ln_lista_equinos = findViewById(R.id.ln_lista_equinos);
         ln_solicitud = findViewById(R.id.ln_solicitud);
         text_solicitud = findViewById(R.id.text_solicitud);
 
         cargarDatosToken();
 
-        conn = new ConexionSQLiteHelper(getApplicationContext(), "bd_equinos", null, 1);
 
         id_pesebrera = getIntent().getExtras().getString("id");
         interfaz_pes = getIntent().getExtras().getString("interfaz");
+        nombre_pes = getIntent().getExtras().getString("nombre_pes");
 
+        txt_detalle_pes.setText(nombre_pes);
+        consultarPesebreraUser();
 
-        if (consultarPesebreraUser()){
-            text_solicitud.setText("Agregar Equino");
-        }
 
         ln_solicitud.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +72,8 @@ public class DetallePesebrera extends AppCompatActivity {
                 intent.putExtra("id",id_pesebrera);
                 Log.d("id_pes", ""+id_pesebrera);
                 intent.putExtra("interfaz",interfaz_pes);
+                intent.putExtra("nombre_pes", nombre_pes);
+                intent.putExtra("id_user", getIntent().getExtras().getString("id_user"));
 
                 startActivity(intent);
 
@@ -72,8 +87,8 @@ public class DetallePesebrera extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), DatosPesebrera.class);
 
                 intent.putExtra("id",id_pesebrera);
-                Log.d("id_pes", ""+id_pesebrera);
                 intent.putExtra("interfaz",interfaz_pes);
+                intent.putExtra("nombre_pes", nombre_pes);
 
                 startActivity(intent);
                 finish();
@@ -81,23 +96,8 @@ public class DetallePesebrera extends AppCompatActivity {
             }
         });
 
-        ln_datos_generales_pes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), DatosPesebrera.class);
-
-                intent.putExtra("id",id_pesebrera);
-                Log.d("id_pes", ""+id_pesebrera);
-                intent.putExtra("interfaz",interfaz_pes);
-
-                startActivity(intent);
-                finish();
-
-            }
-        });
-
-        ln_lista_equinos.setOnClickListener(new View.OnClickListener() {
+      /*  ln_lista_equinos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -108,9 +108,8 @@ public class DetallePesebrera extends AppCompatActivity {
                 finish();
 
             }
-        });
+        });*/
 
-        consultar_pesebrera();
 
     }
 
@@ -118,45 +117,44 @@ public class DetallePesebrera extends AppCompatActivity {
         token = getApplicationContext().getSharedPreferences(dataUserCache,modo_private).getString("access_token", "no hay info");
     }
 
-    boolean consultarPesebreraUser() {
-        Log.d("token", " "+token);
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this, "bd_equinos", null, 1);
-
-        SQLiteDatabase db = conn.getReadableDatabase();
-        Cursor cursor;
-        String[] columns = {Constantes.CAMPO_ID_PESEBRERA};
-        String selection = Constantes.CAMPO_ID_PESEBRERA + " = ? AND " + Constantes.CAMPO_ID_USUARIO_PESEBRERA + " = ? "  ;
-        String[] selectionArgs = {id_pesebrera,token};
-        String tableName = Constantes.TABLA_PESEBRERA;
-        cursor = db.query(tableName, columns, selection, selectionArgs, null, null, null);
-        if (cursor.moveToFirst() == true) {
-            return true;
-        }else{
-            return false;
-        }
-    }
-    private void consultar_pesebrera() {
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={(getIntent().getExtras().getString("id"))};
-        String[] campos={Constantes.CAMPO_NOMBRE_PESEBRERA};
-        //Cursor cursor;
-
+    public void consultarPesebreraUser() {
         try {
 
-            Cursor cursor =db.query(Constantes.TABLA_PESEBRERA,campos,Constantes.CAMPO_ID_PESEBRERA+"=?",parametros,null,null,null);
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String url = getResources().getString(R.string.url_server) + "pesebreras/validar_pesebrera/" + token + "/" + id_pesebrera;
 
-            cursor.moveToFirst();
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-            //txt_detalle_equino.setText(cursor.getString(1));
-            txt_detalle_pes.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_NOMBRE_PESEBRERA)));
+                            try {
+                                JSONObject data = new JSONObject(response);
+                                cod = data.getString("cod");
+                                if (cod.equalsIgnoreCase("1") ){
+                                    text_solicitud.setText("Agregar Equino");
+                                }else{
+                                    text_solicitud.setText("Enviar solicitud");
+                                    text_solicitud.setText("Enviar solicitud");
+                                }
 
-            cursor.close();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
 
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"La pesebrera no existe",Toast.LENGTH_LONG).show();
+            queue.add(stringRequest);
+        } catch (Exception e) {
 
         }
-    }
 
+    }
 
 }

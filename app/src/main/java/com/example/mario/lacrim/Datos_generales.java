@@ -16,17 +16,32 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -101,7 +116,7 @@ public class Datos_generales extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                actualizarEquino();
+                insertar_equino();
 
             }
         });
@@ -110,75 +125,183 @@ public class Datos_generales extends AppCompatActivity {
     }
 
     private void consultar() {
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={getIntent().getExtras().getString("id")};
-        String[] campos={Constantes.CAMPO_NOMBRE_EQUINO,Constantes.CAMPO_FECHA_EQUINO,Constantes.CAMPO_LUGAR_EQUINO,Constantes.CAMPO_SEXO_EQUINO,
-        Constantes.CAMPO_COLOR_EQUINO,Constantes.CAMPO_MICROCHIP_EQUINO,Constantes.CAMPO_CRIADOR_EQUINO,Constantes.CAMPO_TIPO_EQUINO,
-        Constantes.CAMPO_ANDAR_EQUINO,Constantes.CAMPO_PROPIETARIO_EQUINO,Constantes.CAMPO_AVATAR_EQUINO};
 
         try {
-            Cursor cursor =db.query(Constantes.TABLA_EQUINO,campos,Constantes.CAMPO_ID_EQUINO+"=?",parametros,null,null,null);
-            cursor.moveToFirst();
 
-            ed_nombre.setText(cursor.getString(0));
-            ed_fecha_nacimiento.setText(cursor.getString(1));
-            ed_lugar_nacimiento.setText(cursor.getString(2));
-            ed_sexo.setText(cursor.getString(3));
-            ed_color.setText(cursor.getString(4));
-            ed_microship.setText(cursor.getString(5));
-            ed_criador.setText(cursor.getString(6));
-            ed_Tipo.setText(cursor.getString(7));
-            ed_andar.setText(cursor.getString(8));
-            ed_propietario.setText(cursor.getString(9));
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String url =getResources().getString(R.string.url_server)+"equino/obtener_equino_info/"+id_equino;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            try {
+
+                                String nombre = "";
+                                String fecha_nacimiento = "";
+                                String lugar_nacimiento = "";
+                                String sexo= "";
+                                String color = "";
+                                String microship = "";
+                                String criador = "";
+                                String tipo = "";
+                                String andar = "";
+                                String propietario = "";
+                                String avatar = "";
 
 
-            if (!cursor.isNull(10)){
 
-                String codbase64 = cursor.getString(10);
+                                JSONArray data = new JSONArray(response);
 
-                byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
-                Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                img_foto_perfil_equino_detalle_dato_general.setImageBitmap(img);
+                                for (int i = 0; i < data.length(); i++) {
+                                    nombre = data.getJSONObject(i).getString("nombre_equino");
+                                    fecha_nacimiento = data.getJSONObject(i).getString("fecha_equino");
+                                    lugar_nacimiento = data.getJSONObject(i).getString("lugar_equino");
+                                    sexo = data.getJSONObject(i).getString("sexo_equino");
+                                    color = data.getJSONObject(i).getString("color_equino");
+                                    microship = data.getJSONObject(i).getString("microship_equino");
+                                    criador = data.getJSONObject(i).getString("criador_equino");
+                                    tipo = data.getJSONObject(i).getString("tipo_equino");
+                                    andar = data.getJSONObject(i).getString("andar_equino");
+                                    propietario = data.getJSONObject(i).getString("propietario_equino");
+                                    avatar = data.getJSONObject(i).getString("avatar_equino");
 
-            }
+                                }
 
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"El equino no existe",Toast.LENGTH_LONG).show();
+                                ed_nombre.setText(nombre);
+                                ed_fecha_nacimiento.setText(fecha_nacimiento);
+                                ed_lugar_nacimiento.setText(lugar_nacimiento);
+                                ed_sexo.setText(sexo);
+                                ed_color.setText(color);
+                                ed_microship.setText(microship);
+                                ed_criador.setText(criador);
+                                ed_Tipo.setText(tipo);
+                                ed_andar.setText(andar);
+                                ed_propietario.setText(propietario);
+
+                                if (!avatar.equalsIgnoreCase("")){
+
+                                    String codbase64 = avatar;
+
+                                    byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
+                                    Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                                    img_foto_perfil_equino_detalle_dato_general.setImageBitmap(img);
+
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
+
         }
-
     }
 
 
-    private void actualizarEquino() {
-        SQLiteDatabase db=conn.getWritableDatabase();
-        String[] parametros={getIntent().getExtras().getString("id")};
 
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_NOMBRE_EQUINO,ed_nombre.getText().toString());
-        values.put(Constantes.CAMPO_LUGAR_EQUINO,ed_lugar_nacimiento.getText().toString());
-        values.put(Constantes.CAMPO_MICROCHIP_EQUINO,ed_microship.getText().toString());
-        values.put(Constantes.CAMPO_CRIADOR_EQUINO,ed_criador.getText().toString());
-        values.put(Constantes.CAMPO_PROPIETARIO_EQUINO,ed_propietario.getText().toString());
+    private void insertar_equino() {
 
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+
+        map.put("nombre_equino", ed_nombre.getText().toString());
+        map.put("lugar_equino", ed_lugar_nacimiento.getText().toString());
+        map.put("microship_equino", ed_microship.getText().toString());
+        map.put("criador_equino", ed_criador.getText().toString());
+        map.put("propietario_equino", ed_propietario.getText().toString());
+        map.put("id_equino", id_equino);
         if (!avatarBase64.equalsIgnoreCase("")){
-
-            values.put(Constantes.CAMPO_AVATAR, avatarBase64);
-
+            map.put("avatar_equino", avatarBase64);
+        }else{
+            map.put("avatar_equino", "");
         }
 
+        actualizarEquino(map);
 
-        db.update(Constantes.TABLA_EQUINO,values,Constantes.CAMPO_ID_EQUINO+"=?",parametros);
-        Toast.makeText(getApplicationContext(),"Equino actualizado",Toast.LENGTH_LONG).show();
-        db.close();
 
-        Intent i = new Intent(this, Detalle_equino.class);
-        i.putExtra("id",id_equino);
-        i.putExtra("interfaz",interfaz);
-        startActivity(i);
-        finish();
+    }
 
+    private void actualizarEquino(HashMap<String, String> map) {
+        JSONObject miObjetoJSON = new JSONObject(map);
+
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.PUT,
+                        getResources().getString(R.string.url_server)+"equino/equino_actualizar",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_actualizar(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_actualizar(JSONObject response) {
+
+        try {
+           String cod = response.getString("cod");
+
+
+            switch (cod) {
+                case "1":
+                    Toast.makeText(getApplicationContext(), "Equino actualizado", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(this, Detalle_equino.class);
+                    i.putExtra("id", id_equino);
+                    i.putExtra("interfaz", interfaz);
+                    startActivity(i);
+                    finish();
+                    break;
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+
+
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onBackPressed() {

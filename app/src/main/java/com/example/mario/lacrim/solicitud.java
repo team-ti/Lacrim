@@ -120,6 +120,7 @@ public class solicitud extends Fragment {
                                 solicitud.setId_user(id_user);
                                 solicitud.setId_pesebrera(id_pesebrera);
                                 solicitud.setNombre_solicitud(nombre_solicitud);
+                                solicitud.setId_solicitud(id_solicitud);
 
 
                                 Listarsolicitudes.add(solicitud);

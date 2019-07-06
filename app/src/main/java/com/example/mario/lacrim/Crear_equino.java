@@ -2,10 +2,14 @@ package com.example.mario.lacrim;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -13,13 +17,24 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
 import com.example.mario.lacrim.Utilidades.GeneralMethodClass;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Crear_equino extends AppCompatActivity {
 
@@ -28,6 +43,10 @@ public class Crear_equino extends AppCompatActivity {
     Button bt_registrar;
     Calendar calendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date;
+    public static final String dataUserCache = "dataUser";
+    private static final int modo_private = Context.MODE_PRIVATE;
+    String token;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +65,7 @@ public class Crear_equino extends AppCompatActivity {
         sp_andar = findViewById(R.id.sp_andar);
         bt_registrar = findViewById(R.id.bt_registrar);
 
+        cargarDatosToken();
 
         date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -79,6 +99,10 @@ public class Crear_equino extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void cargarDatosToken() {
+        token = getSharedPreferences(dataUserCache,modo_private).getString("access_token", "no hay info");
     }
 
     private void updateEdit() {
@@ -132,37 +156,104 @@ public class Crear_equino extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Andar no puede estar vacio",Toast.LENGTH_SHORT).show();
 
         }else{
-            registrarEquino();
+            insertar_equino();
         }
 
     }
 
+    private void insertar_equino() {
 
-    private void registrarEquino() {
-        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(this,"bd_equinos",null,1);
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
 
-        SQLiteDatabase db=conn.getWritableDatabase();
-
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_NOMBRE_EQUINO,ed_nombre.getText().toString());
-        values.put(Constantes.CAMPO_FECHA_EQUINO,ed_fecha_nacimiento.getText().toString());
-        values.put(Constantes.CAMPO_LUGAR_EQUINO,ed_lugar_nacimiento.getText().toString());
-        values.put(Constantes.CAMPO_COLOR_EQUINO,ed_color.getText().toString());
-        values.put(Constantes.CAMPO_MICROCHIP_EQUINO,ed_microship.getText().toString());
-        values.put(Constantes.CAMPO_CRIADOR_EQUINO,ed_criador.getText().toString());
-        values.put(Constantes.CAMPO_PROPIETARIO_EQUINO,ed_propietario.getText().toString());
-        values.put(Constantes.CAMPO_SEXO_EQUINO,sp_sexo.getSelectedItem().toString());
-        values.put(Constantes.CAMPO_TIPO_EQUINO,sp_tipo.getSelectedItem().toString());
-        values.put(Constantes.CAMPO_ANDAR_EQUINO,sp_andar.getSelectedItem().toString());
+        map.put("nombre_equino", ed_nombre.getText().toString());
+        map.put("fecha_equino", ed_fecha_nacimiento.getText().toString());
+        map.put("color_equino", ed_color.getText().toString());
+        map.put("microship_equino", ed_microship.getText().toString());
+        map.put("criador_equino", ed_criador.getText().toString());
+        map.put("propietario_equino", ed_propietario.getText().toString());
+        map.put("sexo_equino", sp_sexo.getSelectedItem().toString());
+        map.put("tipo_equino", sp_tipo.getSelectedItem().toString());
+        map.put("andar_equino", sp_andar.getSelectedItem().toString());
+        map.put("lugar_equino", ed_lugar_nacimiento.getText().toString());
+        map.put("avatar_equino", "");
+        map.put("id_usuario",token);
 
 
-        db.insert(Constantes.TABLA_EQUINO,Constantes.CAMPO_ID_EQUINO,values);
+        registrarEquino(map);
 
-        Toast.makeText(getApplicationContext(),"Equino resgistrado",Toast.LENGTH_SHORT).show();
-        db.close();
 
-        startActivity(new Intent(Crear_equino.this, MainActivity.class));
-        finish();
+    }
+
+
+    private void registrarEquino(HashMap<String, String> map) {
+        JSONObject miObjetoJSON = new JSONObject(map);
+
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        getResources().getString(R.string.url_server)+"equino/equino_registrar",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_insert(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_insert(JSONObject response) {
+
+        try {
+            String cod = response.getString("cod");
+
+
+
+            switch (cod) {
+                case "1":
+                    Toast.makeText(getApplicationContext(),"Equino registrado",Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Crear_equino.this, MainActivity.class));
+                    finish();
+                    break;
+
+
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+
+
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

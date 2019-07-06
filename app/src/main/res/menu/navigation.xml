@@ -12,6 +12,11 @@
         android:title="" />
 
     <item
+        android:id="@+id/navigation_solicitud"
+        android:icon="@drawable/ic_soli"
+        android:title="" />
+
+    <item
         android:id="@+id/navigation_perfil"
         android:icon="@drawable/ic_perfil"
         android:title="" />

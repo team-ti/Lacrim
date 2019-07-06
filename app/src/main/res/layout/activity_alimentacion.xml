@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Alimentacion">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_weight="2">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_foto_perfil_equino_alimentacion"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_foto_default"
+            android:layout_marginTop="70dp"/>
+
+
+        <TextView
+            android:id="@+id/txt_detalle_equino_alimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text=""
+            android:textSize="21dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txt_detaddlle_equino_alimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="Listado de entramiento y alimentacion"
+            android:textSize="19dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/R_lista_alimentacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/Fbutton_alimentos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="end|bottom"
+            android:clickable="true"
+            android:tint="#ffffff"
+            app:backgroundTint="?attr/actionModeSplitBackground"
+            app:srcCompat="@android:drawable/ic_input_add" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

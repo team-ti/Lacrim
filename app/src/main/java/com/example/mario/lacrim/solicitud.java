@@ -17,12 +17,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
 import com.example.mario.lacrim.Entidades.Solicitudes;
 import com.example.mario.lacrim.Utilidades.Constantes;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class solicitud extends Fragment {
@@ -74,8 +84,72 @@ public class solicitud extends Fragment {
 
 
     private void consultarLista() {
+        final String id_usuario = token;
+        Listarsolicitudes = new ArrayList<>();
 
-        Log.d("solicitud", "hola");
+        try {
+
+            RequestQueue queue = Volley.newRequestQueue(getActivity());
+            String url =getResources().getString(R.string.url_server)+"solicitud/obtener_solicitudes/"+token;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            Integer id_equino=0;
+                            Integer id_user = 0;
+                            Integer id_pesebrera = 0;
+                            String nombre_solicitud = "";
+                            Integer id_solicitud = 0;
+
+                            JSONArray data = new JSONArray(response);
+
+                            Listarsolicitudes= new ArrayList<>();
+
+
+                            for (int i = 0; i < data.length(); i++) {
+                                id_equino = data.getJSONObject(i).getInt("id_equino");
+                                id_user = data.getJSONObject(i).getInt("id_user");
+                                id_pesebrera = data.getJSONObject(i).getInt("id_pesebrera");
+                                nombre_solicitud = data.getJSONObject(i).getString("nombre_solicitud");
+                                id_solicitud = data.getJSONObject(i).getInt("id_solicitud");
+                                Solicitudes solicitud = new Solicitudes();
+
+                                solicitud.setId_equino(id_equino);
+                                solicitud.setId_user(id_user);
+                                solicitud.setId_pesebrera(id_pesebrera);
+                                solicitud.setNombre_solicitud(nombre_solicitud);
+
+
+                                Listarsolicitudes.add(solicitud);
+                            }
+
+                            Adaptador_solicitud myAdapter = new Adaptador_solicitud(mContext, Listarsolicitudes);
+                            R_lista_solicitud.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                            R_lista_solicitud.setHasFixedSize(true);
+                            R_lista_solicitud.setAdapter(myAdapter);
+                            //procesarRespuesta(id, cod);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        // progressDialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // progressDialog.dismiss();
+            }
+        });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
+
+        }
+
+                            Log.d("solicitud", "hola");
 
         Listarsolicitudes = new ArrayList<>();
 

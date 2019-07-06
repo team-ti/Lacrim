@@ -16,8 +16,20 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.Usuario;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
     Button btnEntrar;
@@ -70,7 +82,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    /*public void cargarDatos() {
+    public void cargarDatos() {
 
         token = this.getSharedPreferences(dataUserCache,modo_private).getString("access_token", "0");
         Log.d("token", token);
@@ -79,7 +91,7 @@ public class Login extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
-    }*/
+    }
 
 
     public static void changeEstadoButton(Context c, boolean b) {
@@ -106,33 +118,61 @@ public class Login extends AppCompatActivity {
     }
 
     private void inicarSesion(){
-        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(this,"bd_equinos",null,1);
+        String usuario = lo_usuario.getText().toString().replace(" ","");
+        String contra = lo_contrasena.getText().toString().replace(" ","");
 
-        SQLiteDatabase db=conn.getWritableDatabase();
-        Cursor cursor;
-        String usuario = lo_usuario.getText().toString().trim();
-        String contrasena = lo_contrasena.getText().toString().trim();
-        String[] columns = {Constantes.CAMPO_ID, Constantes.CAMPO_USER, Constantes.CAMPO_CONTRASENA};
-        String selection = Constantes.CAMPO_USER+" = ? AND " + Constantes.CAMPO_CONTRASENA +" = ?";
-        String[] selectionArgs = {usuario, contrasena};
-        String tableName = Constantes.TABLA_USUARIO;
-        cursor = db.query(tableName, columns, selection, selectionArgs, null, null, null);
+        try {
 
-        if(cursor.moveToFirst()==true) {
-            String id = cursor.getString(0);
-            String usua=cursor.getString(1);
-            String contra=cursor.getString(2);
-            Log.d("id:", id);
-            if (usua.equals(lo_usuario.getText().toString().trim()) && contra.equals(lo_contrasena.getText().toString().trim())){
-                editor.putString("access_token", id);
-                editor.commit();
-                guardarEstadoButton();
-                Intent principal=new Intent(this,MainActivity.class);
-                startActivity(principal);
-                finish();
-            }
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url =getResources().getString(R.string.url_server)+"generic/usuario_login/"+usuario+"/"+contra;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                int id = 0;
+                                String cod = "";
+                                //arraylogin = new ArrayList<>();
+                                JSONArray data = new JSONArray(response);
+                                for (int i = 0; i < data.length(); i++) {
+                                    id = data.getJSONObject(i).getInt("id_usuario");
+                                    cod = data.getJSONObject(i).getString("cod");
+
+                                }
+                                    validarIngreso(id, cod);
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                           // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void validarIngreso(int id, String cod){
+        Log.d("response", "onResponse: "+cod);
+        if(cod.equalsIgnoreCase("1")) {
+            editor.putString("access_token", Integer.toString(id));
+            guardarEstadoButton();
+            editor.commit();
+            Intent principal=new Intent(this,MainActivity.class);
+            startActivity(principal);
+            finish();
         }else{
-            Toast.makeText(getApplicationContext(), "Usuario y/o contraseña incorrecta", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrecto", Toast.LENGTH_SHORT).show();
         }
     }
 }

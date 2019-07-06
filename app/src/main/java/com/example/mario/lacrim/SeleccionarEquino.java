@@ -8,10 +8,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -20,11 +23,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SeleccionarEquino extends AppCompatActivity {
     ArrayList<Equinos> ListarEquinos;
@@ -34,7 +51,7 @@ public class SeleccionarEquino extends AppCompatActivity {
     private static final int modo_private = Context.MODE_PRIVATE;
     ConexionSQLiteHelper conn;
     RecyclerView R_lista;
-    String token, equino_id, id_pes;
+    String token, equino_id, id_pes, cod, nombre_usuario;
 
 
     @Override
@@ -45,7 +62,7 @@ public class SeleccionarEquino extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         txt_sin_equinos = findViewById(R.id.txt_sin_equinos);
         R_lista =  findViewById(R.id.R_lista_selecciona_equino);
-        R_lista.setLayoutManager(this.mLayoutManager);
+       // R_lista.setLayoutManager(this.mLayoutManager);
 
         DisplayMetrics dm = new DisplayMetrics();
 
@@ -62,259 +79,393 @@ public class SeleccionarEquino extends AppCompatActivity {
 
         id_pes = getIntent().getExtras().getString("id");
 
-        conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
+        consultarPesebreraUser();
         consultarLista();
+        consultar_nombre();
 
 
-        R_lista.setAdapter(new Adaptador_seleccionar_equino(ListarEquinos));
+
+        //R_lista.setAdapter(new Adaptador_seleccionar_equino(ListarEquinos));
     }
 
     public void cargarDatosToken() {
         token = getApplicationContext().getSharedPreferences(dataUserCache,modo_private).getString("access_token", "no hay info");
     }
 
-    boolean consultarEquinoSolicitud(String id) {
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this, "bd_equinos", null, 1);
-        Log.d("hola", "consultarEquinoSolicitud: "+id);
+    public void consultarPesebreraUser() {
+        try {
 
-        SQLiteDatabase db = conn.getReadableDatabase();
-        Cursor cursor, cursor2;
-        String id_equino = id;
-        String[] columns = {Constantes.CAMPO_ID_SOLICITUD};
-        String selection = Constantes.CAMPO_ID_EQUINO_SOLICITUD + " = ?";
-        String[] selectionArgs = {id_equino};
-        String tableName = Constantes.TABLA_SOLICITUD;
-        cursor = db.query(tableName, columns, selection, selectionArgs, null, null, null);
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String url = getResources().getString(R.string.url_server) + "pesebreras/validar_pesebrera/" + token + "/" + id_pes;
 
-        if (cursor.moveToFirst()) {
-            Log.d(" existe 1", " existe: ");
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-            return true;
+                            try {
+                                JSONObject data = new JSONObject(response);
+                                cod = data.getString("cod");
 
-        }else {
 
-            String[] columns2 = {Constantes.CAMPO_ID_PESEBRERA_EQUINO};
-            String selection2 = Constantes.CAMPO_ID_EQUINO + " = ?";
-            String[] selectionArgs2 = {id_equino};
-            String tableName2 = Constantes.TABLA_EQUINO;
-            cursor2 = db.query(tableName2, columns2, selection2, selectionArgs2, null, null, null);
-            cursor2.moveToFirst();
-            String pes_eq = cursor2.getString(0);
-            Log.d("pes_eq", pes_eq);
-            if ( Integer.parseInt(pes_eq) != 0){
-                Log.d(" xiste2", " existe: ");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
 
-                return true;
-            }else{
-                Log.d("no existe", "no existe: ");
-                return false;
-            }
+            queue.add(stringRequest);
+        } catch (Exception e) {
+
         }
-
 
     }
 
-    boolean consultarPesebreraSolicitud() {
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this, "bd_equinos", null, 1);
+    private void consultar_nombre() {
+        final String id_usuario = token;
 
-        SQLiteDatabase db = conn.getReadableDatabase();
-        Cursor cursor;
-        String[] columns = {Constantes.CAMPO_ID_PESEBRERA};
-        String selection = Constantes.CAMPO_ID_PESEBRERA + " = ? AND " + Constantes.CAMPO_ID_USUARIO_PESEBRERA + " = ? "  ;
-        String[] selectionArgs = {id_pes,token};
-        String tableName = Constantes.TABLA_PESEBRERA;
-        cursor = db.query(tableName, columns, selection, selectionArgs, null, null, null);
-        if (cursor.moveToFirst() == true) {
-            return true;
-        }else{
-            return false;
+        try {
+
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String url =getResources().getString(R.string.url_server)+"generic/usuario_info/"+id_usuario;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            try {
+
+                                String nom= "";
+                                String ape= "";
+
+                                JSONArray data = new JSONArray(response);
+
+
+                                for (int i = 0; i < data.length(); i++) {
+                                    nom = data.getJSONObject(i).getString("nombre");
+                                    ape = data.getJSONObject(i).getString("apellido");
+                                }
+                                nombre_usuario = nom + " " + ape;
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
+
         }
+
     }
+
 
     private void consultarLista() {
-
-
         ListarEquinos = new ArrayList<>();
 
-        SQLiteDatabase db = conn.getReadableDatabase();
-        String[] parametros = {token};
-
-        Equinos equino = null;
-
-         Cursor cursor,cursor1;
-
+        final String id_usuario = token;
 
         try {
-            cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO + " WHERE " + Constantes.CAMPO_ID_USUARIO_EQUINO + "=?", parametros);
 
-            //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
-        int c=0;
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String url =getResources().getString(R.string.url_server)+"equino/obtener_equinos/"+id_usuario;
 
-            if (cursor.getCount()>0) {
-                while (cursor.moveToNext()) {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-                    if (!consultarEquinoSolicitud(cursor.getString(0))) {
-                        equino = new Equinos();
+                            try {
+                                String  id_equino="";
+                                String nombre = "";
+                                String sexo = "";
+                                String andar = "";
+                                String color = "";
 
-                        equino.setId_equino(cursor.getString(0));
-                        equino.setNombre_equino(cursor.getString(1));
-                        equino.setAndar_equino(cursor.getString(9));
-                        ListarEquinos.add(equino);
 
-                        c=c+1;
+                                JSONArray data = new JSONArray(response);
 
+
+                                for (int i = 0; i < data.length(); i++) {
+                                    id_equino = data.getJSONObject(i).getString("id_equino");
+                                    nombre = data.getJSONObject(i).getString("nombre_equino");
+                                    sexo = data.getJSONObject(i).getString("sexo_equino");
+                                    andar = data.getJSONObject(i).getString("andar_equino");
+                                    color = data.getJSONObject(i).getString("color_equino");
+
+                                    Equinos equino = new Equinos();
+
+                                    equino.setId_equino(id_equino);
+                                    equino.setNombre_equino(nombre);
+                                    equino.setSexo_equino(sexo);
+                                    equino.setAndar_equino(andar);
+                                    equino.setColor_equino(color);
+
+                                    ListarEquinos.add(equino);
+                                }
+                                //procesarRespuesta(id, cod);
+
+                                Adaptador_seleccionar_equino myAdapter = new Adaptador_seleccionar_equino(ListarEquinos, new RecyclerViewOnItemClickListener() {
+                                    @Override
+                                    public void onClick(View v, int position) {
+                                        if (cod.equalsIgnoreCase("0")) {
+                                            AlertDialog.Builder builder1 = new AlertDialog.Builder(SeleccionarEquino.this);
+                                            builder1.setMessage("¿Quieres enviar solicitud con este equino? ");
+                                            builder1.setCancelable(true);
+
+                                            builder1.setPositiveButton(
+                                                    "Si",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+
+                                                            insertar_equino_solicitud();
+
+                                                        }
+                                                    });
+
+                                            builder1.setNegativeButton(
+                                                    "No",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+                                                        }
+                                                    });
+
+                                            AlertDialog alert11 = builder1.create();
+                                            alert11.show();
+                                        }else{
+                                            AlertDialog.Builder builder1 = new AlertDialog.Builder(SeleccionarEquino.this);
+                                            builder1.setMessage("¿Quieres agregar este equino a su pesebrera? ");
+                                            builder1.setCancelable(true);
+
+                                            builder1.setPositiveButton(
+                                                    "Si",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+
+                                                            insertar_equino();
+
+                                                        }
+                                                    });
+
+                                            builder1.setNegativeButton(
+                                                    "No",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+                                                        }
+                                                    });
+
+                                            AlertDialog alert11 = builder1.create();
+                                            alert11.show();
+                                        }
+                                    }
+                                });
+
+                                R_lista.setLayoutManager(new GridLayoutManager(getApplicationContext(), 1));
+                                R_lista.setHasFixedSize(true);
+                                R_lista.setAdapter(myAdapter);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    private void insertar_equino() {
+
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+
+        map.put("id_pesebrera", id_pes);
+        map.put("id_equino", equino_id);
+
+
+        agregarEquino(map);
+
+
+    }
+
+    private void agregarEquino(HashMap<String, String> map) {
+        JSONObject miObjetoJSON = new JSONObject(map);
+
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.PUT,
+                        getResources().getString(R.string.url_server)+"solicitud/aceptar_solicitudes",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_actualizar(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
                     }
 
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
                 }
+        );
 
-                if (c==0){
-
-                    R_lista.setVisibility(View.GONE);
-                    txt_sin_equinos.setVisibility(View.VISIBLE);
-                }
-
-            }else{
-
-                R_lista.setVisibility(View.GONE);
-                txt_sin_equinos.setVisibility(View.VISIBLE);
-
-            }
-            R_lista.setAdapter(new Adaptador_seleccionar_equino(ListarEquinos, new RecyclerViewOnItemClickListener() {
-                @Override
-                public void onClick(View v, int position) {
-                    equino_id = ListarEquinos.get(position).getId_equino();
-
-                        String[] param_solicitud = {equino_id};
-                        if (!consultarPesebreraSolicitud()) {
-                            AlertDialog.Builder builder1 = new AlertDialog.Builder(SeleccionarEquino.this);
-                            builder1.setMessage("¿Quieres enviar solicitud con este equino? ");
-                            builder1.setCancelable(true);
-
-                            builder1.setPositiveButton(
-                                    "Si",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-
-                                            enviarSolicitud();
-
-                                        }
-                                    });
-
-                            builder1.setNegativeButton(
-                                    "No",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                            AlertDialog alert11 = builder1.create();
-                            alert11.show();
-                        }else{
-                            AlertDialog.Builder builder1 = new AlertDialog.Builder(SeleccionarEquino.this);
-                            builder1.setMessage("¿Quieres agregar este equino a su pesebrera? ");
-                            builder1.setCancelable(true);
-
-                            builder1.setPositiveButton(
-                                    "Si",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-
-                                            agregarEquino();
-
-                                        }
-                                    });
-
-                            builder1.setNegativeButton(
-                                    "No",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                            AlertDialog alert11 = builder1.create();
-                            alert11.show();
-                        }
-                    /*Intent intent = new Intent(getApplicationContext(), Detalle_equino.class);
-                    intent.putExtra("id", ListarEquinos.get(position).getId_equino());
-                    startActivity(intent);*/
-
-                }
-            }));
-
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
-
-        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_actualizar(JSONObject response) {
 
-    private void agregarEquino() {
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this, "bd_equinos", null, 1);
-
-        SQLiteDatabase db = conn.getWritableDatabase();
-
-        String[] parametros = {equino_id};
-
-        ContentValues values = new ContentValues();
-        values.put(Constantes.CAMPO_ID_PESEBRERA_EQUINO, id_pes);
         try {
-            db.update(Constantes.TABLA_EQUINO,values,Constantes.CAMPO_ID_EQUINO+"=?",parametros);
-            Toast.makeText(getApplicationContext(),"Equino agregado",Toast.LENGTH_LONG).show();
-            db.close();
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
+            String cod = response.getString("cod");
 
+
+            switch (cod) {
+                case "1":
+                    Toast.makeText(getApplicationContext(), "Acción realizada", Toast.LENGTH_SHORT).show();
+
+                    break;
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+
+
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+    }
 
-        finish();
+    private void insertar_equino_solicitud() {
+
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+
+        map.put("id_equino",equino_id);
+        map.put("id_usuario",token);
+        map.put("id_pesebrera", id_pes);
+        map.put("nombre", nombre_usuario);
+        map.put("id_usuario_recceptor", getIntent().getExtras().getString("id_user"));
+
+        enviarSolicitud(map);
+
 
     }
 
-    private void enviarSolicitud(){
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this, "bd_equinos", null, 1);
-
-        SQLiteDatabase db = conn.getWritableDatabase();
-
-        SQLiteDatabase db2 = conn.getReadableDatabase();
-        String [] parametros = {token};
-        String [] parametros2 = {id_pes};
-
-        String[] campos={Constantes.CAMPO_NOMBRE};
-        String[] campos2={Constantes.CAMPO_ID_USUARIO_PESEBRERA};
-
-        Cursor cursor, cursor2;
-        cursor =db2.query(Constantes.TABLA_USUARIO,campos,Constantes.CAMPO_ID+"=?",parametros,null,null,null);
-        cursor.moveToFirst();
-        cursor2 = db2.query(Constantes.TABLA_PESEBRERA,campos2,Constantes.CAMPO_ID_USUARIO_PESEBRERA+"=?",parametros2,null,null,null);
-        cursor2.moveToFirst();
-
-        String nombre_user;
-        Integer user_receptor;
-        nombre_user = cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_NOMBRE));
-        cursor.close();
-        user_receptor = cursor2.getInt(cursor2.getColumnIndex(Constantes.CAMPO_ID_USUARIO_PESEBRERA));
-
-
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_ID_EQUINO_SOLICITUD,equino_id);
-        values.put(Constantes.CAMPO_ID_USER_SOLICITUD,token);
-        values.put(Constantes.CAMPO_ID_PESEBRERA_SOLICITUD,id_pes);
-        values.put(Constantes.CAMPO_NOMBRE_USER_SOLICITUD,nombre_user);
-        values.put(Constantes.CAMPO_ID_USER_RECEPTOR_SOLICITUD,user_receptor);
 
 
 
-        db.insert(Constantes.TABLA_SOLICITUD,Constantes.CAMPO_ID_SOLICITUD,values);
+    private void enviarSolicitud(HashMap<String, String> map){
+        JSONObject miObjetoJSON = new JSONObject(map);
 
-        Toast.makeText(getApplicationContext(),"Solicitud enviada",Toast.LENGTH_SHORT).show();
-        db.close();
-        db2.close();
 
-        //startActivity(new Intent(Crear_equino.this, MainActivity.class));
-        finish();
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        getResources().getString(R.string.url_server)+"solicitud/insertar _solicitud",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_insert_solicitud(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+
+    }
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_insert_solicitud(JSONObject response) {
+
+        try {
+            String cod = response.getString("cod");
+
+            switch (cod) {
+                case "1":
+                    Toast.makeText(getApplicationContext(),"Solicitud enviada",Toast.LENGTH_SHORT).show();
+
+                    break;
+
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+
+
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

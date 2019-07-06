@@ -16,7 +16,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -24,14 +26,29 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.Equinos;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -40,7 +57,7 @@ public class PerfilUsuario extends AppCompatActivity {
     ConexionSQLiteHelper conn;
     TextView txt_us;
     CircleImageView img_foto_perfil;
-    EditText ed_nombres, ed_apellidos, ed_ciudad;
+    EditText ed_nombres, ed_apellidos, ed_ciudad, ed_correo, ed_usuario;
     Button btn_actualizarus;
     View view;
     String token;
@@ -60,6 +77,8 @@ public class PerfilUsuario extends AppCompatActivity {
         ed_nombres = findViewById(R.id.ed_us_nombres);
         ed_apellidos = findViewById(R.id.ed_us_apellidos);
         ed_ciudad = findViewById(R.id.ed_us_ciudad);
+        ed_correo = findViewById(R.id.ed_us_correo);
+       // ed_usuario = findViewById(R.id.ed_us_usuario);
         txt_us = findViewById(R.id.txt_usu);
         btn_actualizarus = findViewById(R.id.btn_actualizarus);
 
@@ -69,7 +88,6 @@ public class PerfilUsuario extends AppCompatActivity {
 
 
         consultar();
-        consultar_usuario();
 
 
         img_foto_perfil.setOnClickListener(new View.OnClickListener() {
@@ -100,34 +118,75 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
     private void consultar() {
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros= {token};
-        String[] campos={Constantes.CAMPO_NOMBRE,Constantes.CAMPO_APELLIDO,Constantes.CAMPO_CIUDAD,Constantes.CAMPO_AVATAR};
+        final String id_usuario = token;
 
         try {
-            Cursor cursor =db.query(Constantes.TABLA_USUARIO,campos,Constantes.CAMPO_ID+"=?",parametros,null,null,null);
-            cursor.moveToFirst();
 
-            ed_nombres.setText(cursor.getString(0));
-            ed_apellidos.setText(cursor.getString(1));
-            ed_ciudad.setText(cursor.getString(2));
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String url =getResources().getString(R.string.url_server)+"generic/usuario_info/"+id_usuario;
 
-            if (!cursor.isNull(3)){
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-                String codbase64 = cursor.getString(3);
+                            try {
 
-                byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
-                Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                String nombres = "";
+                                String apellidos = "";
+                                String ciudad = "";
+                                String usuario= "";
+                                String avatar = "";
+                                String correo = "";
 
-                img_foto_perfil.setImageBitmap(img);
 
-            }
+                                JSONArray data = new JSONArray(response);
 
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"El usuario no existe",Toast.LENGTH_LONG).show();
+
+                                for (int i = 0; i < data.length(); i++) {
+                                    nombres = data.getJSONObject(i).getString("nombre");
+                                    apellidos = data.getJSONObject(i).getString("apellido");
+                                    ciudad = data.getJSONObject(i).getString("ciudad");
+                                    usuario = data.getJSONObject(i).getString("usuario");
+                                    avatar = data.getJSONObject(i).getString("avatar");
+                                    correo  = data.getJSONObject(i).getString("correo");
+
+                                }
+
+                                ed_nombres.setText(nombres);
+                                ed_apellidos.setText(apellidos);
+                                ed_ciudad.setText(ciudad);
+                                ed_correo.setText(correo);
+                                txt_us.setText(usuario);
+
+
+                                if (!avatar.equalsIgnoreCase("")){
+
+                                    String codbase64 = avatar;
+
+                                    byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
+                                    Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                                    img_foto_perfil.setImageBitmap(img);
+
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
+
         }
-
     }
 
     private void validarcampos() {
@@ -143,57 +202,100 @@ public class PerfilUsuario extends AppCompatActivity {
             ed_ciudad.requestFocus();
             Toast.makeText(getApplicationContext(), "Ciudad no puede estar vacio", Toast.LENGTH_SHORT).show();
         }else {
-            actualizarUsuario();
+            insertar_usuario();
         }
     }
 
-    private void actualizarUsuario() {
-        SQLiteDatabase db=conn.getWritableDatabase();
+    private void insertar_usuario() {
 
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_NOMBRE,ed_nombres.getText().toString());
-        values.put(Constantes.CAMPO_APELLIDO,ed_apellidos.getText().toString());
-        values.put(Constantes.CAMPO_CIUDAD, ed_ciudad.getText().toString());
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
 
+        map.put("nombre", ed_nombres.getText().toString());
+        map.put("apellido", ed_apellidos.getText().toString());
+        map.put("ciudad", ed_apellidos.getText().toString());
         if (!avatarBase64.equalsIgnoreCase("")){
-
-            values.put(Constantes.CAMPO_AVATAR, avatarBase64);
-
+            map.put("avatar", avatarBase64);
+        }else{
+            map.put("avatar", "");
         }
 
+        map.put("id_usuario", token);
 
-        String[] parametros= {token};
 
-        db.update(Constantes.TABLA_USUARIO, values, Constantes.CAMPO_ID+"=?",parametros);
+        actualizarUsuario(map);
 
-        Toast.makeText(getApplicationContext(),"Usuario actualizado",Toast.LENGTH_SHORT).show();
-        db.close();
+
     }
 
+    private void actualizarUsuario(HashMap<String, String> map) {
+        JSONObject miObjetoJSON = new JSONObject(map);
 
-    private void consultar_usuario() {
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={token};
-        String[] campos={Constantes.CAMPO_USER};
-        //Cursor cursor;
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.PUT,
+                        getResources().getString(R.string.url_server)+"generic/usuario_actualizar",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_actualizar(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_actualizar(JSONObject response) {
 
         try {
+            String cod = response.getString("cod");
 
-            Cursor cursor =db.query(Constantes.TABLA_USUARIO,campos,Constantes.CAMPO_ID+"=?",parametros,null,null,null);
+            switch (cod) {
+                case "1":
+                    Toast.makeText(getApplicationContext(),"Usuario actualizado",Toast.LENGTH_SHORT).show();
+                    break;
 
-            cursor.moveToFirst();
+                case "0":
 
-            //txt_detalle_equino.setText(cursor.getString(1));
-            txt_us.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_USER)));
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
 
-            cursor.close();
 
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"El usuario no existe",Toast.LENGTH_LONG).show();
-
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
     }
+
+
+
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

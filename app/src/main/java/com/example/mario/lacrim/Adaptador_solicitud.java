@@ -23,13 +23,14 @@ import com.example.mario.lacrim.Utilidades.Constantes;
 import com.example.mario.lacrim.Entidades.Solicitudes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /////////
 
 public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitud.MyViewHolder> implements View.OnClickListener{
 
-    private ArrayList<Solicitudes> sl;
+    ArrayList<Solicitudes> sl;
     ConexionSQLiteHelper conn;
     int id_equino;
     int id_pesebrera;
@@ -106,7 +107,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
                 myViewHolder.texto_aceptar_rechazar.setVisibility(View.VISIBLE);
                 myViewHolder.texto_aceptar_rechazar.setText("Solicitud aceptada");
 
-                AceptarSolicitud();
+                insertar_solicitud();
 
             }
         });
@@ -128,7 +129,21 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
 
     }
-    public void AceptarSolicitud(){
+
+    private void insertar_solicitud() {
+
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+
+        map.put("id_equino", String.valueOf(id_equino));
+
+
+        AceptarSolicitud(map);
+
+
+    }
+
+    public void AceptarSolicitud(HashMap<String, String> map){
+
 
         conn=new ConexionSQLiteHelper(mContext,"bd_equinos",null,1);
 

@@ -1,7 +1,7 @@
 package com.example.mario.lacrim.Entidades;
 
 public class Solicitudes {
-
+    int id_solicitud;
     int id_equino;
     int id_pesebrera;
     int id_user;
@@ -14,6 +14,7 @@ public class Solicitudes {
         this.id_user = id_user;
         this.nombre_solicitud = nombre_solicitud;
         this.id_user_receptor = id_user_receptor;
+        this.id_solicitud = id_solicitud;
     }
 
     public int getId_equino() {
@@ -54,5 +55,13 @@ public class Solicitudes {
 
     public void setId_user_receptor(int id_user_receptor) {
         this.id_user_receptor = id_user_receptor;
+    }
+
+    public int getId_solicitud() {
+        return id_solicitud;
+    }
+
+    public void setId_solicitud(int id_solicitud) {
+        this.id_solicitud = id_solicitud;
     }
 }

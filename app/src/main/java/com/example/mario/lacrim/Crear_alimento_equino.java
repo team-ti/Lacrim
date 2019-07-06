@@ -4,21 +4,34 @@ import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
 import com.example.mario.lacrim.Utilidades.GeneralMethodClass;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Crear_alimento_equino extends AppCompatActivity {
 
@@ -28,6 +41,8 @@ public class Crear_alimento_equino extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener date;
     String id_equino;
     String interfaz;
+    String nombre_equino;
+
 
 
     @Override
@@ -37,6 +52,7 @@ public class Crear_alimento_equino extends AppCompatActivity {
 
         id_equino = getIntent().getExtras().getString("id");
         interfaz = getIntent().getExtras().getString("interfaz");
+        nombre_equino = getIntent().getExtras().getString("nombre_equino");
 
         ed_nombre_alimento = findViewById(R.id.ed_nombre_alimentacion);
         ed_descripcion_alimento = findViewById(R.id.ed_descripcion_alimentacion);
@@ -103,42 +119,110 @@ public class Crear_alimento_equino extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Descripcion no puede estar vacio",Toast.LENGTH_SHORT).show();
 
         }else{
-            registrarAlimentacionEquino();
+            insertarAlimento();
+        }
+
+    }
+    private void insertarAlimento() {
+
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+
+        map.put("nombre", ed_nombre_alimento.getText().toString());
+        map.put("fecha_ali", ed_fecha_alimento.getText().toString());
+        map.put("descripcion", ed_descripcion_alimento.getText().toString());
+        map.put("id_equino",id_equino);
+        registrarAlimentacionEquino(map);
+
+
+    }
+
+    private void registrarAlimentacionEquino(HashMap<String, String> map) {
+
+        JSONObject miObjetoJSON = new JSONObject(map);
+
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        getResources().getString(R.string.url_server)+"alimentacion/alimento_registrar",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_insert(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_insert(JSONObject response) {
+
+        try {
+            String cod = response.getString("cod");
+
+
+            switch (cod) {
+                case "1":
+
+                    Toast.makeText(getApplicationContext(),"Alimentacion resgistrada",Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(this, Alimentacion.class);
+                    i.putExtra("id",id_equino);
+                    i.putExtra("interfaz",interfaz);
+                    i.putExtra("nombre_equino",nombre_equino);
+
+                    startActivity(i);
+                    finish();
+
+                    break;
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+
+
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
     }
 
 
-    private void registrarAlimentacionEquino() {
-        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(this,"bd_equinos",null,1);
 
-        SQLiteDatabase db=conn.getWritableDatabase();
-
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_NOMBRE_ALIMENTO,ed_nombre_alimento.getText().toString());
-        values.put(Constantes.CAMPO_FECHA_ALIMENTO,ed_fecha_alimento.getText().toString());
-        values.put(Constantes.CAMPO_DESCRIPCION_ALIMENTO,ed_descripcion_alimento.getText().toString());
-        values.put(Constantes.CAMPO_ID_EQUINO_ALIMENTO,id_equino);
-
-
-        db.insert(Constantes.TABLA_ALIMENTOS,Constantes.CAMPO_ID_ALIMENTO,values);
-
-        Toast.makeText(getApplicationContext(),"Alimentacion resgistrada",Toast.LENGTH_SHORT).show();
-        db.close();
-
-        Intent i = new Intent(this, Alimentacion.class);
-        i.putExtra("id",id_equino);
-        i.putExtra("interfaz",interfaz);
-        startActivity(i);
-        finish();
-
-    }
 
 
     public void onBackPressed() {
         Intent i = new Intent(this, Alimentacion.class);
         i.putExtra("id",id_equino);
         i.putExtra("interfaz",interfaz);
+        i.putExtra("nombre_equino",nombre_equino);
         startActivity(i);
         finish();
     }

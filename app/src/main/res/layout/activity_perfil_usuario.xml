@@ -98,8 +98,48 @@
                 android:ems="10"
                 android:inputType="textPersonName" />
 
+            <TextView
+                android:id="@+id/text_v1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Correo" />
 
+            <EditText
+                android:id="@+id/ed_us_correo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:ems="10"
+                android:editable="false"
+                android:focusable="false"
+                android:clickable="false"
+                android:background="@null"
+                android:inputType="none" />
 
+           <!-- <TextView
+                android:id="@+id/text_v2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Ciudad" />
+
+            <EditText
+                android:id="@+id/ed_us_usuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:ems="10"
+                android:editable="false"
+                android:focusable="false"
+                android:clickable="false"
+                android:inputType="textPersonName" />-->
             <Button
                 android:id="@+id/btn_actualizarus"
                 android:layout_width="match_parent"
@@ -110,6 +150,7 @@
                 android:background="#198aff"
                 android:text="Actualizar usuario"
                 android:textColor="#ffffff" />
+
 
 
         </LinearLayout>

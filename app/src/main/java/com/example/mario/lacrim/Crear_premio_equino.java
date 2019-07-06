@@ -4,21 +4,35 @@ import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
 import com.example.mario.lacrim.Utilidades.GeneralMethodClass;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Crear_premio_equino extends AppCompatActivity {
 
@@ -28,6 +42,7 @@ public class Crear_premio_equino extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener date;
     String id_equino;
     String interfaz;
+    String nombre_equino;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,36 +116,103 @@ public class Crear_premio_equino extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Descripcion no puede estar vacio",Toast.LENGTH_SHORT).show();
 
         }else{
-            registrarPremioEquino();
+            insertarPremio();
         }
 
     }
 
+    private void insertarPremio() {
 
-    private void registrarPremioEquino() {
-        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(this,"bd_equinos",null,1);
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
 
-        SQLiteDatabase db=conn.getWritableDatabase();
-
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_NOMBRE_PREMIO,ed_nombre_premio.getText().toString());
-        values.put(Constantes.CAMPO_FECHA_PREMIO,ed_fecha_premio.getText().toString());
-        values.put(Constantes.CAMPO_DESCRIPCION_PREMIO,ed_descripcion_premio.getText().toString());
-        values.put(Constantes.CAMPO_ID_EQUINO_PREMIO,id_equino);
+        map.put("nombre", ed_nombre_premio.getText().toString());
+        map.put("fecha_pre", ed_fecha_premio.getText().toString());
+        map.put("descripcion", ed_descripcion_premio.getText().toString());
+        map.put("id_equino",id_equino);
 
 
-        db.insert(Constantes.TABLA_PREMIOS,Constantes.CAMPO_ID_PREMIO,values);
+        registrarPremioEquino(map);
 
-        Toast.makeText(getApplicationContext(),"Premio resgistrado",Toast.LENGTH_SHORT).show();
-        db.close();
-
-        Intent i = new Intent(this, Premiacion.class);
-        i.putExtra("id",id_equino);
-        i.putExtra("interfaz",interfaz);
-        startActivity(i);
-        finish();
 
     }
+
+    private void registrarPremioEquino(HashMap<String, String> map) {
+
+        JSONObject miObjetoJSON = new JSONObject(map);
+
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        getResources().getString(R.string.url_server)+"premios/premio_registrar",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_insert(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_insert(JSONObject response) {
+
+        try {
+            String cod = response.getString("cod");
+
+
+            switch (cod) {
+                case "1":
+                    Toast.makeText(getApplicationContext(),"Premio resgistrado",Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(this, Premiacion.class);
+                    i.putExtra("id",id_equino);
+                    i.putExtra("interfaz",interfaz);
+                    i.putExtra("nombre_equino",nombre_equino);
+
+                    startActivity(i);
+                    finish();
+
+                    break;
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
+
+
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
     public void onBackPressed() {

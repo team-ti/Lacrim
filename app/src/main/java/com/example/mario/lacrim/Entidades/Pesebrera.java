@@ -7,6 +7,7 @@ public class Pesebrera {
     private String encargado_pes;
     private String ciudad_pes;
     private String telefono_pes;
+    private String id_user_pes;
 
     public Pesebrera() {
         this.id_pes = id_pes;
@@ -14,6 +15,7 @@ public class Pesebrera {
         this.encargado_pes = encargado_pes;
         this.ciudad_pes = ciudad_pes;
         this.telefono_pes = telefono_pes;
+        this.id_user_pes = id_user_pes;
     }
 
     public String getId_pes() {
@@ -54,5 +56,13 @@ public class Pesebrera {
 
     public void setTelefono_pes(String telefono_pes) {
         this.telefono_pes = telefono_pes;
+    }
+
+    public String getId_user_pes() {
+        return id_user_pes;
+    }
+
+    public void setId_user_pes(String id_user_pes) {
+        this.id_user_pes = id_user_pes;
     }
 }

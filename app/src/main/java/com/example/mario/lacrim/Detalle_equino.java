@@ -13,15 +13,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Detalle_equino extends AppCompatActivity {
 
     TextView txt_detalle_equino;
-    String id_equino;
+    String id_equino, nombre_equino;
     LinearLayout ln_datos_generales, ln_premios, ln_alimentos,ln_videos;
     String interfaz;
     CircleImageView img_foto_perfil_equino_detalle;
@@ -40,7 +49,6 @@ public class Detalle_equino extends AppCompatActivity {
         ln_alimentos = findViewById(R.id.ln_alimentos);
         ln_videos = findViewById(R.id.ln_videos);
 
-        conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
         id_equino = getIntent().getExtras().getString("id");
         interfaz = getIntent().getExtras().getString("interfaz");
@@ -69,6 +77,7 @@ public class Detalle_equino extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Premiacion.class);
                 intent.putExtra("id",id_equino);
                 intent.putExtra("interfaz",interfaz);
+                intent.putExtra("nombre_equino",nombre_equino);
                 startActivity(intent);
                 finish();
 
@@ -82,6 +91,7 @@ public class Detalle_equino extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Alimentacion.class);
                 intent.putExtra("id",id_equino);
                 intent.putExtra("interfaz",interfaz);
+                intent.putExtra("nombre_equino",nombre_equino);
                 startActivity(intent);
                 finish();
 
@@ -108,40 +118,62 @@ public class Detalle_equino extends AppCompatActivity {
     }
 
     private void consultar_equino() {
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={(getIntent().getExtras().getString("id"))};
-        String[] campos={Constantes.CAMPO_NOMBRE_EQUINO,Constantes.CAMPO_AVATAR_EQUINO};
-        //Cursor cursor;
 
         try {
 
-            Cursor cursor =db.query(Constantes.TABLA_EQUINO,campos,Constantes.CAMPO_ID_EQUINO+"=?",parametros,null,null,null);
-            //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_ID_EQUINO,parametros);
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String url =getResources().getString(R.string.url_server)+"equino/obtener_equino_info/"+id_equino;
 
-            cursor.moveToFirst();
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-            //txt_detalle_equino.setText(cursor.getString(1));
-            txt_detalle_equino.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_NOMBRE_EQUINO)));
+                            try {
 
-            if (!cursor.isNull(1)){
+                                String avatar_equino = "";
 
-                String codbase64 = cursor.getString(1);
 
-                byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
-                Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                img_foto_perfil_equino_detalle.setImageBitmap(img);
+                                JSONArray data = new JSONArray(response);
 
-            }
 
-            cursor.close();
+                                for (int i = 0; i < data.length(); i++) {
+                                    nombre_equino = data.getJSONObject(i).getString("nombre_equino");
+                                    avatar_equino = data.getJSONObject(i).getString("avatar_equino");
 
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"El equino no existe",Toast.LENGTH_LONG).show();
+                                }
+
+                                txt_detalle_equino.setText(nombre_equino);
+
+
+                                if (!avatar_equino.equalsIgnoreCase("")){
+
+                                    String codbase64 = avatar_equino;
+
+                                    byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
+                                    Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                                    img_foto_perfil_equino_detalle.setImageBitmap(img);
+
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
 
         }
-
-
     }
 
 

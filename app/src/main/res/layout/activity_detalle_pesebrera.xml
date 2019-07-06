@@ -104,51 +104,50 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ln_solicitud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:elevation="3dp"
-                    android:background="@drawable/ic_borde_linear"
-                    android:layout_marginBottom="20dp">
+                      android:id="@+id/ln_solicitud"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:paddingLeft="10dp"
+                      android:paddingBottom="10dp"
+                      android:paddingTop="10dp"
+                      android:elevation="3dp"
+                      android:background="@drawable/ic_borde_linear"
+                      android:layout_marginBottom="20dp">
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_weight="5">
+                      <LinearLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:orientation="horizontal"
+                          android:layout_weight="5">
 
-                        <android.support.v7.widget.AppCompatImageView
-                            android:src="@drawable/solicitud"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                          <android.support.v7.widget.AppCompatImageView
+                              android:src="@drawable/solicitud"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"/>
 
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center_horizontal"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/text_solicitud"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Enviar solicitud"
-                            android:layout_gravity="center_vertical"/>
-
-                    </LinearLayout>
+                      </LinearLayout>
 
 
+                      <LinearLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:orientation="horizontal"
+                          android:gravity="center_horizontal"
+                          android:layout_weight="1">
 
-                </LinearLayout>
+                          <TextView
+                              android:id="@+id/text_solicitud"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_gravity="center_vertical"/>
+
+                      </LinearLayout>
+
+
+
+                  </LinearLayout>
 
 
                 <LinearLayout

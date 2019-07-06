@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,10 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
 import com.example.mario.lacrim.Entidades.Pesebrera;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -59,14 +69,7 @@ public class FragmentPesebreras extends Fragment {
 
         cargarDatosToken();
 
-        conn=new ConexionSQLiteHelper(getActivity(),"bd_equinos",null,1);
         consultarLista();
-
-
-        //R_lista.setAdapter(new Adaptador_lista_pesebrera(ListarPesebrera));
-
-        adaptador_pese = new Adaptador_lista_pesebrera(ListarPesebrera);
-        R_lista.setAdapter(adaptador_pese);
 
 
         btn_crear.setOnClickListener(new View.OnClickListener() {
@@ -85,61 +88,89 @@ public class FragmentPesebreras extends Fragment {
 
 
     private void consultarLista() {
-
-
         ListarPesebrera = new ArrayList<>();
 
-        SQLiteDatabase db = conn.getReadableDatabase();
-        String[] parametros = {token};
-        Pesebrera pese = null;
-
-        Cursor cursor;
+        final String id_usuario = token;
 
         try {
-            cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_PESEBRERA + " WHERE " + Constantes.CAMPO_ID_USUARIO_PESEBRERA + "=?", parametros);
+
+            RequestQueue queue = Volley.newRequestQueue(getActivity());
+            String url =getResources().getString(R.string.url_server)+"pesebreras/obtener_pesebreras/"+id_usuario;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            try {
+                                String  id_pes="";
+                                String nombre_pes = "";
+                                String encargado_pes = "";
+                                String ciudad_pes = "";
+                                String telefono_pes = "";
+                                String id_user = "";
+
+                                JSONArray data = new JSONArray(response);
 
 
-            //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
+                                for (int i = 0; i < data.length(); i++) {
+                                    id_pes = data.getJSONObject(i).getString("id_pes");
+                                    nombre_pes = data.getJSONObject(i).getString("nombre_pes");
+                                    encargado_pes = data.getJSONObject(i).getString("encargado_pes");
+                                    ciudad_pes = data.getJSONObject(i).getString("ciudad_pes");
+                                    telefono_pes= data.getJSONObject(i).getString("telefono_pes");
+                                    id_user = data.getJSONObject(i).getString("id_user");
 
-            while (cursor.moveToNext()) {
-                pese = new Pesebrera();
+                                    Pesebrera pese = new Pesebrera();
 
-                pese.setId_pes(cursor.getString(0));
-                pese.setNombre_pes(cursor.getString(1));
-                pese.setEncargado_pes(cursor.getString(2));
-                pese.setCiudad_pes(cursor.getString(3));
-                pese.setTelefono_pes(cursor.getString(4));
+                                    pese.setId_pes(id_pes);
+                                    pese.setNombre_pes(nombre_pes);
+                                    pese.setEncargado_pes(encargado_pes);
+                                    pese.setCiudad_pes(ciudad_pes);
+                                    pese.setTelefono_pes(telefono_pes);
+                                    pese.setId_user_pes(id_user);
 
+                                    ListarPesebrera.add(pese);
+                                }
+                                //procesarRespuesta(id, cod);
 
-                ListarPesebrera.add(pese);
+                                Adaptador_lista_pesebrera myAdapter = new Adaptador_lista_pesebrera(ListarPesebrera, new RecyclerViewOnItemClickListener() {
+                                    @Override
+                                    public void onClick(View v, int position) {
+                                        Intent intent = new Intent(getActivity(), DetallePesebrera.class);
+                                        intent.putExtra("id",ListarPesebrera.get(position).getId_pes());
+                                        intent.putExtra("interfaz","1");
+                                        intent.putExtra("id_user", ListarPesebrera.get(position).getId_user_pes());
+                                        intent.putExtra("nombre_pes", ListarPesebrera.get(position).getNombre_pes());
 
+                                        startActivity(intent);
+                                    }
+                                });
 
-            }
-            R_lista.setAdapter(new Adaptador_lista_pesebrera(ListarPesebrera, new RecyclerViewOnItemClickListener() {
+                                R_lista.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+                                R_lista.setHasFixedSize(true);
+                                R_lista.setAdapter(myAdapter);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
                 @Override
-                public void onClick(View v, int position) {
-
-                    Intent intent = new Intent(getActivity(), DetallePesebrera.class);
-                    intent.putExtra("id", ListarPesebrera.get(position).getId_pes());
-                    //Log.d("id", ListarPesebrera.get(position).getId_pes()+"");
-                    intent.putExtra("interfaz", "2");
-                    String id = ListarPesebrera.get(position).getId_pes();
-                   // Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
-                    startActivity(intent);
-
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
                 }
-            }));
+            });
 
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(getActivity(),"Error",Toast.LENGTH_LONG).show();
+            queue.add(stringRequest);
+        } catch (Exception e) {
 
         }
     }
 
     public void ChangeAdapterPesebrera(Pesebrera pese) {
         int position = 0;
-
 
        // for (int i = 0; i < lstPost.size(); i++) {
 

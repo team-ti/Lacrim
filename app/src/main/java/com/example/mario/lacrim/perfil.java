@@ -22,36 +22,33 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Entidades.Equinos;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link perfil.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link perfil#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class perfil extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     View view;
-    FloatingActionButton Fbutton;
-    ArrayList<Equinos> ListarEquinos;
     TextView txt_us;
     CircleImageView img_foto_perfil_frag;
-    private RecyclerView.LayoutManager mLayoutManager;
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
-    ConexionSQLiteHelper conn;
-    RecyclerView R_lista;
     String token;
     ImageButton perfil_usuario;
     TabLayout tabLayout;
@@ -77,7 +74,6 @@ public class perfil extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_perfil, container, false);
-        mLayoutManager = new LinearLayoutManager(getActivity());
 
         txt_us = view.findViewById(R.id.txt_usu);
         perfil_usuario = view.findViewById(R.id.perfil_usuario);
@@ -96,7 +92,6 @@ public class perfil extends Fragment {
 
         cargarDatosToken();
 
-        conn = new ConexionSQLiteHelper(getActivity(), "bd_equinos", null, 1);
 
         perfil_usuario.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -117,38 +112,47 @@ public class perfil extends Fragment {
 
 
     private void consultar_usuario() {
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={token};
-        String[] campos={Constantes.CAMPO_USER,Constantes.CAMPO_AVATAR};
-        //Cursor cursor;
+        final String id_usuario = token;
 
         try {
 
-            Cursor cursor =db.query(Constantes.TABLA_USUARIO,campos,Constantes.CAMPO_ID+"=?",parametros,null,null,null);
+            RequestQueue queue = Volley.newRequestQueue(getActivity());
+            String url =getResources().getString(R.string.url_server)+"generic/usuario_info/"+id_usuario;
 
-            cursor.moveToFirst();
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-            //txt_detalle_equino.setText(cursor.getString(1));
-            txt_us.setText(cursor.getString(cursor.getColumnIndex(Constantes.CAMPO_USER)));
+                            try {
 
-            if (!cursor.isNull(1)){
+                                String usuario= "";
 
-                String codbase64 = cursor.getString(1);
+                                JSONArray data = new JSONArray(response);
 
-                byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
-                Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                img_foto_perfil_frag.setImageBitmap(img);
+                                for (int i = 0; i < data.length(); i++) {
+                                    usuario = data.getJSONObject(i).getString("usuario");
+                                }
 
-            }
+                                txt_us.setText(usuario);
 
-            cursor.close();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
 
-        }catch (Exception e){
-            Toast.makeText(getActivity(),"El usuario no existe",Toast.LENGTH_LONG).show();
+            queue.add(stringRequest);
+        } catch (Exception e) {
 
         }
-
 
     }
 

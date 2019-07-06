@@ -3,13 +3,25 @@ package com.example.mario.lacrim;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
 import com.example.mario.lacrim.Utilidades.Constantes;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class Detalle_premiacion extends AppCompatActivity {
 
@@ -29,29 +41,56 @@ public class Detalle_premiacion extends AppCompatActivity {
 
         id_equino = getIntent().getExtras().getString("id");
         interfaz = getIntent().getExtras().getString("interfaz");
-        conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
 
         consultar_premio();
 
     }
 
     private void consultar_premio() {
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={getIntent().getExtras().getString("id")};
-        String[] campos={Constantes.CAMPO_NOMBRE_PREMIO,Constantes.CAMPO_FECHA_PREMIO,Constantes.CAMPO_DESCRIPCION_PREMIO};
-
         try {
-            Cursor cursor =db.query(Constantes.TABLA_PREMIOS,campos,Constantes.CAMPO_ID_EQUINO_PREMIO+"=?",parametros,null,null,null);
-            cursor.moveToFirst();
 
-            ed_nombre_detalle_premio.setText(cursor.getString(0));
-            ed_fecha_detalle_premio.setText(cursor.getString(1));
-            ed_descripcion_detalle_premio.setText(cursor.getString(2));
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String id_premio = getIntent().getExtras().getString("id");
+            String url =getResources().getString(R.string.url_server)+"premios/premio_info/"+id_premio;
 
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(),"El equino no existe",Toast.LENGTH_LONG).show();
+                            try {
+
+                                JSONArray data = new JSONArray(response);
+                                String nombre="";
+                                String fecha_pre="";
+                                String descripcion = "";
+
+                                for (int i = 0; i < data.length(); i++) {
+                                    nombre = data.getJSONObject(i).getString("nombre");
+                                    fecha_pre = data.getJSONObject(i).getString("fecha_pre");
+                                    descripcion = data.getJSONObject(i).getString("descripcion");
+
+                                }
+
+                                ed_descripcion_detalle_premio.setText(descripcion);
+                                ed_nombre_detalle_premio.setText(nombre);
+                                ed_fecha_detalle_premio.setText(fecha_pre);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
+
         }
 
     }
@@ -60,6 +99,7 @@ public class Detalle_premiacion extends AppCompatActivity {
         Intent i = new Intent(this, Premiacion.class);
         i.putExtra("id",id_equino);
         i.putExtra("interfaz",interfaz);
+        i.putExtra("nombre_equino",getIntent().getExtras().getString("nombre_equino"));
         startActivity(i);
         finish();
     }

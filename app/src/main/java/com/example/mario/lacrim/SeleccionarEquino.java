@@ -78,7 +78,6 @@ public class SeleccionarEquino extends AppCompatActivity {
         cargarDatosToken();
 
         id_pes = getIntent().getExtras().getString("id");
-
         consultarPesebreraUser();
         consultarLista();
         consultar_nombre();
@@ -222,7 +221,9 @@ public class SeleccionarEquino extends AppCompatActivity {
                                 Adaptador_seleccionar_equino myAdapter = new Adaptador_seleccionar_equino(ListarEquinos, new RecyclerViewOnItemClickListener() {
                                     @Override
                                     public void onClick(View v, int position) {
-                                        if (cod.equalsIgnoreCase("0")) {
+                                        equino_id =ListarEquinos.get(position).getId_equino();
+                                        Log.d("cod", cod);
+                                        if (cod.equalsIgnoreCase("2")) {
                                             AlertDialog.Builder builder1 = new AlertDialog.Builder(SeleccionarEquino.this);
                                             builder1.setMessage("¿Quieres enviar solicitud con este equino? ");
                                             builder1.setCancelable(true);
@@ -320,7 +321,7 @@ public class SeleccionarEquino extends AppCompatActivity {
 
                 new JsonObjectRequest(
                         Request.Method.PUT,
-                        getResources().getString(R.string.url_server)+"solicitud/aceptar_solicitudes",
+                        getResources().getString(R.string.url_server)+"solicitud/solicitud_directa",
                         miObjetoJSON,
                         new Response.Listener<JSONObject>() {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -388,7 +389,7 @@ public class SeleccionarEquino extends AppCompatActivity {
         map.put("id_usuario",token);
         map.put("id_pesebrera", id_pes);
         map.put("nombre", nombre_usuario);
-        map.put("id_usuario_recceptor", getIntent().getExtras().getString("id_user"));
+        map.put("id_usuario_receptor", getIntent().getExtras().getString("id_user"));
 
         enviarSolicitud(map);
 
@@ -406,7 +407,7 @@ public class SeleccionarEquino extends AppCompatActivity {
 
                 new JsonObjectRequest(
                         Request.Method.POST,
-                        getResources().getString(R.string.url_server)+"solicitud/insertar _solicitud",
+                        getResources().getString(R.string.url_server)+"solicitud/insertar_solicitud",
                         miObjetoJSON,
                         new Response.Listener<JSONObject>() {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)

@@ -7,9 +7,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,26 +21,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.mario.lacrim.Database.ConexionSQLiteHelper;
+import com.example.mario.lacrim.Entidades.VolleySingleton;
 import com.example.mario.lacrim.Utilidades.Constantes;
 import com.example.mario.lacrim.Entidades.Solicitudes;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /////////
 
-public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitud.MyViewHolder> implements View.OnClickListener{
+public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitud.MyViewHolder> implements View.OnClickListener {
 
     ArrayList<Solicitudes> sl;
     ConexionSQLiteHelper conn;
     int id_equino;
     int id_pesebrera;
+    int id_solicitud;
     private Context mContext;
     private View.OnClickListener listener;
-
-
+    String avatar;
 
 
     public Adaptador_solicitud(Context mContext, ArrayList<Solicitudes> sl) {
@@ -63,13 +79,12 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
         myViewHolder.tv_nombre_notificacion.setText(nombre);
 
 
-
         id_equino = sl.get(i).getId_equino();
         id_pesebrera = sl.get(i).getId_pesebrera();
-
+        id_solicitud = sl.get(i).getId_solicitud();
         String avatar = cargaravatar();
 
-        if (!avatar.equalsIgnoreCase("")){
+       /* if (!avatar.equalsIgnoreCase("")) {
 
             String codbase64 = avatar;
 
@@ -78,7 +93,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
             myViewHolder.img_perfil_notificacion.setImageBitmap(img);
 
-        }
+        }*/
 
 
         myViewHolder.img_perfil_notificacion.setOnClickListener(new View.OnClickListener() {
@@ -89,13 +104,12 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
                 String idString;
                 idString = String.valueOf(sl.get(i).getId_equino());
                 intent.putExtra("id", idString);
-                intent.putExtra("interfaz","2");
+                intent.putExtra("interfaz", "2");
                 mContext.startActivity(intent);
                 //    getActivity().finish();
 
             }
         });
-
 
 
         myViewHolder.bt_aceptar_solicitud.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +121,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
                 myViewHolder.texto_aceptar_rechazar.setVisibility(View.VISIBLE);
                 myViewHolder.texto_aceptar_rechazar.setText("Solicitud aceptada");
 
-                insertar_solicitud();
+                insertar_aceptar_solicitud();
 
             }
         });
@@ -122,7 +136,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
                 myViewHolder.texto_aceptar_rechazar.setVisibility(View.VISIBLE);
                 myViewHolder.texto_aceptar_rechazar.setText("Solicitud rechazada");
 
-                RechazarSolicitud();
+                insertar_rechazar_solicitud();
 
             }
         });
@@ -130,11 +144,13 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
     }
 
-    private void insertar_solicitud() {
+    private void insertar_aceptar_solicitud() {
 
         HashMap<String, String> map = new HashMap<>();// Mapeo previo
 
         map.put("id_equino", String.valueOf(id_equino));
+        map.put("id_pesebrera", String.valueOf(id_pesebrera));
+        map.put("id_solicitud", String.valueOf(id_solicitud));
 
 
         AceptarSolicitud(map);
@@ -142,84 +158,190 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
     }
 
-    public void AceptarSolicitud(HashMap<String, String> map){
+    public void AceptarSolicitud(HashMap<String, String> map) {
+        JSONObject miObjetoJSON = new JSONObject(map);
 
 
-        conn=new ConexionSQLiteHelper(mContext,"bd_equinos",null,1);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(
 
-        SQLiteDatabase db=conn.getWritableDatabase();
-        String[] parametros={String.valueOf(id_equino)};
+                new JsonObjectRequest(
+                        Request.Method.PUT,
+                        mContext.getString(R.string.url_server) + "solicitud/aceptar_solicitudes",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_aceptar(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
 
-        ContentValues values=new ContentValues();
-        values.put(Constantes.CAMPO_ID_PESEBRERA_EQUINO,id_pesebrera);
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void procesarRespuesta_aceptar(JSONObject response) {
+
+        try {
+            String cod = response.getString("cod");
 
 
-        db.update(Constantes.TABLA_EQUINO,values,Constantes.CAMPO_ID_EQUINO+"=?",parametros);
-        db.close();
+            switch (cod) {
+                case "1":
+                    Toast.makeText(mContext, "Solicitud aceptada", Toast.LENGTH_SHORT).show();
+
+                    break;
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
 
 
-        EliminarSolicitud();
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void insertar_rechazar_solicitud() {
+
+        HashMap<String, String> map = new HashMap<>();// Mapeo previo
+
+        map.put("id_solicitud", String.valueOf(id_solicitud));
+        RechazarSolicitud(map);
 
     }
 
 
-    public void RechazarSolicitud(){
+    public void RechazarSolicitud(HashMap<String, String> map) {
 
-        EliminarSolicitud();
+        JSONObject miObjetoJSON = new JSONObject(map);
 
+
+        VolleySingleton.getInstance(mContext).addToRequestQueue(
+
+                new JsonObjectRequest(
+                        Request.Method.POST,
+                        mContext.getString(R.string.url_server) + "solicitud/rechazar_solicitudes",
+                        miObjetoJSON,
+                        new Response.Listener<JSONObject>() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                procesarRespuesta_rechazar(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Error", "Error Volley: " + error.getMessage());
+                            }
+                        }
+
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Accept", "application/json");
+                        return headers;
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8" + getParamsEncoding();
+                    }
+                }
+        );
     }
 
+    private void procesarRespuesta_rechazar(JSONObject response) {
+
+        try {
+            String cod = response.getString("cod");
 
 
-    public void EliminarSolicitud(){
+            switch (cod) {
+                case "1":
+                    Toast.makeText(mContext, "Solicitud rechazada", Toast.LENGTH_SHORT).show();
 
-        conn=new ConexionSQLiteHelper(mContext,"bd_equinos",null,1);
+                    break;
+
+                case "0":
+
+                    //mensaje el correo ya existe
+                    Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
 
 
-        SQLiteDatabase db=conn.getWritableDatabase();
-        String[] parametros={String.valueOf(id_equino)};
-
-        db.delete(Constantes.TABLA_SOLICITUD,Constantes.CAMPO_ID_EQUINO+"=?",parametros);
-        db.close();
-
-
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private String cargaravatar() {
 
-        conn=new ConexionSQLiteHelper(mContext,"bd_equinos",null,1);
-
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={String.valueOf(id_equino)};
-        String[] campos={Constantes.CAMPO_AVATAR_EQUINO};
-        //Cursor cursor;
-
-        String ava = "";
-
         try {
 
-            Cursor cursor =db.query(Constantes.TABLA_EQUINO,campos,Constantes.CAMPO_ID_EQUINO+"=?",parametros,null,null,null);
-            //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO+" WHERE "+Constantes.CAMPO_ID_EQUINO,parametros);
+            RequestQueue queue = Volley.newRequestQueue(mContext);
+            String url = mContext.getResources().getString(R.string.url_server) + "equino/obtener_equino_info/" + id_equino;
 
-            cursor.moveToFirst();
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-            if (!cursor.isNull(0)){
+                            try {
+                                JSONArray data = new JSONArray(response);
 
-                 ava= cursor.getString(0);
-                return ava;
 
-            }
+                                for (int i = 0; i < data.length(); i++) {
 
-            cursor.close();
+                                    avatar = data.getJSONObject(i).getString("avatar_equino");
 
-        }catch (Exception e){
-            //Toast.makeText(mContext,"El equino no existe",Toast.LENGTH_LONG).show();
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // progressDialog.dismiss();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // progressDialog.dismiss();
+                }
+            });
+
+            queue.add(stringRequest);
+        } catch (Exception e) {
 
         }
-
-
-        return ava;
+        return avatar;
     }
 
 

@@ -36,7 +36,7 @@ public class DetallePesebrera extends AppCompatActivity {
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
     String interfaz_pes;
-    String nombre_pes;
+    String nombre_pes, id_user;
     String token, cod;
 
     ConexionSQLiteHelper conn;
@@ -48,7 +48,7 @@ public class DetallePesebrera extends AppCompatActivity {
 
         txt_detalle_pes = findViewById(R.id.txt_detalle_pes);
         ln_datos_generales_pes = findViewById(R.id.ln_datos_generales_pes);
-        //ln_lista_equinos = findViewById(R.id.ln_lista_equinos);
+        ln_lista_equinos = findViewById(R.id.ln_lista_equinos);
         ln_solicitud = findViewById(R.id.ln_solicitud);
         text_solicitud = findViewById(R.id.text_solicitud);
 
@@ -58,7 +58,7 @@ public class DetallePesebrera extends AppCompatActivity {
         id_pesebrera = getIntent().getExtras().getString("id");
         interfaz_pes = getIntent().getExtras().getString("interfaz");
         nombre_pes = getIntent().getExtras().getString("nombre_pes");
-
+        id_user = getIntent().getExtras().getString("id_user");
         txt_detalle_pes.setText(nombre_pes);
         consultarPesebreraUser();
 
@@ -73,7 +73,7 @@ public class DetallePesebrera extends AppCompatActivity {
                 Log.d("id_pes", ""+id_pesebrera);
                 intent.putExtra("interfaz",interfaz_pes);
                 intent.putExtra("nombre_pes", nombre_pes);
-                intent.putExtra("id_user", getIntent().getExtras().getString("id_user"));
+                intent.putExtra("id_user", id_user);
 
                 startActivity(intent);
 
@@ -97,18 +97,20 @@ public class DetallePesebrera extends AppCompatActivity {
         });
 
 
-      /*  ln_lista_equinos.setOnClickListener(new View.OnClickListener() {
+        ln_lista_equinos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(getApplicationContext(), ListarEquinosPesebrera.class);
                 intent.putExtra("id",id_pesebrera);
                 intent.putExtra("interfaz",interfaz_pes);
+                intent.putExtra("nombre_pes", nombre_pes);
+
                 startActivity(intent);
                 finish();
 
             }
-        });*/
+        });
 
 
     }
@@ -133,8 +135,7 @@ public class DetallePesebrera extends AppCompatActivity {
                                 cod = data.getString("cod");
                                 if (cod.equalsIgnoreCase("1") ){
                                     text_solicitud.setText("Agregar Equino");
-                                }else{
-                                    text_solicitud.setText("Enviar solicitud");
+                                }else if (cod.equalsIgnoreCase("2")){
                                     text_solicitud.setText("Enviar solicitud");
                                 }
 

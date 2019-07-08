@@ -17,6 +17,19 @@
     <list default="true" id="0147c126-0c27-4a2f-8676-3123edd56f6f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/fileHashes/fileHashes.lock" afterDir="false" />
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Adaptador_solicitud.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Adaptador_solicitud.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/DetallePesebrera.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/DetallePesebrera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/ListarEquinosPesebrera.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/ListarEquinosPesebrera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/SeleccionarEquino.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/SeleccionarEquino.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/solicitud.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/solicitud.java" afterDir="false" />
+=======
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
@@ -24,6 +37,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
     </list>
 >>>>>>> develop
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,27 +68,46 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="1" />
+<<<<<<< HEAD
+          <entry key="java" value="81" />
+          <entry key="xml" value="14" />
+=======
           <entry key="java" value="57" />
           <entry key="png" value="3" />
           <entry key="xml" value="33" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="1" />
+<<<<<<< HEAD
+          <entry key="JAVA" value="81" />
+          <entry key="XML" value="14" />
+=======
           <entry key="Image" value="3" />
           <entry key="JAVA" value="57" />
           <entry key="XML" value="33" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
+<<<<<<< HEAD
+          <entry key="java" value="5478" />
+          <entry key="xml" value="96" />
+=======
           <entry key="java" value="1576" />
           <entry key="xml" value="353" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
+<<<<<<< HEAD
+          <entry key="JAVA" value="5478" />
+          <entry key="XML" value="96" />
+=======
           <entry key="JAVA" value="1576" />
           <entry key="XML" value="353" />
         </counts>
@@ -114,6 +147,7 @@
           <entry key="project.open.time.15" value="2" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.opened" value="4" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         </counts>
       </usages-collector>
     </session>
@@ -121,11 +155,49 @@
   <component name="FileEditorManager">
 <<<<<<< HEAD
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< HEAD
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/FragmentEquinos.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="69">
+              <caret line="148" column="103" selection-start-line="148" selection-start-column="61" selection-end-line="148" selection-end-column="103" />
+              <folding>
+                <element signature="e#3338#3383#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/DetallePesebrera.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="107" selection-start-line="107" selection-end-line="107" />
+              <folding>
+                <element signature="e#2341#2903#0" expanded="true" />
+                <element signature="e#2902#2903#0" expanded="true" />
+                <element signature="e#3341#3733#0" expanded="true" />
+                <element signature="e#3732#3733#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/ListarEquinosPesebrera.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="242">
+              <caret line="150" column="77" selection-start-line="150" selection-start-column="77" selection-end-line="150" selection-end-column="77" />
+              <folding>
+                <element signature="e#2494#2539#0" expanded="true" />
+              </folding>
+=======
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/inicio.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="515">
               <caret line="107" selection-start-line="107" selection-end-line="107" />
+>>>>>>> d9b1d07f83777f804e474542bfef173f1b045c91
 =======
     <leaf>
       <file pinned="false" current-in-tab="false">
@@ -133,16 +205,72 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1003">
               <caret line="114" column="33" selection-start-line="114" selection-start-column="33" selection-end-line="114" selection-end-column="33" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+<<<<<<< HEAD
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Adaptador_solicitud.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="55" column="18" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
+              <folding>
+                <element signature="e#5489#5528#0" expanded="true" />
+                <element signature="e#8112#8151#0" expanded="true" />
+                <element signature="e#10307#10361#0" expanded="true" />
+                <element signature="e#11757#11959#0" expanded="true" />
+                <element signature="e#11958#11959#0" expanded="true" />
+                <element signature="e#12997#12998#0" expanded="true" />
+                <element signature="e#13029#13030#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Datos_generales.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="250">
+              <caret line="230" column="17" selection-start-line="230" selection-start-column="8" selection-end-line="230" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/../../../../TEMP/AppData/Local/Android/Sdk/platforms/android-28/android.jar!/android/app/Activity.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="115">
+              <caret line="65" column="26" selection-start-line="65" selection-start-column="26" selection-end-line="65" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/solicitud.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="122" column="70" selection-start-line="122" selection-start-column="70" selection-end-line="122" selection-end-column="70" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/SeleccionarEquino.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="356">
+              <caret line="380" column="5" lean-forward="true" selection-start-line="356" selection-start-column="3" selection-end-line="380" selection-end-column="5" />
+=======
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/FragmentEquinos.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="348">
               <caret line="107" column="44" lean-forward="true" selection-start-line="107" selection-start-column="44" selection-end-line="107" selection-end-column="44" />
+<<<<<<< HEAD
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
+=======
 >>>>>>> develop
+>>>>>>> d9b1d07f83777f804e474542bfef173f1b045c91
             </state>
           </provider>
         </entry>
@@ -160,7 +288,14 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+<<<<<<< HEAD
+      <find>id_pre</find>
+      <find>text</find>
+      <find>cod</find>
+      <find>actualiza</find>
+=======
       <find>videodata</find>
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -213,7 +348,27 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_datos_generales.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_detalle_equino.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Detalle_equino.java" />
+<<<<<<< HEAD
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Login.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Crear_equino.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/FragmentEquinos.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/PerfilUsuario.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/CrearPesebrera.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Datos_generales.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Crear_usuario.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_perfil_usuario.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/DatosPesebrera.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Entidades/Pesebrera.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/FragmentPesebreras.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_detalle_pesebrera.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Entidades/Solicitudes.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/DetallePesebrera.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/ListarEquinosPesebrera.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/SeleccionarEquino.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/solicitud.java" />
+=======
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Datos_generales.java" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Adaptador_solicitud.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/inicio.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Utilidades/Constantes.java" />
@@ -515,6 +670,31 @@
     <frame x="0" y="23" width="1280" height="777" extended-state="6" />
     <editor active="true" />
     <layout>
+<<<<<<< HEAD
+      <window_info id="Structure" order="0" side_tool="true" />
+      <window_info id="Image Layers" order="1" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="Designer" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="Build Variants" order="5" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="6" visible="true" weight="0.2473525" />
+      <window_info id="Captures" order="7" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Logcat" order="0" sideWeight="0.49848714" visible="true" weight="0.13770492" />
+      <window_info anchor="bottom" id="TODO" order="1" />
+      <window_info anchor="bottom" id="Debug" order="2" weight="0.25081968" />
+      <window_info anchor="bottom" id="Terminal" order="3" weight="0.3295082" />
+      <window_info anchor="bottom" id="Version Control" order="4" weight="0.3295082" />
+      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.5015129" side_tool="true" weight="0.3147541" />
+      <window_info anchor="bottom" id="Build" order="6" sideWeight="0.4969743" weight="0.3295082" />
+      <window_info anchor="bottom" id="Android Profiler" order="7" />
+      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.49924356" weight="0.3295082" />
+      <window_info anchor="right" id="Capture Analysis" order="0" />
+      <window_info anchor="right" id="Gradle" order="1" />
+      <window_info anchor="right" id="Theme Preview" order="2" />
+      <window_info anchor="right" id="Preview" order="3" weight="0.32980332" />
+      <window_info anchor="right" id="Palette&#9;" order="4" />
+      <window_info anchor="right" id="Device File Explorer" order="5" side_tool="true" />
+=======
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
       <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.2907916" />
       <window_info id="Structure" order="2" side_tool="true" />
@@ -540,6 +720,7 @@
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info anchor="right" id="Preview" order="4" weight="0.21082391" />
       <window_info anchor="right" id="Palette&#9;" order="5" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
     </layout>
     <layout-to-restore>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
@@ -599,11 +780,114 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
+<<<<<<< HEAD
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Crear_alimento_equino.java</url>
+          <line>70</line>
+          <properties />
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Detalle_alimentacion.java</url>
+          <line>48</line>
+          <properties />
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Detalle_alimentacion.java</url>
+          <line>50</line>
+          <properties />
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Alimentacion.java</url>
+          <line>70</line>
+          <properties />
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Alimentacion.java</url>
+          <line>71</line>
+          <properties />
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Alimentacion.java</url>
+          <line>87</line>
+          <properties />
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Alimentacion.java</url>
+          <line>72</line>
+          <properties />
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Alimentacion.java</url>
+          <line>143</line>
+          <properties />
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Alimentacion.java</url>
+          <line>135</line>
+          <properties />
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/CrearPesebrera.java</url>
+          <line>113</line>
+          <properties />
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/CrearPesebrera.java</url>
+          <line>119</line>
+          <properties />
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/CrearPesebrera.java</url>
+          <line>150</line>
+          <properties />
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Datos_generales.java</url>
+          <line>280</line>
+          <properties />
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/SeleccionarEquino.java</url>
+          <line>315</line>
+          <properties />
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Datos_generales.java</url>
+          <line>288</line>
+          <properties />
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Alimentacion.java</url>
+          <line>164</line>
+          <properties class="com.example.mario.lacrim.Alimentacion" />
+          <option name="timeStamp" value="47" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+=======
     <watches-manager>
       <configuration name="app">
         <watch expression="((SQLiteCursor)cursor).mCount" custom="android.database.sqlite.SQLiteCursor" />
       </configuration>
     </watches-manager>
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
   </component>
   <component name="editorHistoryManager">
 <<<<<<< HEAD
@@ -797,6 +1081,9 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Login.java">
+=======
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_perfil_usuario.xml">
       <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
@@ -829,6 +1116,7 @@
       <provider editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Detalle_alimentacion.java">
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="24" column="53" lean-forward="true" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
@@ -972,6 +1260,9 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/DatosPesebrera.java">
+=======
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_seleccionar_equino.xml">
 <<<<<<< HEAD
 =======
@@ -984,6 +1275,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/CrearPesebrera.java">
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
           <caret line="150" column="28" selection-start-line="150" selection-start-column="28" selection-end-line="150" selection-end-column="28" />
@@ -1045,13 +1337,40 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_presentacion.xml">
       <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="69">
+          <caret line="148" column="103" selection-start-line="148" selection-start-column="61" selection-end-line="148" selection-end-column="103" />
+          <folding>
+            <element signature="e#3338#3383#0" expanded="true" />
+          </folding>
+=======
         <state relative-caret-position="-1720">
           <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/buscar.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="204">
+          <caret line="107" selection-start-line="107" selection-end-line="107" />
+          <folding>
+            <element signature="e#2341#2903#0" expanded="true" />
+            <element signature="e#2902#2903#0" expanded="true" />
+            <element signature="e#3341#3733#0" expanded="true" />
+            <element signature="e#3732#3733#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/ListarEquinosPesebrera.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="150" column="77" selection-start-line="150" selection-start-column="77" selection-end-line="150" selection-end-column="77" />
+          <folding>
+            <element signature="e#2494#2539#0" expanded="true" />
+=======
         <state relative-caret-position="15">
           <caret line="132" column="4" selection-start-line="132" selection-start-column="4" selection-end-line="132" selection-end-column="4" />
           <folding>
@@ -1061,19 +1380,57 @@
             <element signature="e#6289#6290#0" expanded="true" />
             <element signature="e#6478#6862#0" expanded="true" />
             <element signature="e#6861#6862#0" expanded="true" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/SeleccionarEquino.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="380" column="5" lean-forward="true" selection-start-line="356" selection-start-column="3" selection-end-line="380" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Entidades/Solicitudes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="59" column="34" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="34" />
+          <folding>
+            <element signature="e#1428#1429#0" expanded="true" />
+            <element signature="e#1481#1482#0" expanded="true" />
+            <element signature="e#1529#1530#0" expanded="true" />
+          </folding>
+=======
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/inicio.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1003">
           <caret line="114" column="33" selection-start-line="114" selection-start-column="33" selection-end-line="114" selection-end-column="33" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         </state>
       </provider>
     </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-fragment-28.0.0.aar/2912e6105b04a3fbb8fc128906e11277/jars/classes.jar!/android/support/v4/app/Fragment.class">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="272">
+          <caret line="122" column="70" selection-start-line="122" selection-start-column="70" selection-end-line="122" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../../../TEMP/AppData/Local/Android/Sdk/platforms/android-28/android.jar!/android/app/Activity.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="65" column="26" selection-start-line="65" selection-start-column="26" selection-end-line="65" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/Datos_generales.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="230" column="17" selection-start-line="230" selection-start-column="8" selection-end-line="230" selection-end-column="17" />
+=======
         <state relative-caret-position="2454">
           <caret line="284" column="31" selection-start-line="284" selection-start-column="31" selection-end-line="284" selection-end-column="31" />
         </state>
@@ -1083,13 +1440,28 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="219">
           <caret line="439" column="18" selection-start-line="439" selection-start-column="18" selection-end-line="439" selection-end-column="18" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/mario/lacrim/FragmentEquinos.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="272">
+          <caret line="55" column="18" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
+          <folding>
+            <element signature="e#5489#5528#0" expanded="true" />
+            <element signature="e#8112#8151#0" expanded="true" />
+            <element signature="e#10307#10361#0" expanded="true" />
+            <element signature="e#11757#11959#0" expanded="true" />
+            <element signature="e#11958#11959#0" expanded="true" />
+            <element signature="e#12997#12998#0" expanded="true" />
+            <element signature="e#13029#13030#0" expanded="true" />
+          </folding>
+=======
         <state relative-caret-position="348">
           <caret line="107" column="44" lean-forward="true" selection-start-line="107" selection-start-column="44" selection-end-line="107" selection-end-column="44" />
+>>>>>>> 28bd2b5526d5bf26b9a7d9f519a2c056590b2fda
         </state>
       </provider>
     </entry>

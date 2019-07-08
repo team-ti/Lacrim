@@ -54,7 +54,6 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
 
         interfaz = getIntent().getExtras().getString("interfaz");
 
-        conn=new ConexionSQLiteHelper(getApplicationContext(),"bd_equinos",null,1);
         consultarLista();
 
 
@@ -142,60 +141,6 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
 
         }
 
-        ListarEquinos = new ArrayList<>();
-
-        SQLiteDatabase db = conn.getReadableDatabase();
-        String[] parametros = {id_pes};
-        Equinos equino = null;
-
-        Cursor cursor;
-
-
-        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_EQUINO + " WHERE " + Constantes.CAMPO_ID_PESEBRERA_EQUINO + "=?", parametros);
-
-
-        //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
-
-        if (cursor.getCount() > 0){
-
-            while (cursor.moveToNext()) {
-                equino = new Equinos();
-
-                equino.setId_equino(cursor.getString(0));
-                equino.setNombre_equino(cursor.getString(1));
-                equino.setSexo_equino(cursor.getString(4));
-                equino.setAndar_equino(cursor.getString(9));
-                equino.setColor_equino(cursor.getString(5));
-
-
-                ListarEquinos.add(equino);
-
-
-            }
-
-        R_lista.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-
-                Intent intent = new Intent(getApplicationContext(), Detalle_equino.class);
-                intent.putExtra("id", ListarEquinos.get(position).getId_equino());
-                intent.putExtra("interfaz", interfaz);
-                //int id = ListarEquinos.get(position).getId_equino();
-                //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
-                startActivity(intent);
-                //    getActivity().finish();
-            }
-        }));
-
-    }else{
-
-            txt_sin_equino.setVisibility(View.VISIBLE);
-            R_lista.setVisibility(View.GONE);
-
-        }
-
-        cursor.close();
-
 
     }
 
@@ -203,6 +148,7 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
         Intent i = new Intent(this, DetallePesebrera.class);
         i.putExtra("id",id_pes);
         i.putExtra("interfaz",interfaz);
+        i.putExtra("nombre_pes",getIntent().getExtras().getString("nombre_pes"));
         startActivity(i);
         finish();
     }

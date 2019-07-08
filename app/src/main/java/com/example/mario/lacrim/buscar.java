@@ -103,12 +103,12 @@ public class buscar extends Fragment {
                     if (sp_tipo_buscar.getSelectedItem().toString().equalsIgnoreCase("Equino")){
 
                         consultar_equinos(palabra_buscar);
-                        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos));
+                        //R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos));
 
                     }else{
 
                         consultar_pesebrera(palabra_buscar);
-                        R_lista_buscar.setAdapter(new Adaptador_lista_pesebrera_buscar(ListarPesebrera));
+                        //R_lista_buscar.setAdapter(new Adaptador_lista_pesebrera_buscar(ListarPesebrera));
 
                     }
 
@@ -383,6 +383,12 @@ public class buscar extends Fragment {
     public void vaciar_lista(){
 
         ListarEquinos = new ArrayList<>();
+
+        ListarEquinos.clear();
+
+
+        R_lista_buscar.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        R_lista_buscar.setHasFixedSize(true);
 
         R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
             @Override

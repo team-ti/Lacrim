@@ -1,6 +1,7 @@
 package com.example.mario.lacrim;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,6 +43,7 @@ public class Crear_alimento_equino extends AppCompatActivity {
     String id_equino;
     String interfaz;
     String nombre_equino;
+    ProgressDialog progressDialog;
 
 
 
@@ -140,6 +142,7 @@ public class Crear_alimento_equino extends AppCompatActivity {
 
         JSONObject miObjetoJSON = new JSONObject(map);
 
+        progressDialog = ProgressDialog.show(this, "Creando alimento", "Espere unos segundos");
 
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
 
@@ -157,6 +160,7 @@ public class Crear_alimento_equino extends AppCompatActivity {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                progressDialog.dismiss();
                                 Log.d("Error", "Error Volley: " + error.getMessage());
                             }
                         }
@@ -208,6 +212,8 @@ public class Crear_alimento_equino extends AppCompatActivity {
 
                     break;
             }
+            progressDialog.dismiss();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

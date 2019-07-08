@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
@@ -66,6 +67,8 @@ public class PerfilUsuario extends AppCompatActivity {
     private static final int modo_private = Context.MODE_PRIVATE;
     Fragment fragment;
     FragmentManager fragmentManager;
+    ProgressDialog progressDialog;
+
 
 
     @Override
@@ -119,6 +122,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
     private void consultar() {
         final String id_usuario = token;
+        progressDialog = ProgressDialog.show(this, "Cargando datos usuario", "Espere unos segundos");
 
         try {
 
@@ -129,6 +133,7 @@ public class PerfilUsuario extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            progressDialog.dismiss();
 
                             try {
 
@@ -172,6 +177,8 @@ public class PerfilUsuario extends AppCompatActivity {
                                 }
 
                             } catch (JSONException e) {
+                                progressDialog.dismiss();
+
                                 e.printStackTrace();
                             }
                             // progressDialog.dismiss();
@@ -179,7 +186,7 @@ public class PerfilUsuario extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 

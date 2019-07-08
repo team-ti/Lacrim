@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -37,6 +38,8 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
     RecyclerView R_lista;
     String token, id_pes, interfaz;
     TextView txt_sin_equino;
+    ProgressDialog progressDialog;
+
 
 
     @Override
@@ -66,6 +69,7 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
 
     private void consultarLista() {
         ListarEquinos = new ArrayList<>();
+        progressDialog = ProgressDialog.show(this, "Cargando equinos", "Espere unos segundos");
 
         try {
 
@@ -123,6 +127,7 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
                                 R_lista.setHasFixedSize(true);
                                 R_lista.setAdapter(myAdapter);
 
+                                progressDialog.dismiss();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -132,7 +137,7 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 

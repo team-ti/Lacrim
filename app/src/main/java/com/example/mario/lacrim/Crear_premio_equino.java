@@ -1,6 +1,7 @@
 package com.example.mario.lacrim;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -43,6 +44,8 @@ public class Crear_premio_equino extends AppCompatActivity {
     String id_equino;
     String interfaz;
     String nombre_equino;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +140,7 @@ public class Crear_premio_equino extends AppCompatActivity {
     }
 
     private void registrarPremioEquino(HashMap<String, String> map) {
+        progressDialog = ProgressDialog.show(this, "Creando premio", "Espere unos segundos");
 
         JSONObject miObjetoJSON = new JSONObject(map);
 
@@ -151,12 +155,15 @@ public class Crear_premio_equino extends AppCompatActivity {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onResponse(JSONObject response) {
+
                                 procesarRespuesta_insert(response);
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                progressDialog.dismiss();
+
                                 Log.d("Error", "Error Volley: " + error.getMessage());
                             }
                         }
@@ -207,6 +214,8 @@ public class Crear_premio_equino extends AppCompatActivity {
 
                     break;
             }
+            progressDialog.dismiss();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +38,8 @@ public class Login extends AppCompatActivity {
     TextView btnRegistrar_lo;
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
+    ProgressDialog progressDialog;
+
 
     RadioButton rb_sesion;
 
@@ -60,6 +63,7 @@ public class Login extends AppCompatActivity {
         btnEntrar = findViewById(R.id.btn_entrar);
         btnRegistrar_lo = findViewById(R.id.btnRegistrar_lo);
         sharedpreferences = getSharedPreferences(dataUserCache, modo_private);
+        // contruir el mensaje en el oncreate
         editor = sharedpreferences.edit();
 
         if (obtenerEstadoButton()) {
@@ -122,6 +126,7 @@ public class Login extends AppCompatActivity {
         String contra = lo_contrasena.getText().toString().replace(" ","");
 
         try {
+            progressDialog = ProgressDialog.show(this, "Iniciando sesión", "Espere unos segundos");
 
             RequestQueue queue = Volley.newRequestQueue(this);
             String url =getResources().getString(R.string.url_server)+"generic/usuario_login/"+usuario+"/"+contra;
@@ -130,6 +135,7 @@ public class Login extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+
                             try {
                                 int id = 0;
                                 String cod = "";
@@ -146,11 +152,13 @@ public class Login extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                           // progressDialog.dismiss();
+                            progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressDialog.dismiss();
+
                     Toast.makeText(getApplicationContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
 
                 }
@@ -161,6 +169,12 @@ public class Login extends AppCompatActivity {
 
         }
     }
+
+
+
+
+
+
 
     private void validarIngreso(int id, String cod){
         Log.d("response", "onResponse: "+cod);
@@ -174,5 +188,7 @@ public class Login extends AppCompatActivity {
         }else{
             Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrecto", Toast.LENGTH_SHORT).show();
         }
+        progressDialog.dismiss();
+
     }
 }

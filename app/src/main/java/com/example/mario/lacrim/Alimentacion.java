@@ -1,6 +1,7 @@
 package com.example.mario.lacrim;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -47,6 +48,7 @@ public class Alimentacion extends AppCompatActivity {
     FloatingActionButton Fbutton_alimentos;
     private RecyclerView.LayoutManager mLayoutManager;
     String interfaz, nombre_equino;
+    ProgressDialog progressDialog;
 
 
 
@@ -97,6 +99,7 @@ public class Alimentacion extends AppCompatActivity {
 
     private void consultarListaAlimentacion() {
         try {
+            progressDialog = ProgressDialog.show(this, "Cargando alimentación", "Espere unos segundos");
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             String url = getResources().getString(R.string.url_server) + "alimentacion/alimentacion_equino/" + id_equino;
@@ -145,6 +148,7 @@ public class Alimentacion extends AppCompatActivity {
                                 R_lista_alimentacion.setLayoutManager(new GridLayoutManager(getApplicationContext(), 1));
                                 R_lista_alimentacion.setHasFixedSize(true);
                                 R_lista_alimentacion.setAdapter(myAdapter);
+                                progressDialog.dismiss();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -154,6 +158,7 @@ public class Alimentacion extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressDialog.dismiss();
                     // progressDialog.dismiss();
                 }
             });

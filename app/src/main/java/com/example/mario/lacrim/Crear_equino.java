@@ -1,6 +1,7 @@
 package com.example.mario.lacrim;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class Crear_equino extends AppCompatActivity {
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
     String token;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -187,6 +189,7 @@ public class Crear_equino extends AppCompatActivity {
 
     private void registrarEquino(HashMap<String, String> map) {
         JSONObject miObjetoJSON = new JSONObject(map);
+        progressDialog = ProgressDialog.show(this, "Creando equino", "Espere unos segundos");
 
 
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
@@ -205,6 +208,7 @@ public class Crear_equino extends AppCompatActivity {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                progressDialog.dismiss();
                                 Log.d("Error", "Error Volley: " + error.getMessage());
                             }
                         }
@@ -251,6 +255,8 @@ public class Crear_equino extends AppCompatActivity {
 
                     break;
             }
+            progressDialog.dismiss();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

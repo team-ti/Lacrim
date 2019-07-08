@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -54,6 +55,8 @@ public class perfil extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter adapter;
+    ProgressDialog progressDialog;
+
 
 
 
@@ -113,6 +116,7 @@ public class perfil extends Fragment {
 
     private void consultar_usuario() {
         final String id_usuario = token;
+        progressDialog = ProgressDialog.show(getActivity(), "Cargando perfil", "Espere unos segundos");
 
         try {
 
@@ -123,7 +127,7 @@ public class perfil extends Fragment {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-
+                            progressDialog.dismiss();
                             try {
 
                                 String usuario= "";
@@ -138,6 +142,7 @@ public class perfil extends Fragment {
                                 txt_us.setText(usuario);
 
                             } catch (JSONException e) {
+                                progressDialog.dismiss();
                                 e.printStackTrace();
                             }
                             // progressDialog.dismiss();
@@ -145,12 +150,14 @@ public class perfil extends Fragment {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressDialog.dismiss();
                     // progressDialog.dismiss();
                 }
             });
 
             queue.add(stringRequest);
         } catch (Exception e) {
+            progressDialog.dismiss();
 
         }
 

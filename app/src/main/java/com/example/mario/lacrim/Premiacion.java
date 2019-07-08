@@ -1,6 +1,7 @@
 package com.example.mario.lacrim;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -46,6 +47,8 @@ public class Premiacion extends AppCompatActivity {
     FloatingActionButton Fbutton_premiacion;
     private RecyclerView.LayoutManager mLayoutManager;
     String interfaz;
+    ProgressDialog progressDialog;
+
 
 
     @SuppressLint("RestrictedApi")
@@ -95,6 +98,7 @@ public class Premiacion extends AppCompatActivity {
 
 
     private void consultar_equino() {
+        progressDialog = ProgressDialog.show(this, "Cargando premios", "Espere unos segundos");
 
         try {
 
@@ -105,6 +109,7 @@ public class Premiacion extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            progressDialog.dismiss();
 
                             try {
                                 String nombre_premiacion = "";
@@ -145,6 +150,8 @@ public class Premiacion extends AppCompatActivity {
                                 R_lista_premiacion.setAdapter(myAdapter);
 
                             } catch (JSONException e) {
+                                progressDialog.dismiss();
+
                                 e.printStackTrace();
                             }
                             // progressDialog.dismiss();
@@ -152,7 +159,7 @@ public class Premiacion extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 

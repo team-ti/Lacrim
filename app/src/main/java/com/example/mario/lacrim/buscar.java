@@ -385,21 +385,20 @@ public class buscar extends Fragment {
     public void vaciar_lista(){
 
         ListarEquinos = new ArrayList<>();
-
-        Adaptador_lista_pesebrera_buscar myAdapter = new Adaptador_lista_pesebrera_buscar(ListarPesebrera, new RecyclerViewOnItemClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-                Intent intent = new Intent(getActivity(), DetallePesebrera.class);
-                intent.putExtra("id",ListarPesebrera.get(position).getId_pes());
-                intent.putExtra("interfaz","2");
-                //int id = ListarEquinos.get(position).getId_equino();
-                //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
-                startActivity(intent);
-            }
-        });
         R_lista_buscar.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         R_lista_buscar.setHasFixedSize(true);
-        R_lista_buscar.setAdapter(myAdapter);
+        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+
+                Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                startActivity(intent);
+                getActivity().finish();
+            }
+        }));
+
+
     }
 
 

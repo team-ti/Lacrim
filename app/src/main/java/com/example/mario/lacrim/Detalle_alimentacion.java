@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,6 +28,8 @@ public class Detalle_alimentacion extends AppCompatActivity {
     EditText ed_nombre_detalle_alimentacion, ed_fecha_detalle_alimentacion, ed_descripcion_detalle_alimentacion;
     String id_equino, id_alimento;
     String interfaz;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class Detalle_alimentacion extends AppCompatActivity {
 
     private void consultar_alimentacion() {
         try {
+            progressDialog = ProgressDialog.show(this, "Cargando datos alimentación", "Espere unos segundos");
+
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             //String id_alimentacion = getIntent().getExtras().getString("id");
@@ -57,7 +62,6 @@ public class Detalle_alimentacion extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-
                             try {
 
                                 JSONArray data = new JSONArray(response);
@@ -76,14 +80,17 @@ public class Detalle_alimentacion extends AppCompatActivity {
                                 ed_nombre_detalle_alimentacion.setText(nombre);
                                 ed_fecha_detalle_alimentacion.setText(fecha_ali);
 
+                                progressDialog.dismiss();
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressDialog.dismiss();
                     // progressDialog.dismiss();
                 }
             });

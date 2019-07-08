@@ -148,18 +148,17 @@ public class Alimentacion extends AppCompatActivity {
                                 R_lista_alimentacion.setLayoutManager(new GridLayoutManager(getApplicationContext(), 1));
                                 R_lista_alimentacion.setHasFixedSize(true);
                                 R_lista_alimentacion.setAdapter(myAdapter);
-                                progressDialog.dismiss();
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     progressDialog.dismiss();
-                    // progressDialog.dismiss();
                 }
             });
 

@@ -84,6 +84,9 @@ public class perfil extends Fragment {
         perfil_usuario = view.findViewById(R.id.perfil_usuario);
         img_foto_perfil_frag = view.findViewById(R.id.img_foto_perfil_frag);
 
+        progressDialog = ProgressDialog.show(getActivity(), "Cargando perfil", "Espere unos segundos");
+
+
         tabLayout = view.findViewById(R.id.tablayout_id);
         viewPager = view.findViewById(R.id.viewpager_id);
 
@@ -125,7 +128,6 @@ public class perfil extends Fragment {
 
     private void consultar_usuario() {
         final String id_usuario = token;
-        progressDialog = ProgressDialog.show(getActivity(), "Cargando perfil", "Espere unos segundos");
 
         try {
 
@@ -136,7 +138,6 @@ public class perfil extends Fragment {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            progressDialog.dismiss();
                             try {
 
                                 String usuario= "";
@@ -167,13 +168,14 @@ public class perfil extends Fragment {
                                 progressDialog.dismiss();
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     progressDialog.dismiss();
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 

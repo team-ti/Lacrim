@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,6 +39,8 @@ public class DetallePesebrera extends AppCompatActivity {
     String interfaz_pes;
     String nombre_pes, id_user;
     String token, cod;
+    ProgressDialog progressDialog;
+
 
     ConexionSQLiteHelper conn;
 
@@ -51,6 +54,9 @@ public class DetallePesebrera extends AppCompatActivity {
         ln_lista_equinos = findViewById(R.id.ln_lista_equinos);
         ln_solicitud = findViewById(R.id.ln_solicitud);
         text_solicitud = findViewById(R.id.text_solicitud);
+
+        progressDialog = ProgressDialog.show(this, "Cargando pesebrera", "Espere unos segundos");
+
 
         cargarDatosToken();
 
@@ -142,12 +148,12 @@ public class DetallePesebrera extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 

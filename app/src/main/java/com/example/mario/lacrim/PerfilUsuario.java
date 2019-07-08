@@ -61,6 +61,7 @@ public class PerfilUsuario extends AppCompatActivity {
     EditText ed_nombres, ed_apellidos, ed_ciudad, ed_correo, ed_usuario;
     Button btn_actualizarus;
     View view;
+    Context mContext;
     String token;
     String avatarBase64="";
     public static final String dataUserCache = "dataUser";
@@ -84,9 +85,10 @@ public class PerfilUsuario extends AppCompatActivity {
         ed_correo = findViewById(R.id.ed_us_correo);
        // ed_usuario = findViewById(R.id.ed_us_usuario);
         txt_us = findViewById(R.id.txt_usu);
+        mContext = this;
         btn_actualizarus = findViewById(R.id.btn_actualizarus);
 
-        progressDialog = ProgressDialog.show(this, "Cargando informacion", "Espere unos segundos");
+        //progressDialog = ProgressDialog.show(this, "Cargando datos de usuario", "Espere unos segundos");
 
         cargarDatosToken();
 
@@ -112,8 +114,9 @@ public class PerfilUsuario extends AppCompatActivity {
         btn_actualizarus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.show();
-                //progressDialog = ProgressDialog.show(getApplicationContext(), "Cargando informacion", "Espere unos segundos");
+                //progressDialog.show();
+                progressDialog = ProgressDialog.show(mContext, "Actualizando usuario", "Espere unos segundos");
+
                 validarcampos();
 
             }

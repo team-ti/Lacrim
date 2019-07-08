@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,6 +35,7 @@ public class Detalle_equino extends AppCompatActivity {
     LinearLayout ln_datos_generales, ln_premios, ln_alimentos,ln_videos;
     String interfaz;
     CircleImageView img_foto_perfil_equino_detalle;
+    ProgressDialog progressDialog;
 
     ConexionSQLiteHelper conn;
 
@@ -48,6 +50,8 @@ public class Detalle_equino extends AppCompatActivity {
         ln_premios = findViewById(R.id.ln_premios);
         ln_alimentos = findViewById(R.id.ln_alimentos);
         ln_videos = findViewById(R.id.ln_videos);
+
+        progressDialog = ProgressDialog.show(this, "Cargando equino", "Espere unos segundos");
 
 
         id_equino = getIntent().getExtras().getString("id");
@@ -161,12 +165,12 @@ public class Detalle_equino extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 

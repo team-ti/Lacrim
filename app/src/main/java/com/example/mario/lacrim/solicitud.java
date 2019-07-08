@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -47,6 +48,7 @@ public class solicitud extends Fragment {
     String token;
     Context mContext;
     TextView txt_sin_notificacion;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -61,6 +63,8 @@ public class solicitud extends Fragment {
         txt_sin_notificacion = view.findViewById(R.id.txt_sin_notificacion);
 
         mContext = this.getContext();
+
+        progressDialog = ProgressDialog.show(getActivity(), "Cargando solicitudes", "Espere unos segundos");
 
 
         cargarDatosToken();
@@ -150,12 +154,12 @@ public class solicitud extends Fragment {
                             R_lista_solicitud.setVisibility(View.GONE);
                             txt_sin_notificacion.setVisibility(View.VISIBLE);
                         }
-                        // progressDialog.dismiss();
+                         progressDialog.dismiss();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // progressDialog.dismiss();
+                 progressDialog.dismiss();
                 R_lista_solicitud.setVisibility(View.GONE);
                 txt_sin_notificacion.setVisibility(View.VISIBLE);
             }

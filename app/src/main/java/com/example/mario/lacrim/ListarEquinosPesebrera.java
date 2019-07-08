@@ -91,6 +91,16 @@ public class ListarEquinosPesebrera extends AppCompatActivity {
 
                                 JSONArray data = new JSONArray(response);
 
+                                if (data.length()>0){
+
+                                    R_lista.setVisibility(View.VISIBLE);
+                                    txt_sin_equino.setVisibility(View.GONE);
+
+                                }else{
+
+                                    R_lista.setVisibility(View.GONE);
+                                    txt_sin_equino.setVisibility(View.VISIBLE);
+                                }
 
                                 for (int i = 0; i < data.length(); i++) {
                                     id_equino = data.getJSONObject(i).getString("id_equino");

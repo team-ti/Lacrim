@@ -105,6 +105,19 @@ public class solicitud extends Fragment {
 
                             JSONArray data = new JSONArray(response);
 
+                            if (data.length()>0){
+
+                                R_lista_solicitud.setVisibility(View.VISIBLE);
+                                txt_sin_notificacion.setVisibility(View.GONE);
+
+                            }else{
+
+                                R_lista_solicitud.setVisibility(View.GONE);
+                                txt_sin_notificacion.setVisibility(View.VISIBLE);
+                            }
+
+
+
                             Listarsolicitudes= new ArrayList<>();
 
 
@@ -132,9 +145,10 @@ public class solicitud extends Fragment {
                             R_lista_solicitud.setAdapter(myAdapter);
                             //procesarRespuesta(id, cod);
 
-
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            R_lista_solicitud.setVisibility(View.GONE);
+                            txt_sin_notificacion.setVisibility(View.VISIBLE);
                         }
                         // progressDialog.dismiss();
                     }
@@ -142,6 +156,8 @@ public class solicitud extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // progressDialog.dismiss();
+                R_lista_solicitud.setVisibility(View.GONE);
+                txt_sin_notificacion.setVisibility(View.VISIBLE);
             }
         });
 

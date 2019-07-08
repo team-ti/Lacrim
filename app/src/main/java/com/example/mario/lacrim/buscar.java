@@ -97,8 +97,11 @@ public class buscar extends Fragment {
 
                     vaciar_lista();
 
+                    R_lista_buscar.setVisibility(View.GONE);
+
                 }else{
 
+                    R_lista_buscar.setVisibility(View.VISIBLE);
 
                     if (sp_tipo_buscar.getSelectedItem().toString().equalsIgnoreCase("Equino")){
 
@@ -389,6 +392,17 @@ public class buscar extends Fragment {
         ListarEquinos = new ArrayList<>();
 
         ListarEquinos.clear();
+
+        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getActivity(), Detalle_equino.class);
+                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                intent.putExtra("interfaz","2");
+                startActivity(intent);
+            }
+        }));
+
 
 
         R_lista_buscar.setLayoutManager(new GridLayoutManager(getActivity(), 1));

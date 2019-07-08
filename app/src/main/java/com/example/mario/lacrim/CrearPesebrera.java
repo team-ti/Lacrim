@@ -168,6 +168,10 @@ public class CrearPesebrera extends AppCompatActivity {
 
                     break;
             }
+            Intent i = new Intent(this, MainActivity.class);
+            i.putExtra("vista","hola");
+            startActivity(i);
+            finish();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -176,8 +180,9 @@ public class CrearPesebrera extends AppCompatActivity {
 
 
     public void onBackPressed() {
-        //Intent i = new Intent(this, MainActivity.class);
-        //startActivity(i);
+        Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("vista","hola");
+        startActivity(i);
         finish();
     }
 }

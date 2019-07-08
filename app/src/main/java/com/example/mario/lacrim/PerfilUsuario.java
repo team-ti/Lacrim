@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
@@ -64,8 +65,10 @@ public class PerfilUsuario extends AppCompatActivity {
     String avatarBase64="";
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
-    Fragment fragment;
+    //Fragment fragment;
+    Uri path;
     FragmentManager fragmentManager;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -81,6 +84,8 @@ public class PerfilUsuario extends AppCompatActivity {
        // ed_usuario = findViewById(R.id.ed_us_usuario);
         txt_us = findViewById(R.id.txt_usu);
         btn_actualizarus = findViewById(R.id.btn_actualizarus);
+
+        progressDialog = ProgressDialog.show(this, "Cargando informacion", "Espere unos segundos");
 
         cargarDatosToken();
 
@@ -106,7 +111,8 @@ public class PerfilUsuario extends AppCompatActivity {
         btn_actualizarus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                progressDialog.show();
+                //progressDialog = ProgressDialog.show(getApplicationContext(), "Cargando informacion", "Espere unos segundos");
                 validarcampos();
 
             }
@@ -174,12 +180,12 @@ public class PerfilUsuario extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 
@@ -268,7 +274,6 @@ public class PerfilUsuario extends AppCompatActivity {
         );
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void procesarRespuesta_actualizar(JSONObject response) {
 
         try {
@@ -287,6 +292,23 @@ public class PerfilUsuario extends AppCompatActivity {
 
                     break;
             }
+
+            if (!avatarBase64.equalsIgnoreCase("")){
+
+                //perfil fragment =  new perfil();
+                //fragment.cambiarImagen(path);
+
+                //perfil fragment = (perfil) getSupportFragmentManager().findFragmentById(R.id.per);
+                //fragment.cambiarImagen(path);
+
+                //((perfil) g).cambiarImagen(path);
+
+
+
+
+            }
+
+            progressDialog.dismiss();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -303,7 +325,8 @@ public class PerfilUsuario extends AppCompatActivity {
 
         if(resultCode==RESULT_OK){
 
-            Uri path = data.getData();
+            path = data.getData();
+
             img_foto_perfil.setImageURI(path);
 
             try {
@@ -326,11 +349,18 @@ public class PerfilUsuario extends AppCompatActivity {
     private String encodeImage(Bitmap bm)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
+        bm.compress(Bitmap.CompressFormat.JPEG,50,baos);
         byte[] b = baos.toByteArray();
         String encImage = Base64.encodeToString(b, Base64.DEFAULT);
 
         return encImage;
+    }
+
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("vista","hola");
+        startActivity(i);
+        finish();
     }
 
 }

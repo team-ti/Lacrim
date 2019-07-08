@@ -251,6 +251,10 @@ public class Crear_equino extends AppCompatActivity {
 
                     break;
             }
+
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            finish();
         } catch (JSONException e) {
             e.printStackTrace();
         }

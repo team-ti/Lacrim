@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int modo_private = Context.MODE_PRIVATE;
     Fragment fragment;
     FragmentManager fragmentManager;
+    String vista;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,17 +63,35 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        this.fragment = new inicio();
-        this.fragmentManager = getSupportFragmentManager();
-        this.fragmentManager.beginTransaction().replace(R.id.content, this.fragment).commit();
-        getMenuInflater().inflate(R.menu.menu_barra, menu);
-        return super.onCreateOptionsMenu(menu);
+
+        if (getIntent().hasExtra("vista")){
+
+
+            this.fragment = new perfil();
+            this.fragmentManager = getSupportFragmentManager();
+            this.fragmentManager.beginTransaction().replace(R.id.content, this.fragment).commit();
+            getMenuInflater().inflate(R.menu.menu_barra, menu);
+            return super.onCreateOptionsMenu(menu);
+
+        }else{
+
+            this.fragment = new inicio();
+            this.fragmentManager = getSupportFragmentManager();
+            this.fragmentManager.beginTransaction().replace(R.id.content, this.fragment).commit();
+            getMenuInflater().inflate(R.menu.menu_barra, menu);
+            return super.onCreateOptionsMenu(menu);
+
+        }
+
+
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
 

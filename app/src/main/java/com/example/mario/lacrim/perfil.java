@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +98,7 @@ public class perfil extends Fragment {
         perfil_usuario.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), PerfilUsuario.class));
+                getActivity().finish();
             }
         });
 
@@ -109,6 +112,12 @@ public class perfil extends Fragment {
         token = getActivity().getSharedPreferences(dataUserCache,modo_private).getString("access_token", "no hay info");
     }
 
+
+    public void cambiarImagen(Uri path){
+
+        img_foto_perfil_frag.setImageURI(path);
+
+    }
 
 
     private void consultar_usuario() {
@@ -127,15 +136,28 @@ public class perfil extends Fragment {
                             try {
 
                                 String usuario= "";
+                                String avatar="";
 
                                 JSONArray data = new JSONArray(response);
 
 
                                 for (int i = 0; i < data.length(); i++) {
                                     usuario = data.getJSONObject(i).getString("usuario");
+                                    avatar = data.getJSONObject(i).getString("avatar");
                                 }
 
                                 txt_us.setText(usuario);
+
+                                if (!avatar.equalsIgnoreCase("")) {
+
+                                    String codbase64 = avatar;
+
+                                    byte[] decodedString = Base64.decode(codbase64, Base64.DEFAULT);
+                                    Bitmap img = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                                    img_foto_perfil_frag.setImageBitmap(img);
+
+                                }
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

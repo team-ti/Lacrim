@@ -75,7 +75,7 @@ public class FragmentPesebreras extends Fragment {
         btn_crear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), CrearPesebrera.class));
-                //getActivity().finish();
+                getActivity().finish();
             }
         });
 

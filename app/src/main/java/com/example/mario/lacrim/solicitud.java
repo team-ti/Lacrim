@@ -110,9 +110,9 @@ public class solicitud extends Fragment {
 
                             for (int i = 0; i < data.length(); i++) {
                                 id_equino = data.getJSONObject(i).getInt("id_equino");
-                                id_user = data.getJSONObject(i).getInt("id_user");
+                                id_user = data.getJSONObject(i).getInt("id_usuario");
                                 id_pesebrera = data.getJSONObject(i).getInt("id_pesebrera");
-                                nombre_solicitud = data.getJSONObject(i).getString("nombre_solicitud");
+                                nombre_solicitud = data.getJSONObject(i).getString("nombre");
                                 id_solicitud = data.getJSONObject(i).getInt("id_solicitud");
                                 Solicitudes solicitud = new Solicitudes();
 
@@ -150,55 +150,7 @@ public class solicitud extends Fragment {
 
         }
 
-                            Log.d("solicitud", "hola");
 
-        Listarsolicitudes = new ArrayList<>();
-
-        SQLiteDatabase db=conn.getReadableDatabase();
-        String[] parametros={token};
-        Solicitudes solicitud=null;
-
-        Cursor cursor;
-
-        try{
-        cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_SOLICITUD+ " WHERE " +Constantes.CAMPO_ID_USER_RECEPTOR_SOLICITUD+"=?",parametros);
-
-
-        //cursor = db.rawQuery("SELECT * FROM " + Constantes.TABLA_ACTIVIDAD+busqueda+"AND"+item_bus,null);
-
-         if (cursor.getCount()>0) {
-
-             while (cursor.moveToNext()) {
-                 solicitud = new Solicitudes();
-
-                 solicitud.setId_equino(cursor.getInt(1));
-                 solicitud.setId_user(cursor.getInt(2));
-                 solicitud.setId_pesebrera(cursor.getInt(3));
-                 solicitud.setNombre_solicitud(cursor.getString(5));
-
-
-                 Listarsolicitudes.add(solicitud);
-             }
-
-
-             Adaptador_solicitud myAdapter = new Adaptador_solicitud(mContext, Listarsolicitudes);
-             R_lista_solicitud.setLayoutManager(new GridLayoutManager(getContext(), 1));
-             R_lista_solicitud.setHasFixedSize(true);
-             R_lista_solicitud.setAdapter(myAdapter);
-
-         }else{
-
-             txt_sin_notificacion.setVisibility(View.VISIBLE);
-             R_lista_solicitud.setVisibility(View.GONE);
-
-
-         }
-
-        cursor.close();
-        }catch (Exception e){
-            Toast.makeText(getActivity(),"Error",Toast.LENGTH_LONG).show();
-
-        }
     }
 
 }

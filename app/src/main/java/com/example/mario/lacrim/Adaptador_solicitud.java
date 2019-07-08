@@ -84,7 +84,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
         id_solicitud = sl.get(i).getId_solicitud();
         String avatar = cargaravatar();
 
-        if (!avatar.equalsIgnoreCase("")) {
+       /* if (!avatar.equalsIgnoreCase("")) {
 
             String codbase64 = avatar;
 
@@ -93,7 +93,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
             myViewHolder.img_perfil_notificacion.setImageBitmap(img);
 
-        }
+        }*/
 
 
         myViewHolder.img_perfil_notificacion.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +244,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
         VolleySingleton.getInstance(mContext).addToRequestQueue(
 
                 new JsonObjectRequest(
-                        Request.Method.PUT,
+                        Request.Method.POST,
                         mContext.getString(R.string.url_server) + "solicitud/rechazar_solicitudes",
                         miObjetoJSON,
                         new Response.Listener<JSONObject>() {

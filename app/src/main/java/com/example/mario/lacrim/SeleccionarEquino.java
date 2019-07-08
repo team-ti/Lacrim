@@ -181,7 +181,7 @@ public class SeleccionarEquino extends AppCompatActivity {
         try {
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            String url =getResources().getString(R.string.url_server)+"solicitud/equinos_solicitud/"+id_usuario;
+            String url =getResources().getString(R.string.url_server)+"equino/obtener_equinos/"+id_usuario;
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
@@ -222,7 +222,8 @@ public class SeleccionarEquino extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v, int position) {
                                         equino_id =ListarEquinos.get(position).getId_equino();
-                                        if (cod.equalsIgnoreCase("0")) {
+                                        Log.d("cod", cod);
+                                        if (cod.equalsIgnoreCase("2")) {
                                             AlertDialog.Builder builder1 = new AlertDialog.Builder(SeleccionarEquino.this);
                                             builder1.setMessage("¿Quieres enviar solicitud con este equino? ");
                                             builder1.setCancelable(true);

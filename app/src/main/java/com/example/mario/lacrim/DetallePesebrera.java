@@ -36,7 +36,7 @@ public class DetallePesebrera extends AppCompatActivity {
     public static final String dataUserCache = "dataUser";
     private static final int modo_private = Context.MODE_PRIVATE;
     String interfaz_pes;
-    String nombre_pes;
+    String nombre_pes, id_user;
     String token, cod;
 
     ConexionSQLiteHelper conn;
@@ -58,7 +58,7 @@ public class DetallePesebrera extends AppCompatActivity {
         id_pesebrera = getIntent().getExtras().getString("id");
         interfaz_pes = getIntent().getExtras().getString("interfaz");
         nombre_pes = getIntent().getExtras().getString("nombre_pes");
-
+        id_user = getIntent().getExtras().getString("id_user");
         txt_detalle_pes.setText(nombre_pes);
         consultarPesebreraUser();
 
@@ -73,7 +73,7 @@ public class DetallePesebrera extends AppCompatActivity {
                 Log.d("id_pes", ""+id_pesebrera);
                 intent.putExtra("interfaz",interfaz_pes);
                 intent.putExtra("nombre_pes", nombre_pes);
-                intent.putExtra("id_user", getIntent().getExtras().getString("id_user"));
+                intent.putExtra("id_user", id_user);
 
                 startActivity(intent);
 
@@ -135,7 +135,7 @@ public class DetallePesebrera extends AppCompatActivity {
                                 cod = data.getString("cod");
                                 if (cod.equalsIgnoreCase("1") ){
                                     text_solicitud.setText("Agregar Equino");
-                                }else{
+                                }else if (cod.equalsIgnoreCase("2")){
                                     text_solicitud.setText("Enviar solicitud");
                                 }
 

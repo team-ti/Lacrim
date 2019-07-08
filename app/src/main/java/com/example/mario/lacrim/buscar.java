@@ -103,12 +103,12 @@ public class buscar extends Fragment {
                     if (sp_tipo_buscar.getSelectedItem().toString().equalsIgnoreCase("Equino")){
 
                         consultar_equinos(palabra_buscar);
-                        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos));
+                      //  R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos));
 
                     }else{
 
                         consultar_pesebrera(palabra_buscar);
-                        R_lista_buscar.setAdapter(new Adaptador_lista_pesebrera_buscar(ListarPesebrera));
+                     //   R_lista_buscar.setAdapter(new Adaptador_lista_pesebrera_buscar(ListarPesebrera));
 
                     }
                 }
@@ -226,17 +226,19 @@ public class buscar extends Fragment {
                                 String encargado_pes = "";
                                 String ciudad_pes = "";
                                 String telefono_pes = "";
+                                String id_user = "";
 
 
                                 JSONArray data = new JSONArray(response);
 
                                 ListarPesebrera= new ArrayList<>();
                                 for (int i = 0; i < data.length(); i++) {
-                                    id_pes = data.getJSONObject(i).getString("id_equino");
-                                    nombre_pes = data.getJSONObject(i).getString("nombre_equino");
-                                    encargado_pes = data.getJSONObject(i).getString("sexo_equino");
-                                    ciudad_pes = data.getJSONObject(i).getString("andar_equino");
-                                    telefono_pes = data.getJSONObject(i).getString("color_equino");
+                                    id_pes = data.getJSONObject(i).getString("id_pes");
+                                    nombre_pes = data.getJSONObject(i).getString("nombre_pes");
+                                    encargado_pes = data.getJSONObject(i).getString("encargado_pes");
+                                    ciudad_pes = data.getJSONObject(i).getString("ciudad_pes");
+                                    telefono_pes = data.getJSONObject(i).getString("telefono_pes");
+                                    id_user = data.getJSONObject(i).getString("id_user");
 
                                     Pesebrera pesebrera = new Pesebrera();
 
@@ -245,6 +247,7 @@ public class buscar extends Fragment {
                                     pesebrera.setEncargado_pes(encargado_pes);
                                     pesebrera.setCiudad_pes(ciudad_pes);
                                     pesebrera.setTelefono_pes(telefono_pes);
+                                    pesebrera.setId_user_pes(id_user);
 
                                     ListarPesebrera.add(pesebrera);
                                 }
@@ -256,6 +259,8 @@ public class buscar extends Fragment {
                                         Intent intent = new Intent(getActivity(), DetallePesebrera.class);
                                         intent.putExtra("id",ListarPesebrera.get(position).getId_pes());
                                         intent.putExtra("interfaz","2");
+                                        intent.putExtra("id_user", ListarPesebrera.get(position).getId_user_pes());
+
                                         //int id = ListarEquinos.get(position).getId_equino();
                                         //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
                                         startActivity(intent);
@@ -263,6 +268,7 @@ public class buscar extends Fragment {
                                 });
 
                                 R_lista_buscar.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+
                                 R_lista_buscar.setHasFixedSize(true);
                                 R_lista_buscar.setAdapter(myAdapter);
 
@@ -380,18 +386,20 @@ public class buscar extends Fragment {
 
         ListarEquinos = new ArrayList<>();
 
-        R_lista_buscar.setAdapter(new Adaptador_lista(ListarEquinos, new RecyclerViewOnItemClickListener() {
+        Adaptador_lista_pesebrera_buscar myAdapter = new Adaptador_lista_pesebrera_buscar(ListarPesebrera, new RecyclerViewOnItemClickListener() {
             @Override
             public void onClick(View v, int position) {
-
-                Intent intent = new Intent(getActivity(), Detalle_equino.class);
-                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
+                Intent intent = new Intent(getActivity(), DetallePesebrera.class);
+                intent.putExtra("id",ListarPesebrera.get(position).getId_pes());
+                intent.putExtra("interfaz","2");
+                //int id = ListarEquinos.get(position).getId_equino();
+                //Toast.makeText(getActivity(),""+id,Toast.LENGTH_LONG).show();
                 startActivity(intent);
-                getActivity().finish();
             }
-        }));
-
-
+        });
+        R_lista_buscar.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        R_lista_buscar.setHasFixedSize(true);
+        R_lista_buscar.setAdapter(myAdapter);
     }
 
 

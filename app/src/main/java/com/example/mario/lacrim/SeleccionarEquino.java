@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -52,6 +53,7 @@ public class SeleccionarEquino extends AppCompatActivity {
     ConexionSQLiteHelper conn;
     RecyclerView R_lista;
     String token, equino_id, id_pes, cod, nombre_usuario;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -108,6 +110,7 @@ public class SeleccionarEquino extends AppCompatActivity {
 
 
                             } catch (JSONException e) {
+
                                 e.printStackTrace();
                             }
                             // progressDialog.dismiss();
@@ -115,7 +118,7 @@ public class SeleccionarEquino extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 
@@ -177,6 +180,7 @@ public class SeleccionarEquino extends AppCompatActivity {
         ListarEquinos = new ArrayList<>();
 
         final String id_usuario = token;
+        progressDialog = ProgressDialog.show(this, "Cargando equinos", "Espere unos segundos");
 
         try {
 
@@ -187,6 +191,7 @@ public class SeleccionarEquino extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            progressDialog.dismiss();
 
                             try {
                                 String  id_equino="";
@@ -284,12 +289,12 @@ public class SeleccionarEquino extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 

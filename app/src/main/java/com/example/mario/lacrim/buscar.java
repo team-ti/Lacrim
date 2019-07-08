@@ -397,20 +397,16 @@ public class buscar extends Fragment {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getActivity(), Detalle_equino.class);
-                intent.putExtra("id",ListarEquinos.get(position).getId_equino());
-                intent.putExtra("interfaz","2");
-                startActivity(intent);
+                intent.putExtra("id", ListarEquinos.get(position).getId_equino());
+                intent.putExtra("interfaz", "2");
+                R_lista_buscar.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+                R_lista_buscar.setHasFixedSize(true);
+
             }
-        }));
 
-
-
-        R_lista_buscar.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        R_lista_buscar.setHasFixedSize(true);
-
+            }));
 
     }
-
 
 }
 

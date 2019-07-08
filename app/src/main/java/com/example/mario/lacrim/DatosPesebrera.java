@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -43,6 +44,8 @@ public class DatosPesebrera extends AppCompatActivity {
     String id_pes;
     String interfaz;
     String nombre_pes;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,7 @@ public class DatosPesebrera extends AppCompatActivity {
 
     private void consultar() {
         try {
+            progressDialog = ProgressDialog.show(this, "Cargando datos pesebrera", "Espere unos segundos");
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             String url =getResources().getString(R.string.url_server)+"pesebreras/obtener_pesebrera_info/"+id_pes;
@@ -117,16 +121,17 @@ public class DatosPesebrera extends AppCompatActivity {
                                 txt_ciudad.setText(ciudad);
                                 txt_telefono.setText(telefono);
 
+                                progressDialog.dismiss();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 
@@ -179,6 +184,7 @@ public class DatosPesebrera extends AppCompatActivity {
     private void actualizarPesebrera(HashMap<String, String> map) {
         JSONObject miObjetoJSON = new JSONObject(map);
 
+        progressDialog = ProgressDialog.show(this, "Actualizando pesebrera", "Espere unos segundos");
 
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
 
@@ -190,12 +196,15 @@ public class DatosPesebrera extends AppCompatActivity {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onResponse(JSONObject response) {
+
                                 procesarRespuesta_insert(response);
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                progressDialog.dismiss();
+
                                 Log.d("Error", "Error Volley: " + error.getMessage());
                             }
                         }
@@ -242,6 +251,8 @@ public class DatosPesebrera extends AppCompatActivity {
 
                     break;
             }
+            progressDialog.dismiss();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

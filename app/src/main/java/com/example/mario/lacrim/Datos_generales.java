@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -54,6 +55,8 @@ public class Datos_generales extends AppCompatActivity {
     String id_equino;
     String interfaz;
     String avatarBase64="";
+    ProgressDialog progressDialog;
+
 
 
     @Override
@@ -125,6 +128,7 @@ public class Datos_generales extends AppCompatActivity {
     }
 
     private void consultar() {
+        progressDialog = ProgressDialog.show(this, "Cargando datos de equino", "Espere unos segundos");
 
         try {
 
@@ -135,7 +139,6 @@ public class Datos_generales extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-
                             try {
 
                                 String nombre = "";
@@ -191,15 +194,17 @@ public class Datos_generales extends AppCompatActivity {
                                     img_foto_perfil_equino_detalle_dato_general.setImageBitmap(img);
 
                                 }
+                                progressDialog.dismiss();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressDialog.dismiss();
                     // progressDialog.dismiss();
                 }
             });
@@ -235,6 +240,7 @@ public class Datos_generales extends AppCompatActivity {
 
     private void actualizarEquino(HashMap<String, String> map) {
         JSONObject miObjetoJSON = new JSONObject(map);
+        progressDialog = ProgressDialog.show(this, "Actualizando equino", "Espere unos segundos");
 
 
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(
@@ -253,6 +259,7 @@ public class Datos_generales extends AppCompatActivity {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                progressDialog.dismiss();
                                 Log.d("Error", "Error Volley: " + error.getMessage());
                             }
                         }
@@ -299,6 +306,8 @@ public class Datos_generales extends AppCompatActivity {
 
                     break;
             }
+            progressDialog.dismiss();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

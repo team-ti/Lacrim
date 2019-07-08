@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,12 +24,14 @@ import com.example.mario.lacrim.Utilidades.Constantes;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class Detalle_premiacion extends AppCompatActivity {
+public class  Detalle_premiacion extends AppCompatActivity {
 
     ConexionSQLiteHelper conn;
     EditText ed_nombre_detalle_premio, ed_fecha_detalle_premio, ed_descripcion_detalle_premio;
     String id_equino;
     String interfaz;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class Detalle_premiacion extends AppCompatActivity {
     }
 
     private void consultar_premio() {
+        progressDialog = ProgressDialog.show(this, "Cargando datos premio", "Espere unos segundos");
+
         try {
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -75,16 +80,17 @@ public class Detalle_premiacion extends AppCompatActivity {
                                 ed_descripcion_detalle_premio.setText(descripcion);
                                 ed_nombre_detalle_premio.setText(nombre);
                                 ed_fecha_detalle_premio.setText(fecha_pre);
+                                progressDialog.dismiss();
 
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                              e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // progressDialog.dismiss();
+                     progressDialog.dismiss();
                 }
             });
 

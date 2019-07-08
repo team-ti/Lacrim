@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -46,6 +47,7 @@ public class inicio extends Fragment {
     ConexionSQLiteHelper conn;
     RecyclerView R_lista;
     String token;
+    ProgressDialog progressDialog;
 
     public inicio() {
         // Required empty public constructor
@@ -101,6 +103,7 @@ public class inicio extends Fragment {
         final String id_usuario = token;
 
         try {
+            progressDialog = ProgressDialog.show(getActivity(), "Cargando equinos", "Espere unos segundos");
 
             RequestQueue queue = Volley.newRequestQueue(getActivity());
             String url =getResources().getString(R.string.url_server)+"equino/obtener_equinos/"+id_usuario;
@@ -109,7 +112,6 @@ public class inicio extends Fragment {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-
                             try {
                                 String  id_equino="";
                                 String nombre = "";
@@ -156,14 +158,17 @@ public class inicio extends Fragment {
                                  R_lista.setHasFixedSize(true);
                                  R_lista.setAdapter(myAdapter);
 
+                                 progressDialog.dismiss();
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            // progressDialog.dismiss();
+                             progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressDialog.dismiss();
                     // progressDialog.dismiss();
                 }
             });

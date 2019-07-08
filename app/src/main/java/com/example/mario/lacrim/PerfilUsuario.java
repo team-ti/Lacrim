@@ -71,6 +71,7 @@ public class PerfilUsuario extends AppCompatActivity {
     ProgressDialog progressDialog;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +126,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
     private void consultar() {
         final String id_usuario = token;
+        progressDialog = ProgressDialog.show(this, "Cargando datos usuario", "Espere unos segundos");
 
         try {
 
@@ -135,6 +137,7 @@ public class PerfilUsuario extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            progressDialog.dismiss();
 
                             try {
 
@@ -178,6 +181,8 @@ public class PerfilUsuario extends AppCompatActivity {
                                 }
 
                             } catch (JSONException e) {
+                                progressDialog.dismiss();
+
                                 e.printStackTrace();
                             }
                              progressDialog.dismiss();

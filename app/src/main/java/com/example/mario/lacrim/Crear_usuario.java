@@ -1,5 +1,6 @@
 package com.example.mario.lacrim;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -37,6 +38,8 @@ public class Crear_usuario extends AppCompatActivity {
 
     EditText us_nombres, us_apellidos, us_correo, us_ciudad, us_usuario, us_contrasena;
     Button btn_registrarus;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,41 +63,7 @@ public class Crear_usuario extends AppCompatActivity {
         });
     }
 
-    boolean consultarUsuario(String user) {
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this, "bd_equinos", null, 1);
 
-        SQLiteDatabase db = conn.getWritableDatabase();
-        Cursor cursor;
-        String usuario = us_usuario.getText().toString().trim();
-        String[] columns = {Constantes.CAMPO_USER};
-        String selection = Constantes.CAMPO_USER + " = ?";
-        String[] selectionArgs = {usuario};
-        String tableName = Constantes.TABLA_USUARIO;
-        cursor = db.query(tableName, columns, selection, selectionArgs, null, null, null);
-        if (cursor.moveToFirst() == true) {
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    boolean consultarCorreo(String correo){
-        ConexionSQLiteHelper conn = new ConexionSQLiteHelper(this, "bd_equinos", null, 1);
-
-        SQLiteDatabase db = conn.getWritableDatabase();
-        Cursor cursor;
-        String txt_correo = us_correo.getText().toString().trim();
-        String[] columns = {Constantes.CAMPO_CORREO};
-        String selection = Constantes.CAMPO_CORREO + " = ?";
-        String[] selectionArgs = {txt_correo};
-        String tableName = Constantes.TABLA_USUARIO;
-        cursor = db.query(tableName, columns, selection, selectionArgs, null, null, null);
-        if (cursor.moveToFirst() == true) {
-            return true;
-        }else{
-            return false;
-        }
-    }
 
     private void validarcampos() {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
@@ -106,10 +75,6 @@ public class Crear_usuario extends AppCompatActivity {
         } else if (us_apellidos == null || us_apellidos.getText().toString().equals("")) {
             us_apellidos.requestFocus();
             Toast.makeText(getApplicationContext(), "Apellidos no puede estar vacio", Toast.LENGTH_SHORT).show();
-
-        } else if (consultarCorreo(us_correo.getText().toString())){
-            us_correo.requestFocus();
-            Toast.makeText(getApplicationContext(), "Correo ya existe", Toast.LENGTH_SHORT).show();
 
         } else if (us_correo == null || us_correo.getText().toString().equals("")) {
             us_correo.requestFocus();
@@ -125,10 +90,6 @@ public class Crear_usuario extends AppCompatActivity {
         } else if (us_usuario == null || us_usuario.getText().toString().equals("")) {
             us_usuario.requestFocus();
             Toast.makeText(getApplicationContext(), "Usuario no puede estar vacio", Toast.LENGTH_SHORT).show();
-
-        } else if (consultarUsuario(us_usuario.getText().toString())){
-            us_usuario.requestFocus();
-            Toast.makeText(getApplicationContext(), "Usuario ya existe", Toast.LENGTH_SHORT).show();
 
         } else if (us_contrasena == null || us_contrasena.getText().toString().equals("")) {
             us_contrasena.requestFocus();
@@ -169,6 +130,7 @@ public class Crear_usuario extends AppCompatActivity {
 
 
     public void registrarUsuario(HashMap<String, String> map) {
+        progressDialog = ProgressDialog.show(this, "Cargando registro", "Espere unos segundos");
 
         JSONObject miObjetoJSON = new JSONObject(map);
 
@@ -180,15 +142,19 @@ public class Crear_usuario extends AppCompatActivity {
                         getResources().getString(R.string.url_server)+"generic/usuario_registrar",
                         miObjetoJSON,
                         new Response.Listener<JSONObject>() {
+
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onResponse(JSONObject response) {
-                               procesarRespuesta_insert(response);
+
+                                procesarRespuesta_insert(response);
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                progressDialog.dismiss();
+
                                 Log.d("Error", "Error Volley: " + error.getMessage());
                             }
                         }
@@ -232,6 +198,8 @@ public class Crear_usuario extends AppCompatActivity {
 
                     break;
             }
+            progressDialog.dismiss();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

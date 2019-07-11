@@ -82,9 +82,9 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
         id_equino = sl.get(i).getId_equino();
         id_pesebrera = sl.get(i).getId_pesebrera();
         id_solicitud = sl.get(i).getId_solicitud();
-        String avatar = cargaravatar();
+        String avatar = sl.get(i).getAvatar();
 
-       /* if (!avatar.equalsIgnoreCase("")) {
+        if (!avatar.equalsIgnoreCase("")) {
 
             String codbase64 = avatar;
 
@@ -93,7 +93,7 @@ public class Adaptador_solicitud extends RecyclerView.Adapter<Adaptador_solicitu
 
             myViewHolder.img_perfil_notificacion.setImageBitmap(img);
 
-        }*/
+        }
 
 
         myViewHolder.img_perfil_notificacion.setOnClickListener(new View.OnClickListener() {

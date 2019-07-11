@@ -7,6 +7,7 @@ public class Solicitudes {
     int id_user;
     String nombre_solicitud;
     int id_user_receptor;
+    String avatar;
 
     public Solicitudes() {
         this.id_equino = id_equino;
@@ -15,6 +16,7 @@ public class Solicitudes {
         this.nombre_solicitud = nombre_solicitud;
         this.id_user_receptor = id_user_receptor;
         this.id_solicitud = id_solicitud;
+        this.avatar = avatar;
     }
 
     public int getId_equino() {
@@ -63,5 +65,13 @@ public class Solicitudes {
 
     public void setId_solicitud(int id_solicitud) {
         this.id_solicitud = id_solicitud;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

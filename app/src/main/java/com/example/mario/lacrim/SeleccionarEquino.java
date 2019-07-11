@@ -40,6 +40,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -185,7 +187,7 @@ public class SeleccionarEquino extends AppCompatActivity {
         try {
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            String url =getResources().getString(R.string.url_server)+"equino/obtener_equinos/"+id_usuario;
+            String url = getResources().getString(R.string.url_server)+"equino/equinos_solicitud/"+id_usuario;
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
@@ -194,6 +196,9 @@ public class SeleccionarEquino extends AppCompatActivity {
                             progressDialog.dismiss();
 
                             try {
+
+                                String responseCod = URLDecoder.decode(response,"UTF-8");
+
                                 String  id_equino="";
                                 String nombre = "";
                                 String sexo = "";
@@ -201,15 +206,13 @@ public class SeleccionarEquino extends AppCompatActivity {
                                 String color = "";
 
 
-                                JSONArray data = new JSONArray(response);
+                                JSONArray data = new JSONArray(responseCod);
 
 
                                 for (int i = 0; i < data.length(); i++) {
                                     id_equino = data.getJSONObject(i).getString("id_equino");
                                     nombre = data.getJSONObject(i).getString("nombre_equino");
-                                    sexo = data.getJSONObject(i).getString("sexo_equino");
                                     andar = data.getJSONObject(i).getString("andar_equino");
-                                    color = data.getJSONObject(i).getString("color_equino");
 
                                     Equinos equino = new Equinos();
 
@@ -288,8 +291,10 @@ public class SeleccionarEquino extends AppCompatActivity {
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
                             }
-                             progressDialog.dismiss();
+                            progressDialog.dismiss();
                         }
                     }, new Response.ErrorListener() {
                 @Override

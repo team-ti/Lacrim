@@ -106,6 +106,7 @@ public class solicitud extends Fragment {
                             Integer id_pesebrera = 0;
                             String nombre_solicitud = "";
                             Integer id_solicitud = 0;
+                            String avatar="";
 
                             JSONArray data = new JSONArray(response);
 
@@ -131,6 +132,7 @@ public class solicitud extends Fragment {
                                 id_pesebrera = data.getJSONObject(i).getInt("id_pesebrera");
                                 nombre_solicitud = data.getJSONObject(i).getString("nombre");
                                 id_solicitud = data.getJSONObject(i).getInt("id_solicitud");
+                                avatar = data.getJSONObject(i).getString("avatar");
                                 Solicitudes solicitud = new Solicitudes();
 
                                 solicitud.setId_equino(id_equino);
@@ -138,6 +140,8 @@ public class solicitud extends Fragment {
                                 solicitud.setId_pesebrera(id_pesebrera);
                                 solicitud.setNombre_solicitud(nombre_solicitud);
                                 solicitud.setId_solicitud(id_solicitud);
+                                solicitud.setAvatar(avatar);
+
 
 
                                 Listarsolicitudes.add(solicitud);

@@ -32,6 +32,8 @@ import com.example.mario.lacrim.Utilidades.Constantes;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 public class FragmentPesebreras extends Fragment {
@@ -101,6 +103,8 @@ public class FragmentPesebreras extends Fragment {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+
+
 
                             try {
                                 String  id_pes="";
